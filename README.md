@@ -202,3 +202,17 @@ and dot product — to model what a real RISC-V posit deployment would look like
 
 For a real RISC-V posit32 deployment, quire is not just more accurate — it is what
 keeps the solver converging at all under extreme dynamic range conditions.
+
+### Correction to scale=1e+09 result
+
+The p32-mv/naive "convergence" at scale=1e+09 (313 iterations) is a **false positive**.
+Per-iteration residual tracing (src/bcsstk03_anomaly_diag.cpp) shows all three
+scales around the anomaly (1e+08, 1e+09, 1e+10) produce identical chaotic residual
+behavior after ~iteration 150: erratic oscillation between ~1e-2 and ~1e-6 with no
+monotone descent. The scale=1e+09 run happens to cross the 1e-6 threshold once at
+iter 312 during this wandering — not genuine convergence.
+
+**Corrected interpretation:** naive posit32 enters a chaotic residual regime at
+dynamic range ~1.52e+14. In this regime, convergence checks are unreliable —
+a solver could report "converged" while solution quality is actually poor.
+Quire avoids this regime entirely by maintaining exact accumulation.
