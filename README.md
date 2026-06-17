@@ -178,3 +178,27 @@ on a real FEM matrix.
 
 Full log and source in results/logs/bcsstk03_convergence_boundary.log and
 src/bcsstk03_convergence_boundary.cpp.
+
+---
+
+## Full posit32 solver: does quire robustness survive posit32 matvec?
+
+Previous convergence boundary experiment used double-precision matvec with posit32
+dot products only. This experiment runs the full CG solver in posit32 — both matvec
+and dot product — to model what a real RISC-V posit deployment would look like.
+
+| scale | diag_range | dbl/dbl | dbl-mv/quire | dbl-mv/naive | p32-mv/quire | p32-mv/naive |
+|-------|-----------|---------|-------------|-------------|-------------|-------------|
+| 1e+08 | 1.52e+14  | 148     | 265         | 343         | 299         | **DIV**     |
+| 1e+09 | 1.52e+15  | 153     | 257         | 280         | 330         | 313         |
+| 1e+10 | 1.52e+16  | 156     | 292         | **DIV**     | 367         | **DIV**     |
+| 1e+12 | 1.52e+18  | 177     | 430         | **DIV**     | 439         | **DIV**     |
+
+**Findings:**
+1. Posit32 matvec pulls the naive divergence boundary down by ~one decade (1.52e+16 → 1.52e+14)
+2. Quire survives full posit32 arithmetic all the way to 1.52e+18 — same ceiling as hybrid mode
+3. Quire's exact dot product compensates for posit32 matvec rounding, not just naive dot product errors
+4. Anomaly at scale=1e+09: p32-mv/naive converges (313 iters) between two diverging scale points — noted for further investigation
+
+For a real RISC-V posit32 deployment, quire is not just more accurate — it is what
+keeps the solver converging at all under extreme dynamic range conditions.
