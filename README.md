@@ -12,12 +12,14 @@ Gurleen Kaur | Mentors: Kurt Keville (MIT), Joshua Gyllinsky
 **Quire exactness is necessary but not sufficient — posit precision must match matrix dynamic range.**
 
 posit16+quire fails on high-dynamic-range FEM matrices (bcsstk03: rel error 159, bcsstk14: rel error 0.05).  
-posit32+quire succeeds on all matrices tested.  
-posit64+quire = exact double (zero measured error) on all three matrices.
+posit32+quire succeeds on both FEM matrices tested.  
+posit64+quire = exact double (zero measured error) on both matrices.
 
-This provides empirical boundary conditions on Gustafson's HPEC 2025 claim that  
-*"16-bit posits can replace 64-bit floats in stable computations via exact dot products."*  
-The claim does not hold for FEM structural matrices with dynamic range ~10^16.
+This empirically tests Gustafson's HPEC 2025 claim that 16-bit posits can replace
+64-bit floats in stable computations via exact dot products. For FEM structural
+matrices with dynamic range ~10^16, the claim does not hold: posit16+quire was
+tested directly and fails by 2–4 orders of magnitude past any usable tolerance.
+posit32+quire is the minimum viable precision here.
 
 ---
 
@@ -39,14 +41,19 @@ The claim does not hold for FEM structural matrices with dynamic range ~10^16.
 | posit32   | 5.44×10^-7           | 7.37×10^-6           | 14x quire wins ✓ viable |
 | posit64   | 0.000                | 0.000                | exact double ✓ |
 
-## Precision Ladder Results (add32, Circuit/SPICE)
+## Excluded: add32 (Circuit/SPICE)
 
-| Precision | Max rel error (quire) | Max rel error (naive) | Verdict |
-|-----------|----------------------|----------------------|---------|
-| posit8    | 1.00×10^0            | 1.00×10^0            | overflow — unusable |
-| posit16   | 3.07×10^-1           | 1.18×10^0            | 4x quire wins — NOT engineering viable |
-| posit32   | 9.28×10^-8           | 9.35×10^-6           | 101x quire wins ✓ viable |
-| posit64   | 0.000                | 0.000                | exact double ✓ |
+add32 was initially included as a third, lower-condition-number domain alongside
+the two FEM matrices. It was dropped from all CG-based accuracy results once we
+verified it directly: add32 is **not symmetric** (5,172 off-diagonal pairs where
+A[i,j] ≠ A[j,i], confirmed by direct matrix inspection) and not positive definite.
+Conjugate Gradient assumes a symmetric positive-definite matrix — its step-size
+formula and convergence guarantee don't hold otherwise, so any "CG accuracy" number
+computed on add32 isn't measuring a well-defined quantity. We removed the add32
+precision-ladder and three-way comparison results rather than keep numbers that
+looked clean but rested on an invalid solver assumption. add32 reappears once below,
+purely as a vector-length data point in the raw dotX timing benchmark, which doesn't
+depend on CG or symmetry at all.
 
 ---
 
@@ -54,7 +61,6 @@ The claim does not hold for FEM structural matrices with dynamic range ~10^16.
 
 | Matrix | n_used | Max rel — naive | Max rel — quire | Improvement |
 |--------|--------|----------------|----------------|-------------|
-| add32  | 11/50  | 9.35×10^-6     | 9.28×10^-8     | **101x**    |
 | bcsstk03 | 115/300 | 7.37×10^-6  | 5.44×10^-7     | **14x**     |
 | bcsstk14 | 64/300  | 7.83×10^-7  | 3.65×10^-8     | **21x**     |
 
@@ -62,11 +68,10 @@ The claim does not hold for FEM structural matrices with dynamic range ~10^16.
 
 ---
 
-## Matrices tested (all verified from .mtx files)
+## Matrices tested (CG accuracy results; all verified from .mtx files)
 
 | Matrix | Domain | Size | Dynamic range | Diag ratio (proxy for conditioning) |
 |--------|--------|------|---------------|--------------------------------------|
-| add32 | Circuit/SPICE (Motorola) | 4,960×4,960 | ~10^4.5 | ~10^2 (condition ~137) |
 | bcsstk03 | FEM Structural | 112×112 | ~10^16.6 | ~4.55×10^8 |
 | bcsstk14 | FEM Structural | 1,806×1,806 | ~10^15.7 | ~8.94×10^9 |
 
@@ -77,7 +82,7 @@ Download matrices: https://sparse.tamu.edu
 ## Method
 
 - Jacobi-preconditioned Conjugate Gradient
-- 50 iterations (add32) / 300 iterations (bcsstk03, bcsstk14)
+- 300 iterations per matrix (bcsstk03, bcsstk14)
 - At each iteration: pAp computed in double64 (reference), posit+quire, posit naive
 - Filter: iterations where |pAp_d| < 1e-6 × max|pAp_d| excluded (near-zero denominator near convergence)
 - CG runs entirely in double64 — posit computations logged for comparison only
@@ -112,9 +117,8 @@ docs/          — presentation slides
 
 1. **Dynamic range is the limiting factor** — posit16+quire fails on matrices with dynamic range >10^15, regardless of quire exactness
 2. **posit32+quire is the minimum viable precision** for FEM structural matrices tested here
-3. **posit16+quire is not engineering viable on any matrix tested** — even circuit matrices show 0.31 max relative error at posit16
-4. **posit64+quire matches double64 exactly** — zero measured error across all three matrices
-5. **Quire beats naive by 14x–101x at posit32** — accumulation error is real and eliminatable by quire
+3. **posit64+quire matches double64 exactly** — zero measured error on both matrices
+4. **Quire beats naive by 14x–21x at posit32** — accumulation error is real and eliminatable by quire
 
 ---
 
@@ -153,6 +157,11 @@ as precision ladder. Each function timed for 1 second per case.
 quire/naive ratio ≈ 1.0 across all cases: the overhead is posit conversion
 (software emulation), not quire accumulation specifically. On hardware with a
 native posit FPU (the motivation for RISC-V posit work), this overhead disappears.
+
+Note: add32 appears here only as a vector-length data point for raw dotX timing.
+It plays no role in CG accuracy (see "Excluded: add32" above) — this benchmark
+measures arithmetic throughput, not solver correctness, and doesn't depend on
+matrix symmetry.
 
 ---
 
