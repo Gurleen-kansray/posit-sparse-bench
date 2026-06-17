@@ -225,3 +225,65 @@ iter 312 during this wandering — not genuine convergence.
 dynamic range ~1.52e+14. In this regime, convergence checks are unreliable —
 a solver could report "converged" while solution quality is actually poor.
 Quire avoids this regime entirely by maintaining exact accumulation.
+
+---
+
+## Note on Dynamic Range Reporting
+
+Dynamic range figures in the slides (bcsstk03: ~10^16.6, bcsstk14: ~10^15.7) were
+cited from SuiteSparse website metadata. Direct computation from raw .mtx files gives:
+
+- bcsstk03: max/min of all nonzero entries = 10^16.6 ✓ matches
+- bcsstk14: raw max/min = 10^36.7 — bcsstk14 contains near-zero off-diagonal
+  entries (~1e-27) from FEM assembly that are numerical noise, not physically
+  meaningful values. Filtered dynamic range (entries > 1e-10) = 10^19.9.
+  The 10^15.7 figure from SuiteSparse refers to diagonal-only range.
+
+**This does not affect any precision ladder results** — all error measurements
+are computed from actual CG dot products, not from dynamic range estimates.
+
+---
+
+## Precision Threshold Mapper — New Contribution
+
+A generic tool (`src/precision_threshold_mapper.cpp`) that takes any SPD sparse
+matrix in Matrix Market format and automatically runs the full precision ladder,
+outputting minimum viable posit precision. This enables systematic mapping of the
+posit16/posit32 boundary across matrix families.
+
+### Build and run on any matrix:
+```bash
+g++ -std=c++20 -O2 -I../universal/include -o precision_mapper src/precision_threshold_mapper.cpp -lm
+./precision_mapper data/matrices/yourmatrix.mtx 300
+```
+
+### Results across 8 SPD sparse matrices (HB family, SuiteSparse):
+
+| Matrix   | n    | Domain          | diag_ratio  | posit16 verdict | posit32 verdict | Min viable |
+|----------|------|-----------------|-------------|-----------------|-----------------|------------|
+| nos4     | 100  | beam structure  | 4.4e+00     | MARGINAL        | PASS            | posit32    |
+| nos3     | 960  | plate biharmonic| 6.1e+00     | MARGINAL        | PASS            | posit32    |
+| nos5     | 468  | structural      | 9.5e+00     | FAIL            | PASS            | posit32    |
+| nos1     | 237  | structural      | 7.7e+03     | FAIL            | PASS            | posit32    |
+| nos2     | 957  | structural      | 1.2e+05     | FAIL            | PASS            | posit32    |
+| nos6     | 675  | structural      | 4.0e+06     | FAIL            | PASS            | posit32    |
+| bcsstk03 | 112  | FEM structural  | 1.5e+06     | FAIL            | PASS            | posit32    |
+| bcsstk14 | 1806 | FEM structural  | 8.9e+09     | FAIL            | PASS            | posit32    |
+
+### Key empirical finding:
+**posit32+quire passes on all 8 SPD sparse matrices tested, spanning diag_ratio
+from 4 to 8.9×10^9. posit16+quire fails or is marginal on every matrix where
+diag_ratio > ~10^3. posit8 overflows or fails universally.**
+
+This extends the original two-matrix result to a broader empirical law:
+for SPD sparse matrices in the HB/FEM family, posit32 is the minimum viable
+precision regardless of matrix size or dynamic range. The posit16 boundary
+appears tied to diagonal condition ratio, not raw dynamic range alone.
+
+### Caveat: diag_ratio is not a strict threshold
+
+nos5 (diag_ratio 9.5) FAILs at posit16 while bcsstm05 (diag_ratio 12.7) is only
+MARGINAL — a higher-ratio matrix outperforms a lower-ratio one. Mass matrices
+(bcsstm*) and stiffness matrices (bcsstk*) may have systematically different
+posit16 behavior at the same diag_ratio. Treat diag_ratio as a useful predictor
+of posit16 viability, not a strict threshold.

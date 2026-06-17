@@ -3,3 +3,6 @@ bcsstk03_posit
 bcsstk14_posit
 bcsstk14_posit64
 *.o
+precision_mapper
+boundary_fine
+boundary_res
