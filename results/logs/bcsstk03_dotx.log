@@ -1,0 +1,600 @@
+iter=0 pAp_d=2.1359165908e-05 pAp_p=2.1359165657e-05 pAp_pn=2.1359166567e-05 diff=2.508e-13 diff_naive=6.587e-13
+  residual=1.144e+02
+iter=1 pAp_d=5.7349324029e-06 pAp_p=5.7349320741e-06 pAp_pn=5.7349325289e-06 diff=3.288e-13 diff_naive=1.260e-13
+  residual=6.365e+01
+iter=2 pAp_d=7.5867811964e-06 pAp_p=7.5867810665e-06 pAp_pn=7.5867810665e-06 diff=1.299e-13 diff_naive=1.299e-13
+  residual=1.123e+02
+iter=3 pAp_d=4.3419538346e-06 pAp_p=4.3419536269e-06 pAp_pn=4.3419536269e-06 diff=2.077e-13 diff_naive=2.077e-13
+  residual=1.454e+02
+iter=4 pAp_d=1.6093944247e-05 pAp_p=1.6093944396e-05 pAp_pn=1.6093943486e-05 diff=1.489e-13 diff_naive=7.606e-13
+  residual=1.391e+02
+iter=5 pAp_d=8.9549382075e-06 pAp_p=8.9549384938e-06 pAp_pn=8.9549375843e-06 diff=2.864e-13 diff_naive=6.231e-13
+  residual=1.188e+02
+iter=6 pAp_d=8.2654146248e-06 pAp_p=8.2654150901e-06 pAp_pn=8.2654141806e-06 diff=4.653e-13 diff_naive=4.442e-13
+  residual=1.157e+02
+iter=7 pAp_d=4.5323176492e-06 pAp_p=4.5323176892e-06 pAp_pn=4.5323185986e-06 diff=3.994e-14 diff_naive=9.494e-13
+  residual=2.441e+02
+iter=8 pAp_d=1.2175339419e-05 pAp_p=1.2175339180e-05 pAp_pn=1.2175339180e-05 diff=2.394e-13 diff_naive=2.394e-13
+  residual=2.211e+02
+iter=9 pAp_d=5.3571195211e-06 pAp_p=5.3571197896e-06 pAp_pn=5.3571193348e-06 diff=2.684e-13 diff_naive=1.863e-13
+  residual=1.459e+02
+iter=10 pAp_d=1.0213696324e-05 pAp_p=1.0213696441e-05 pAp_pn=1.0213695532e-05 diff=1.173e-13 diff_naive=7.922e-13
+  residual=9.248e+01
+iter=11 pAp_d=2.7209319469e-06 pAp_p=2.7209318887e-06 pAp_pn=2.7209321161e-06 diff=5.822e-14 diff_naive=1.692e-13
+  residual=2.486e+02
+iter=12 pAp_d=5.5841857837e-06 pAp_p=5.5841856010e-06 pAp_pn=5.5841824178e-06 diff=1.827e-13 diff_naive=3.366e-12
+  residual=2.686e+02
+iter=13 pAp_d=6.4623261910e-06 pAp_p=6.4623263825e-06 pAp_pn=6.4623282015e-06 diff=1.915e-13 diff_naive=2.010e-12
+  residual=1.653e+02
+iter=14 pAp_d=6.9469607538e-06 pAp_p=6.9469610935e-06 pAp_pn=6.9469597292e-06 diff=3.397e-13 diff_naive=1.025e-12
+  residual=1.754e+02
+iter=15 pAp_d=1.4180078081e-05 pAp_p=1.4180078324e-05 pAp_pn=1.4180079233e-05 diff=2.430e-13 diff_naive=1.152e-12
+  residual=1.835e+02
+iter=16 pAp_d=3.4908363979e-06 pAp_p=3.4908362068e-06 pAp_pn=3.4908362068e-06 diff=1.912e-13 diff_naive=1.912e-13
+  residual=4.085e+02
+iter=17 pAp_d=8.3191493202e-06 pAp_p=8.3191498561e-06 pAp_pn=8.3191498561e-06 diff=5.359e-13 diff_naive=5.359e-13
+  residual=3.604e+02
+iter=18 pAp_d=8.3187479356e-06 pAp_p=8.3187478594e-06 pAp_pn=8.3187487689e-06 diff=7.618e-14 diff_naive=8.333e-13
+  residual=2.336e+02
+iter=19 pAp_d=8.6479848517e-06 pAp_p=8.6479849415e-06 pAp_pn=8.6479849415e-06 diff=8.977e-14 diff_naive=8.977e-14
+  residual=1.366e+02
+iter=20 pAp_d=6.8610939671e-06 pAp_p=6.8610943345e-06 pAp_pn=6.8610943345e-06 diff=3.674e-13 diff_naive=3.674e-13
+  residual=1.197e+02
+iter=21 pAp_d=5.5351310149e-06 pAp_p=5.5351306401e-06 pAp_pn=5.5351310948e-06 diff=3.748e-13 diff_naive=7.990e-14
+  residual=8.309e+01
+iter=22 pAp_d=1.2277942311e-06 pAp_p=1.2277942005e-06 pAp_pn=1.2277943142e-06 diff=3.056e-14 diff_naive=8.313e-14
+  residual=9.451e+01
+iter=23 pAp_d=2.8345773463e-06 pAp_p=2.8345773444e-06 pAp_pn=2.8345775718e-06 diff=1.869e-15 diff_naive=2.255e-13
+  residual=8.697e+01
+iter=24 pAp_d=2.9451382323e-06 pAp_p=2.9451382488e-06 pAp_pn=2.9451377941e-06 diff=1.657e-14 diff_naive=4.382e-13
+  residual=6.987e+01
+iter=25 pAp_d=1.5367441150e-06 pAp_p=1.5367440938e-06 pAp_pn=1.5367440938e-06 diff=2.124e-14 diff_naive=2.124e-14
+  residual=6.090e+01
+iter=26 pAp_d=1.1278304542e-06 pAp_p=1.1278305010e-06 pAp_pn=1.1278308421e-06 diff=4.677e-14 diff_naive=3.878e-13
+  residual=6.219e+01
+iter=27 pAp_d=8.2231675983e-07 pAp_p=8.2231679244e-07 pAp_pn=8.2231679244e-07 diff=3.261e-14 diff_naive=3.261e-14
+  residual=7.166e+01
+iter=28 pAp_d=7.5804194715e-07 pAp_p=7.5804189237e-07 pAp_pn=7.5804189237e-07 diff=5.479e-14 diff_naive=5.479e-14
+  residual=7.940e+01
+iter=29 pAp_d=2.3548898645e-06 pAp_p=2.3548898298e-06 pAp_pn=2.3548900572e-06 diff=3.474e-14 diff_naive=1.926e-13
+  residual=6.802e+01
+iter=30 pAp_d=1.0040409403e-06 pAp_p=1.0040409961e-06 pAp_pn=1.0040412235e-06 diff=5.583e-14 diff_naive=2.832e-13
+  residual=1.073e+02
+iter=31 pAp_d=4.6362127018e-06 pAp_p=4.6362129069e-06 pAp_pn=4.6362129069e-06 diff=2.051e-13 diff_naive=2.051e-13
+  residual=1.040e+02
+iter=32 pAp_d=4.9473353473e-06 pAp_p=4.9473351282e-06 pAp_pn=4.9473351282e-06 diff=2.191e-13 diff_naive=2.191e-13
+  residual=1.001e+02
+iter=33 pAp_d=3.9080091696e-06 pAp_p=3.9080091483e-06 pAp_pn=3.9080100578e-06 diff=2.130e-14 diff_naive=8.882e-13
+  residual=6.866e+01
+iter=34 pAp_d=9.5499916708e-07 pAp_p=9.5499922281e-07 pAp_pn=9.5499922281e-07 diff=5.573e-14 diff_naive=5.573e-14
+  residual=6.988e+01
+iter=35 pAp_d=1.0968594266e-06 pAp_p=1.0968593642e-06 pAp_pn=1.0968593642e-06 diff=6.237e-14 diff_naive=6.237e-14
+  residual=7.577e+01
+iter=36 pAp_d=8.2698512392e-07 pAp_p=8.2698511505e-07 pAp_pn=8.2698545611e-07 diff=8.867e-15 diff_naive=3.322e-13
+  residual=7.792e+01
+iter=37 pAp_d=1.9427080222e-06 pAp_p=1.9427079678e-06 pAp_pn=1.9427081952e-06 diff=5.436e-14 diff_naive=1.730e-13
+  residual=7.814e+01
+iter=38 pAp_d=1.3658355225e-06 pAp_p=1.3658354874e-06 pAp_pn=1.3658358284e-06 diff=3.511e-14 diff_naive=3.059e-13
+  residual=6.962e+01
+iter=39 pAp_d=1.1256858692e-06 pAp_p=1.1256859125e-06 pAp_pn=1.1256857988e-06 diff=4.327e-14 diff_naive=7.041e-14
+  residual=4.618e+01
+iter=40 pAp_d=3.6019840579e-07 pAp_p=3.6019844174e-07 pAp_pn=3.6019838490e-07 diff=3.595e-14 diff_naive=2.089e-14
+  residual=7.425e+01
+iter=41 pAp_d=1.6766459726e-06 pAp_p=1.6766459794e-06 pAp_pn=1.6766456383e-06 diff=6.796e-15 diff_naive=3.343e-13
+  residual=4.002e+01
+iter=42 pAp_d=2.9957133077e-07 pAp_p=2.9957135439e-07 pAp_pn=2.9957135439e-07 diff=2.362e-14 diff_naive=2.362e-14
+  residual=4.774e+01
+iter=43 pAp_d=2.3620014702e-07 pAp_p=2.3620012257e-07 pAp_pn=2.3620017942e-07 diff=2.445e-14 diff_naive=3.240e-14
+  residual=6.258e+01
+iter=44 pAp_d=5.3669237136e-07 pAp_p=5.3669236877e-07 pAp_pn=5.3669225508e-07 diff=2.593e-15 diff_naive=1.163e-13
+  residual=4.166e+01
+iter=45 pAp_d=5.3579338604e-07 pAp_p=5.3579333326e-07 pAp_pn=5.3579333326e-07 diff=5.279e-14 diff_naive=5.279e-14
+  residual=3.685e+01
+iter=46 pAp_d=6.1645541059e-07 pAp_p=6.1645539517e-07 pAp_pn=6.1645528149e-07 diff=1.541e-14 diff_naive=1.291e-13
+  residual=3.198e+01
+iter=47 pAp_d=1.7601952755e-07 pAp_p=1.7601951185e-07 pAp_pn=1.7601942659e-07 diff=1.570e-14 diff_naive=1.010e-13
+  residual=9.852e+01
+iter=48 pAp_d=5.8133683985e-07 pAp_p=5.8133673519e-07 pAp_pn=5.8133650782e-07 diff=1.047e-13 diff_naive=3.320e-13
+  residual=1.507e+02
+iter=49 pAp_d=1.0179570054e-06 pAp_p=1.0179569472e-06 pAp_pn=1.0179564924e-06 diff=5.826e-14 diff_naive=5.130e-13
+  residual=1.201e+02
+iter=50 pAp_d=7.3420493721e-07 pAp_p=7.3420494573e-07 pAp_pn=7.3420528679e-07 diff=8.524e-15 diff_naive=3.496e-13
+  residual=7.955e+01
+iter=51 pAp_d=5.8633021035e-07 pAp_p=5.8633031585e-07 pAp_pn=5.8633042954e-07 diff=1.055e-13 diff_naive=2.192e-13
+  residual=6.362e+01
+iter=52 pAp_d=3.8334925982e-07 pAp_p=3.8334928831e-07 pAp_pn=3.8334928831e-07 diff=2.850e-14 diff_naive=2.850e-14
+  residual=1.081e+02
+iter=53 pAp_d=1.4395421113e-06 pAp_p=1.4395420749e-06 pAp_pn=1.4395417338e-06 diff=3.646e-14 diff_naive=3.775e-13
+  residual=9.076e+01
+iter=54 pAp_d=3.4673556817e-06 pAp_p=3.4673555547e-06 pAp_pn=3.4673550999e-06 diff=1.271e-13 diff_naive=5.818e-13
+  residual=5.497e+01
+iter=55 pAp_d=1.1183136907e-06 pAp_p=1.1183137758e-06 pAp_pn=1.1183140032e-06 diff=8.508e-14 diff_naive=3.125e-13
+  residual=8.607e+01
+iter=56 pAp_d=3.0510657209e-07 pAp_p=3.0510659599e-07 pAp_pn=3.0510648230e-07 diff=2.390e-14 diff_naive=8.978e-14
+  residual=1.045e+02
+iter=57 pAp_d=1.0970846784e-06 pAp_p=1.0970846915e-06 pAp_pn=1.0970846915e-06 diff=1.314e-14 diff_naive=1.314e-14
+  residual=6.433e+01
+iter=58 pAp_d=1.3997652744e-06 pAp_p=1.3997653241e-06 pAp_pn=1.3997649830e-06 diff=4.967e-14 diff_naive=2.914e-13
+  residual=4.472e+01
+iter=59 pAp_d=5.4802838710e-07 pAp_p=5.4802842442e-07 pAp_pn=5.4802842442e-07 diff=3.732e-14 diff_naive=3.732e-14
+  residual=3.372e+01
+iter=60 pAp_d=1.0686238745e-07 pAp_p=1.0686238738e-07 pAp_pn=1.0686245844e-07 diff=6.572e-17 diff_naive=7.099e-14
+  residual=9.761e+01
+iter=61 pAp_d=2.3237688497e-07 pAp_p=2.3237691948e-07 pAp_pn=2.3237700475e-07 diff=3.452e-14 diff_naive=1.198e-13
+  residual=1.982e+02
+iter=62 pAp_d=8.1495621022e-07 pAp_p=8.1495613813e-07 pAp_pn=8.1495647919e-07 diff=7.209e-14 diff_naive=2.690e-13
+  residual=1.412e+02
+iter=63 pAp_d=5.1015216829e-07 pAp_p=5.1015217650e-07 pAp_pn=5.1015240388e-07 diff=8.211e-15 diff_naive=2.356e-13
+  residual=7.155e+01
+iter=64 pAp_d=5.0966108837e-07 pAp_p=5.0966104936e-07 pAp_pn=5.0966093568e-07 diff=3.900e-14 diff_naive=1.527e-13
+  residual=5.944e+01
+iter=65 pAp_d=3.9185627081e-07 pAp_p=3.9185630385e-07 pAp_pn=3.9185624701e-07 diff=3.304e-14 diff_naive=2.381e-14
+  residual=9.186e+01
+iter=66 pAp_d=3.1447179342e-07 pAp_p=3.1447177662e-07 pAp_pn=3.1447171978e-07 diff=1.680e-14 diff_naive=7.364e-14
+  residual=8.298e+01
+iter=67 pAp_d=5.9884016407e-07 pAp_p=5.9884018810e-07 pAp_pn=5.9884052916e-07 diff=2.404e-14 diff_naive=3.651e-13
+  residual=5.620e+01
+iter=68 pAp_d=3.8813120890e-07 pAp_p=3.8813124092e-07 pAp_pn=3.8813129777e-07 diff=3.202e-14 diff_naive=8.887e-14
+  residual=4.457e+01
+iter=69 pAp_d=7.2958165964e-08 pAp_p=7.2958172836e-08 pAp_pn=7.2958229680e-08 diff=6.872e-15 diff_naive=6.372e-14
+  residual=1.786e+02
+iter=70 pAp_d=2.1923770505e-07 pAp_p=2.1923773375e-07 pAp_pn=2.1923770532e-07 diff=2.869e-14 diff_naive=2.722e-16
+  residual=8.263e+01
+iter=71 pAp_d=6.7723608572e-08 pAp_p=6.7723618713e-08 pAp_pn=6.7723590291e-08 diff=1.014e-14 diff_naive=1.828e-14
+  residual=5.419e+01
+iter=72 pAp_d=1.5265681242e-08 pAp_p=1.5265683828e-08 pAp_pn=1.5265683828e-08 diff=2.586e-15 diff_naive=2.586e-15
+  residual=2.906e+01
+iter=73 pAp_d=9.6545552693e-08 pAp_p=9.6545548445e-08 pAp_pn=9.6545562656e-08 diff=4.248e-15 diff_naive=9.962e-15
+  residual=2.635e+01
+iter=74 pAp_d=8.3175721025e-08 pAp_p=8.3175720533e-08 pAp_pn=8.3175720533e-08 diff=4.920e-16 diff_naive=4.920e-16
+  residual=1.778e+01
+iter=75 pAp_d=2.9006191330e-08 pAp_p=2.9006187674e-08 pAp_pn=2.9006166358e-08 diff=3.656e-15 diff_naive=2.497e-14
+  residual=2.416e+01
+iter=76 pAp_d=2.0878110252e-08 pAp_p=2.0878111684e-08 pAp_pn=2.0878125895e-08 diff=1.432e-15 diff_naive=1.564e-14
+  residual=1.460e+01
+iter=77 pAp_d=9.2290773982e-09 pAp_p=9.2290761700e-09 pAp_pn=9.2290761700e-09 diff=1.228e-15 diff_naive=1.228e-15
+  residual=2.388e+01
+iter=78 pAp_d=9.5757794864e-08 pAp_p=9.5757798135e-08 pAp_pn=9.5757798135e-08 diff=3.272e-15 diff_naive=3.272e-15
+  residual=1.379e+01
+iter=79 pAp_d=1.3454732232e-07 pAp_p=1.3454732084e-07 pAp_pn=1.3454732084e-07 diff=1.476e-15 diff_naive=1.476e-15
+  residual=9.781e+00
+iter=80 pAp_d=7.6729763122e-09 pAp_p=7.6729769205e-09 pAp_pn=7.6729840259e-09 diff=6.083e-16 diff_naive=7.714e-15
+  residual=1.073e+01
+iter=81 pAp_d=9.1650883284e-09 pAp_p=9.1650882439e-09 pAp_pn=9.1650953493e-09 diff=8.449e-17 diff_naive=7.021e-15
+  residual=2.404e+01
+iter=82 pAp_d=1.3833791577e-07 pAp_p=1.3833789581e-07 pAp_pn=1.3833792423e-07 diff=1.996e-14 diff_naive=8.457e-15
+  residual=3.158e+01
+iter=83 pAp_d=3.8522423253e-07 pAp_p=3.8522421164e-07 pAp_pn=3.8522432533e-07 diff=2.089e-14 diff_naive=9.280e-14
+  residual=3.766e+01
+iter=84 pAp_d=2.9357355821e-07 pAp_p=2.9357357789e-07 pAp_pn=2.9357369158e-07 diff=1.969e-14 diff_naive=1.334e-13
+  residual=3.042e+01
+iter=85 pAp_d=7.6979826139e-08 pAp_p=7.6979830510e-08 pAp_pn=7.6979873143e-08 diff=4.371e-15 diff_naive=4.700e-14
+  residual=3.243e+01
+iter=86 pAp_d=1.4959592691e-07 pAp_p=1.4959593386e-07 pAp_pn=1.4959596228e-07 diff=6.957e-15 diff_naive=3.538e-14
+  residual=4.161e+01
+iter=87 pAp_d=5.4879378451e-07 pAp_p=5.4879376421e-07 pAp_pn=5.4879387790e-07 diff=2.030e-14 diff_naive=9.339e-14
+  residual=4.006e+01
+iter=88 pAp_d=9.7098108415e-08 pAp_p=9.7098109109e-08 pAp_pn=9.7098109109e-08 diff=6.937e-16 diff_naive=6.937e-16
+  residual=4.210e+01
+iter=89 pAp_d=1.7302738475e-07 pAp_p=1.7302738797e-07 pAp_pn=1.7302733113e-07 diff=3.218e-15 diff_naive=5.363e-14
+  residual=3.277e+01
+iter=90 pAp_d=9.4141342716e-07 pAp_p=9.4141341833e-07 pAp_pn=9.4141353202e-07 diff=8.824e-15 diff_naive=1.049e-13
+  residual=2.772e+01
+iter=91 pAp_d=4.6538563550e-08 pAp_p=4.6538559673e-08 pAp_pn=4.6538573883e-08 diff=3.877e-15 diff_naive=1.033e-14
+  residual=3.539e+01
+iter=92 pAp_d=4.4891492541e-07 pAp_p=4.4891493189e-07 pAp_pn=4.4891487505e-07 diff=6.486e-15 diff_naive=5.036e-14
+  residual=3.349e+01
+iter=93 pAp_d=2.2887953406e-08 pAp_p=2.2887952866e-08 pAp_pn=2.2887959972e-08 diff=5.395e-16 diff_naive=6.566e-15
+  residual=3.531e+01
+iter=94 pAp_d=1.6986521079e-07 pAp_p=1.6986521700e-07 pAp_pn=1.6986516016e-07 diff=6.212e-15 diff_naive=5.063e-14
+  residual=2.191e+01
+iter=95 pAp_d=1.2067414294e-07 pAp_p=1.2067414445e-07 pAp_pn=1.2067417288e-07 diff=1.514e-15 diff_naive=2.994e-14
+  residual=1.815e+01
+iter=96 pAp_d=2.5689130943e-08 pAp_p=2.5689132599e-08 pAp_pn=2.5689111283e-08 diff=1.655e-15 diff_naive=1.966e-14
+  residual=1.321e+01
+iter=97 pAp_d=7.6519412443e-09 pAp_p=7.6519413028e-09 pAp_pn=7.6519484082e-09 diff=5.847e-17 diff_naive=7.164e-15
+  residual=9.000e+00
+iter=98 pAp_d=5.4024885887e-09 pAp_p=5.4024891227e-09 pAp_pn=5.4024855700e-09 diff=5.340e-16 diff_naive=3.019e-15
+  residual=3.352e+01
+iter=99 pAp_d=6.6960905635e-08 pAp_p=6.6960922140e-08 pAp_pn=6.6960907930e-08 diff=1.651e-14 diff_naive=2.294e-15
+  residual=2.565e+01
+iter=100 pAp_d=4.7268060901e-08 pAp_p=4.7268059689e-08 pAp_pn=4.7268130743e-08 diff=1.213e-15 diff_naive=6.984e-14
+  residual=5.145e+01
+iter=101 pAp_d=5.0266496286e-08 pAp_p=5.0266493190e-08 pAp_pn=5.0266507401e-08 diff=3.096e-15 diff_naive=1.112e-14
+  residual=1.817e+01
+iter=102 pAp_d=1.1302568342e-08 pAp_p=1.1302567771e-08 pAp_pn=1.1302553560e-08 diff=5.718e-16 diff_naive=1.478e-14
+  residual=4.329e+01
+iter=103 pAp_d=2.9300079733e-07 pAp_p=2.9300082360e-07 pAp_pn=2.9300082360e-07 diff=2.628e-14 diff_naive=2.628e-14
+  residual=3.480e+01
+iter=104 pAp_d=1.0703433994e-07 pAp_p=1.0703433873e-07 pAp_pn=1.0703435294e-07 diff=1.212e-15 diff_naive=1.300e-14
+  residual=9.780e+00
+iter=105 pAp_d=2.0149030666e-08 pAp_p=2.0149030888e-08 pAp_pn=2.0149009572e-08 diff=2.224e-16 diff_naive=2.109e-14
+  residual=5.592e+00
+iter=106 pAp_d=1.4232910733e-09 pAp_p=1.4232908185e-09 pAp_pn=1.4232934831e-09 diff=2.548e-16 diff_naive=2.410e-15
+  residual=1.295e+01
+iter=107 pAp_d=8.3935116440e-08 pAp_p=8.3935120188e-08 pAp_pn=8.3935120188e-08 diff=3.748e-15 diff_naive=3.748e-15
+  residual=6.813e+00
+iter=108 pAp_d=5.0129858400e-09 pAp_p=5.0129855822e-09 pAp_pn=5.0129802531e-09 diff=2.578e-16 diff_naive=5.587e-15
+  residual=5.513e+00
+iter=109 pAp_d=1.1281125445e-08 pAp_p=1.1281123591e-08 pAp_pn=1.1281134249e-08 diff=1.854e-15 diff_naive=8.804e-15
+  residual=5.912e+00
+iter=110 pAp_d=1.8053780169e-09 pAp_p=1.8053780693e-09 pAp_pn=1.8053780693e-09 diff=5.234e-17 diff_naive=5.234e-17
+  residual=1.165e+00
+iter=111 pAp_d=1.1831089592e-09 pAp_p=1.1831087221e-09 pAp_pn=1.1831122748e-09 diff=2.371e-16 diff_naive=3.316e-15
+  residual=9.865e-02
+iter=112 pAp_d=8.0836849853e-14 pAp_p=8.0836379257e-14 pAp_pn=8.0835945576e-14 diff=4.706e-19 diff_naive=9.043e-19
+  residual=1.581e+00
+iter=113 pAp_d=6.4677587392e-10 pAp_p=6.4677552203e-10 pAp_pn=6.4677596612e-10 diff=3.519e-16 diff_naive=9.220e-17
+  residual=1.192e+00
+iter=114 pAp_d=1.6659493886e-10 pAp_p=1.6659496005e-10 pAp_pn=1.6659496005e-10 diff=2.119e-17 diff_naive=2.119e-17
+  residual=1.262e-01
+iter=115 pAp_d=4.5763076888e-12 pAp_p=4.5763115519e-12 pAp_pn=4.5763254297e-12 diff=3.863e-18 diff_naive=1.774e-17
+  residual=1.246e-01
+iter=116 pAp_d=5.4548081865e-13 pAp_p=5.4548032757e-13 pAp_pn=5.4549073591e-13 diff=4.911e-19 diff_naive=9.917e-18
+  residual=2.916e-01
+iter=117 pAp_d=3.0901361146e-12 pAp_p=3.0901392556e-12 pAp_pn=3.0901670112e-12 diff=3.141e-18 diff_naive=3.090e-17
+  residual=5.329e-01
+iter=118 pAp_d=2.3270991238e-11 pAp_p=2.3270996241e-11 pAp_pn=2.3271162775e-11 diff=5.003e-18 diff_naive=1.715e-16
+  residual=2.134e-01
+iter=119 pAp_d=4.2393197584e-12 pAp_p=4.2393172306e-12 pAp_pn=4.2392755972e-12 diff=2.528e-18 diff_naive=4.416e-17
+  residual=9.818e-02
+iter=120 pAp_d=5.9676158141e-13 pAp_p=5.9676222297e-13 pAp_pn=5.9676569242e-13 diff=6.416e-19 diff_naive=4.111e-18
+  residual=1.276e-01
+iter=121 pAp_d=1.4305980450e-13 pAp_p=1.4306004298e-13 pAp_pn=1.4305744089e-13 diff=2.385e-19 diff_naive=2.364e-18
+  residual=7.668e-01
+iter=122 pAp_d=1.9956283273e-11 pAp_p=1.9956286623e-11 pAp_pn=1.9956231112e-11 diff=3.350e-18 diff_naive=5.216e-17
+  residual=4.122e-01
+iter=123 pAp_d=3.7694482389e-12 pAp_p=3.7694430910e-12 pAp_pn=3.7693875798e-12 diff=5.148e-18 diff_naive=6.066e-17
+  residual=7.713e-03
+iter=124 pAp_d=2.2303924534e-14 pAp_p=2.2303990252e-14 pAp_pn=2.2304207092e-14 diff=6.572e-20 diff_naive=2.826e-19
+  residual=1.683e-02
+iter=125 pAp_d=4.5354699856e-14 pAp_p=4.5354778960e-14 pAp_pn=4.5353477918e-14 diff=7.910e-20 diff_naive=1.222e-18
+  residual=1.611e-02
+iter=126 pAp_d=2.1635320826e-14 pAp_p=2.1635254352e-14 pAp_pn=2.1635037512e-14 diff=6.647e-20 diff_naive=2.833e-19
+  residual=2.833e-02
+iter=127 pAp_d=7.5254081599e-15 pAp_p=7.5254472792e-15 pAp_pn=7.5254472792e-15 diff=3.912e-20 diff_naive=3.912e-20
+  residual=5.654e-02
+iter=128 pAp_d=5.5630303971e-13 pAp_p=5.5630153262e-13 pAp_pn=5.5628765483e-13 diff=1.507e-18 diff_naive=1.538e-17
+  residual=1.334e-02
+iter=129 pAp_d=1.2658056263e-14 pAp_p=1.2658060364e-14 pAp_pn=1.2657951944e-14 diff=4.100e-21 diff_naive=1.043e-19
+  residual=1.013e-03
+iter=130 pAp_d=1.2083406781e-15 pAp_p=1.2083433212e-15 pAp_pn=1.2083162162e-15 diff=2.643e-21 diff_naive=2.446e-20
+  residual=9.365e-04
+iter=131 pAp_d=1.9559199420e-16 pAp_p=1.9559007192e-16 pAp_pn=1.9559007192e-16 diff=1.922e-21 diff_naive=1.922e-21
+  residual=3.191e-04
+iter=132 pAp_d=4.3335308528e-17 pAp_p=4.3335899647e-17 pAp_pn=4.3334205582e-17 diff=5.911e-22 diff_naive=1.103e-21
+  residual=5.016e-05
+iter=133 pAp_d=3.9758695569e-19 pAp_p=3.9757608962e-19 pAp_pn=3.9747021050e-19 diff=1.087e-23 diff_naive=1.167e-22
+  residual=1.857e-04
+iter=134 pAp_d=2.5896570995e-18 pAp_p=2.5895914780e-18 pAp_pn=2.5898032362e-18 diff=6.562e-23 diff_naive=1.461e-22
+  residual=2.242e-05
+iter=135 pAp_d=9.7666257115e-20 pAp_p=9.7660251840e-20 pAp_pn=9.7766130959e-20 diff=6.005e-24 diff_naive=9.987e-23
+  residual=7.722e-05
+iter=136 pAp_d=4.6009171280e-20 pAp_p=4.6004476948e-20 pAp_pn=4.5978007168e-20 diff=4.694e-24 diff_naive=3.116e-23
+  residual=4.518e-05
+iter=137 pAp_d=2.5813715999e-19 pAp_p=2.5813329068e-19 pAp_pn=2.5808035112e-19 diff=3.869e-24 diff_naive=5.681e-23
+  residual=8.715e-05
+iter=138 pAp_d=1.6577514162e-19 pAp_p=1.6578022965e-19 pAp_pn=1.6575375987e-19 diff=5.088e-24 diff_naive=2.138e-23
+  residual=1.648e-04
+iter=139 pAp_d=3.7000834282e-18 pAp_p=3.7002634301e-18 pAp_pn=3.7011104630e-18 diff=1.800e-22 diff_naive=1.027e-21
+  residual=2.303e-04
+iter=140 pAp_d=3.6167179553e-17 pAp_p=3.6166612782e-17 pAp_pn=3.6159836518e-17 diff=5.668e-22 diff_naive=7.343e-21
+  residual=7.755e-05
+iter=141 pAp_d=1.2863021327e-17 pAp_p=1.2863042337e-17 pAp_pn=1.2863042337e-17 diff=2.101e-23 diff_naive=2.101e-23
+  residual=1.980e-05
+iter=142 pAp_d=2.2498518938e-19 pAp_p=2.2499312661e-19 pAp_pn=2.2494018706e-19 diff=7.937e-24 diff_naive=4.500e-23
+  residual=1.191e-05
+iter=143 pAp_d=2.5373916734e-20 pAp_p=2.5371283748e-20 pAp_pn=2.5364666303e-20 diff=2.633e-24 diff_naive=9.250e-24
+  residual=1.045e-05
+iter=144 pAp_d=1.1328116574e-20 pAp_p=1.1329065670e-20 pAp_pn=1.1335683114e-20 diff=9.491e-25 diff_naive=7.567e-24
+  residual=9.661e-06
+iter=145 pAp_d=4.9077473267e-21 pAp_p=4.9084897549e-21 pAp_pn=4.9068353937e-21 diff=7.424e-25 diff_naive=9.119e-25
+  residual=9.756e-06
+iter=146 pAp_d=3.3698606515e-21 pAp_p=3.3699338155e-21 pAp_pn=3.3699338155e-21 diff=7.316e-26 diff_naive=7.316e-26
+  residual=1.052e-05
+iter=147 pAp_d=1.7684504008e-20 pAp_p=1.7681812774e-20 pAp_pn=1.7695047664e-20 diff=2.691e-24 diff_naive=1.054e-23
+  residual=1.322e-05
+iter=148 pAp_d=2.3059029103e-20 pAp_p=2.3061795478e-20 pAp_pn=2.3041943143e-20 diff=2.766e-24 diff_naive=1.709e-23
+  residual=8.742e-06
+iter=149 pAp_d=6.1159183310e-21 pAp_p=6.1161734492e-21 pAp_pn=6.1145190880e-21 diff=2.551e-25 diff_naive=1.399e-24
+  residual=1.682e-05
+iter=150 pAp_d=8.8023407363e-20 pAp_p=8.8025252065e-20 pAp_pn=8.8025252065e-20 diff=1.845e-24 diff_naive=1.845e-24
+  residual=9.884e-06
+iter=151 pAp_d=3.0966904568e-20 pAp_p=3.0969642134e-20 pAp_pn=3.0982877024e-20 diff=2.738e-24 diff_naive=1.597e-23
+  residual=4.810e-06
+iter=152 pAp_d=9.9590459766e-21 pAp_p=9.9592545751e-21 pAp_pn=9.9691807425e-21 diff=2.086e-25 diff_naive=1.013e-23
+  residual=3.355e-06
+iter=153 pAp_d=2.6692406418e-21 pAp_p=2.6684846561e-21 pAp_pn=2.6651759336e-21 diff=7.560e-25 diff_naive=4.065e-24
+  residual=3.168e-06
+iter=154 pAp_d=8.2744198180e-21 pAp_p=8.2751148480e-21 pAp_pn=8.2784235704e-21 diff=6.950e-25 diff_naive=4.004e-24
+  residual=2.633e-06
+iter=155 pAp_d=1.7584902845e-21 pAp_p=1.7585859823e-21 pAp_pn=1.7602403435e-21 diff=9.570e-26 diff_naive=1.750e-24
+  residual=2.668e-06
+iter=156 pAp_d=1.1022129690e-21 pAp_p=1.1018045759e-21 pAp_pn=1.1018045759e-21 diff=4.084e-25 diff_naive=4.084e-25
+  residual=2.360e-06
+iter=157 pAp_d=1.7765008446e-22 pAp_p=1.7763703655e-22 pAp_pn=1.7825742201e-22 diff=1.305e-26 diff_naive=6.073e-25
+  residual=2.057e-06
+iter=158 pAp_d=9.4673303907e-23 pAp_p=9.4712180137e-23 pAp_pn=9.4505384984e-23 diff=3.888e-26 diff_naive=1.679e-25
+  residual=2.080e-06
+iter=159 pAp_d=6.7089377313e-22 pAp_p=6.7084347678e-22 pAp_pn=6.7167065739e-22 diff=5.030e-26 diff_naive=7.769e-25
+  residual=2.085e-06
+iter=160 pAp_d=7.2630522867e-22 pAp_p=7.2626457782e-22 pAp_pn=7.2543739721e-22 diff=4.065e-26 diff_naive=8.678e-25
+  residual=1.754e-06
+iter=161 pAp_d=8.3229376919e-23 pAp_p=8.3235049138e-23 pAp_pn=8.3235049138e-23 diff=5.672e-27 diff_naive=5.672e-27
+  residual=6.439e-06
+iter=162 pAp_d=1.0117601727e-20 pAp_p=1.0118073253e-20 pAp_pn=1.0124690698e-20 diff=4.715e-25 diff_naive=7.089e-24
+  residual=7.623e-06
+iter=163 pAp_d=9.3345182006e-21 pAp_p=9.3339060320e-21 pAp_pn=9.3405234769e-21 diff=6.122e-25 diff_naive=6.005e-24
+  residual=6.124e-06
+iter=164 pAp_d=1.3432747493e-20 pAp_p=1.3433413148e-20 pAp_pn=1.3430104425e-20 diff=6.657e-25 diff_naive=2.643e-24
+  residual=6.462e-06
+iter=165 pAp_d=6.9900802461e-21 pAp_p=6.9913305373e-21 pAp_pn=6.9880218148e-21 diff=1.250e-24 diff_naive=2.058e-24
+  residual=8.279e-06
+iter=166 pAp_d=1.4314041298e-20 pAp_p=1.4313533320e-20 pAp_pn=1.4300298430e-20 diff=5.080e-25 diff_naive=1.374e-23
+  residual=8.659e-06
+iter=167 pAp_d=1.5851749311e-20 pAp_p=1.5848780537e-20 pAp_pn=1.5842163092e-20 diff=2.969e-24 diff_naive=9.586e-24
+  residual=7.537e-06
+iter=168 pAp_d=7.0486726167e-20 pAp_p=7.0489023079e-20 pAp_pn=7.0436083520e-20 diff=2.297e-24 diff_naive=5.064e-23
+  residual=3.892e-06
+iter=169 pAp_d=7.2837437328e-21 pAp_p=7.2824981129e-21 pAp_pn=7.2824981129e-21 diff=1.246e-24 diff_naive=1.246e-24
+  residual=1.918e-06
+iter=170 pAp_d=3.0570611528e-21 pAp_p=3.0572595440e-21 pAp_pn=3.0556051828e-21 diff=1.984e-25 diff_naive=1.456e-24
+  residual=2.047e-06
+iter=171 pAp_d=5.3106762750e-22 pAp_p=5.3104995326e-22 pAp_pn=5.2980918234e-22 diff=1.767e-26 diff_naive=1.258e-24
+  residual=1.404e-06
+iter=172 pAp_d=7.8995760028e-22 pAp_p=7.8995748499e-22 pAp_pn=7.8954389468e-22 diff=1.153e-28 diff_naive=4.137e-25
+  residual=8.390e-07
+iter=173 pAp_d=2.5658525570e-22 pAp_p=2.5663278504e-22 pAp_pn=2.5621919474e-22 diff=4.753e-26 diff_naive=3.661e-25
+  residual=5.016e-07
+iter=174 pAp_d=7.7034522158e-23 pAp_p=7.7031194544e-23 pAp_pn=7.7134592121e-23 diff=3.328e-27 diff_naive=1.001e-25
+  residual=4.347e-07
+iter=175 pAp_d=3.6958434009e-23 pAp_p=3.6964633623e-23 pAp_pn=3.6964633623e-23 diff=6.200e-27 diff_naive=6.200e-27
+  residual=7.618e-07
+iter=176 pAp_d=8.7709240032e-23 pAp_p=8.7681144931e-23 pAp_pn=8.7784542507e-23 diff=2.810e-26 diff_naive=7.530e-26
+  residual=9.585e-07
+iter=177 pAp_d=8.4824511687e-23 pAp_p=8.4786012787e-23 pAp_pn=8.4786012787e-23 diff=3.850e-26 diff_naive=3.850e-26
+  residual=9.019e-07
+iter=178 pAp_d=3.3715911934e-23 pAp_p=3.3707609962e-23 pAp_pn=3.3811007538e-23 diff=8.302e-27 diff_naive=9.510e-26
+  residual=2.624e-07
+iter=179 pAp_d=6.2312223411e-24 pAp_p=6.2297039883e-24 pAp_pn=6.1909298971e-24 diff=1.518e-27 diff_naive=4.029e-26
+  residual=1.024e-07
+iter=180 pAp_d=2.7271526317e-24 pAp_p=2.7271110820e-24 pAp_pn=2.7335734305e-24 diff=4.155e-29 diff_naive=6.421e-27
+  residual=2.282e-08
+iter=181 pAp_d=4.4777562825e-26 pAp_p=4.4832542966e-26 pAp_pn=4.2409162265e-26 diff=5.498e-29 diff_naive=2.368e-27
+  residual=5.564e-08
+iter=182 pAp_d=3.5733407613e-25 pAp_p=3.5704475659e-25 pAp_pn=3.5704475659e-25 diff=2.893e-28 diff_naive=2.893e-28
+  residual=2.624e-08
+iter=183 pAp_d=1.2679406259e-25 pAp_p=1.2682359001e-25 pAp_pn=1.2601579644e-25 diff=2.953e-29 diff_naive=7.783e-28
+  residual=2.072e-08
+iter=184 pAp_d=1.3765192311e-25 pAp_p=1.3732490638e-25 pAp_pn=1.3651711281e-25 diff=3.270e-28 diff_naive=1.135e-27
+  residual=1.326e-08
+iter=185 pAp_d=7.2335615217e-27 pAp_p=7.2701421025e-27 pAp_pn=7.1691679066e-27 diff=3.658e-29 diff_naive=6.439e-29
+  residual=7.869e-09
+iter=186 pAp_d=4.1437586242e-27 pAp_p=4.1399420306e-27 pAp_pn=4.0894549327e-27 diff=3.817e-30 diff_naive=5.430e-29
+  residual=8.396e-09
+iter=187 pAp_d=3.4514562761e-26 pAp_p=3.4331226595e-26 pAp_pn=3.3927329812e-26 diff=1.833e-28 diff_naive=5.872e-28
+  residual=5.413e-09
+iter=188 pAp_d=9.9699149938e-27 pAp_p=9.9964453910e-27 pAp_pn=9.9964453910e-27 diff=2.653e-29 diff_naive=2.653e-29
+  residual=1.514e-09
+iter=189 pAp_d=2.5603305054e-28 pAp_p=2.5874637691e-28 pAp_pn=2.3350282795e-28 diff=2.713e-30 diff_naive=2.253e-29
+  residual=1.597e-09
+iter=190 pAp_d=6.3968706861e-28 pAp_p=6.4371049866e-28 pAp_pn=6.3108872418e-28 diff=4.023e-30 diff_naive=8.598e-30
+  residual=1.324e-09
+iter=191 pAp_d=6.7469126796e-28 pAp_p=6.6895404763e-28 pAp_pn=6.5633227314e-28 diff=5.737e-30 diff_naive=1.836e-29
+  residual=4.178e-10
+iter=192 pAp_d=8.1911495038e-29 pAp_p=8.2041534143e-29 pAp_pn=7.8886090522e-29 diff=1.300e-31 diff_naive=3.025e-30
+  residual=4.206e-10
+iter=193 pAp_d=4.7206272438e-29 pAp_p=4.7331654313e-29 pAp_pn=3.9443045261e-29 diff=1.254e-31 diff_naive=7.763e-30
+  residual=4.636e-10
+iter=194 pAp_d=3.4166227606e-29 pAp_p=3.4709879830e-29 pAp_pn=3.1554436209e-29 diff=5.437e-31 diff_naive=2.612e-30
+  residual=1.828e-10
+iter=195 pAp_d=5.9573236534e-30 pAp_p=5.9164567892e-30 pAp_pn=5.1275958839e-30 diff=4.087e-32 diff_naive=8.297e-31
+  residual=1.945e-10
+iter=196 pAp_d=8.0064357562e-30 pAp_p=7.8886090522e-30 pAp_pn=6.3108872418e-30 diff=1.178e-31 diff_naive=1.696e-30
+  residual=3.081e-10
+iter=197 pAp_d=1.3564917875e-29 pAp_p=1.3410635389e-29 pAp_pn=1.4199496294e-29 diff=1.543e-31 diff_naive=6.346e-31
+  residual=1.343e-10
+iter=198 pAp_d=1.7389701310e-29 pAp_p=1.7354939915e-29 pAp_pn=1.6566079010e-29 diff=3.476e-32 diff_naive=8.236e-31
+  residual=9.515e-11
+iter=199 pAp_d=1.8339062484e-30 pAp_p=1.7749370367e-30 pAp_pn=1.5777218104e-30 diff=5.897e-32 diff_naive=2.562e-31
+  residual=1.054e-10
+iter=200 pAp_d=1.6178298574e-30 pAp_p=1.5777218104e-30 pAp_pn=1.5777218104e-30 diff=4.011e-32 diff_naive=4.011e-32
+  residual=1.053e-10
+iter=201 pAp_d=2.9888038290e-30 pAp_p=2.9582283946e-30 pAp_pn=2.3665827157e-30 diff=3.058e-32 diff_naive=6.222e-31
+  residual=5.575e-11
+iter=202 pAp_d=2.8035382498e-31 pAp_p=2.9582283946e-31 pAp_pn=1.9721522631e-31 diff=1.547e-32 diff_naive=8.314e-32
+  residual=5.253e-11
+iter=203 pAp_d=9.8226303688e-31 pAp_p=9.8607613153e-31 pAp_pn=5.9164567892e-31 diff=3.813e-33 diff_naive=3.906e-31
+  residual=2.201e-11
+iter=204 pAp_d=4.1869068416e-32 pAp_p=3.6977854932e-32 pAp_pn=1.8488927466e-32 diff=4.891e-33 diff_naive=2.338e-32
+  residual=7.407e-12
+iter=205 pAp_d=9.2909870154e-32 pAp_p=9.8607613153e-32 pAp_pn=7.3955709864e-32 diff=5.698e-33 diff_naive=1.895e-32
+  residual=4.199e-12
+iter=206 pAp_d=1.6596595941e-33 pAp_p=1.5407439555e-33 pAp_pn=1.5407439555e-33 diff=1.189e-34 diff_naive=1.189e-34
+  residual=1.556e-11
+iter=207 pAp_d=5.1531996626e-32 pAp_p=4.9303806576e-32 pAp_pn=3.6977854932e-32 diff=2.228e-33 diff_naive=1.455e-32
+  residual=1.913e-11
+iter=208 pAp_d=5.3986621217e-32 pAp_p=4.9303806576e-32 pAp_pn=2.4651903288e-32 diff=4.683e-33 diff_naive=2.933e-32
+  residual=1.840e-12
+iter=209 pAp_d=3.3245511854e-34 pAp_p=3.8518598888e-34 pAp_pn=1.9259299444e-34 diff=5.273e-35 diff_naive=1.399e-34
+  residual=1.517e-12
+iter=210 pAp_d=3.2230471661e-34 pAp_p=3.8518598888e-34 pAp_pn=1.9259299444e-34 diff=6.288e-35 diff_naive=1.297e-34
+  residual=1.904e-12
+iter=211 pAp_d=1.1381020662e-34 pAp_p=1.9259299444e-34 pAp_pn=4.8148248610e-35 diff=7.878e-35 diff_naive=6.566e-35
+  residual=7.591e-13
+iter=212 pAp_d=3.0089410295e-35 pAp_p=4.8148248610e-35 pAp_pn=1.2037062152e-35 diff=1.806e-35 diff_naive=1.805e-35
+  residual=4.904e-13
+iter=213 pAp_d=2.6918474450e-35 pAp_p=4.8148248610e-35 pAp_pn=1.2037062152e-35 diff=2.123e-35 diff_naive=1.488e-35
+  residual=6.094e-13
+iter=214 pAp_d=5.8338807071e-35 pAp_p=4.8148248610e-35 pAp_pn=1.2037062152e-35 diff=1.019e-35 diff_naive=4.630e-35
+  residual=3.244e-13
+iter=215 pAp_d=3.0534309063e-35 pAp_p=4.8148248610e-35 pAp_pn=0.0000000000e+00 diff=1.761e-35 diff_naive=3.053e-35
+  residual=1.534e-13
+iter=216 pAp_d=2.3087751833e-36 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=1.556e-36 diff_naive=1.556e-36
+  residual=2.011e-13
+iter=217 pAp_d=4.1655627115e-36 pAp_p=1.2037062152e-35 pAp_pn=7.5231638453e-37 diff=7.871e-36 diff_naive=3.413e-36
+  residual=3.788e-13
+iter=218 pAp_d=2.6933697281e-35 pAp_p=4.8148248610e-35 pAp_pn=1.2037062152e-35 diff=2.121e-35 diff_naive=1.490e-35
+  residual=1.650e-13
+iter=219 pAp_d=4.0866573961e-36 pAp_p=1.2037062152e-35 pAp_pn=7.5231638453e-37 diff=7.950e-36 diff_naive=3.334e-36
+  residual=4.940e-14
+iter=220 pAp_d=1.4933717379e-36 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.411e-37 diff_naive=7.411e-37
+  residual=4.340e-14
+iter=221 pAp_d=1.1606607241e-37 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=6.363e-37 diff_naive=6.363e-37
+  residual=4.853e-14
+iter=222 pAp_d=6.3370026615e-37 pAp_p=7.5231638453e-37 pAp_pn=-7.5231638453e-37 diff=1.186e-37 diff_naive=1.386e-36
+  residual=6.800e-14
+iter=223 pAp_d=4.8036974685e-38 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.043e-37 diff_naive=4.804e-38
+  residual=3.154e-15
+iter=224 pAp_d=5.3803383131e-40 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.518e-37 diff_naive=7.518e-37
+  residual=9.849e-15
+iter=225 pAp_d=1.9192998958e-39 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.504e-37 diff_naive=7.504e-37
+  residual=1.141e-14
+iter=226 pAp_d=1.6495944994e-38 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.358e-37 diff_naive=1.650e-38
+  residual=4.011e-15
+iter=227 pAp_d=8.3789709714e-39 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.439e-37 diff_naive=8.379e-39
+  residual=7.294e-15
+iter=228 pAp_d=4.2162366000e-39 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.481e-37 diff_naive=7.481e-37
+  residual=2.842e-15
+iter=229 pAp_d=1.8501966187e-39 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.505e-37 diff_naive=7.505e-37
+  residual=8.390e-15
+iter=230 pAp_d=3.8806244042e-40 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.519e-37 diff_naive=7.519e-37
+  residual=1.229e-14
+iter=231 pAp_d=1.6973973072e-38 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.353e-37 diff_naive=1.697e-38
+  residual=3.891e-15
+iter=232 pAp_d=4.2147709383e-39 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.481e-37 diff_naive=7.481e-37
+  residual=2.892e-15
+iter=233 pAp_d=1.0788906248e-39 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.512e-37 diff_naive=1.079e-39
+  residual=2.139e-15
+iter=234 pAp_d=8.0254663451e-40 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.515e-37 diff_naive=7.515e-37
+  residual=4.258e-15
+iter=235 pAp_d=7.4993261272e-40 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.516e-37 diff_naive=7.499e-40
+  residual=4.418e-16
+iter=236 pAp_d=7.0406531011e-42 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=1.520e-15
+iter=237 pAp_d=9.4703907057e-41 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.522e-37 diff_naive=9.470e-41
+  residual=2.926e-15
+iter=238 pAp_d=1.2619400806e-39 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.511e-37 diff_naive=1.262e-39
+  residual=1.597e-15
+iter=239 pAp_d=3.2566732496e-39 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.491e-37 diff_naive=3.257e-39
+  residual=1.048e-15
+iter=240 pAp_d=2.0680020529e-40 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.521e-37 diff_naive=7.521e-37
+  residual=1.015e-15
+iter=241 pAp_d=1.1824775703e-40 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.522e-37 diff_naive=1.182e-40
+  residual=8.831e-16
+iter=242 pAp_d=1.6233442533e-41 pAp_p=7.5231638453e-37 pAp_pn=-7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=1.447e-15
+iter=243 pAp_d=9.1505964192e-41 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.522e-37 diff_naive=7.522e-37
+  residual=3.106e-16
+iter=244 pAp_d=1.8319564715e-41 pAp_p=7.5231638453e-37 pAp_pn=-7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=2.635e-16
+iter=245 pAp_d=3.1750278481e-42 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=4.652e-16
+iter=246 pAp_d=1.8211857138e-41 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.523e-37 diff_naive=1.821e-41
+  residual=2.056e-15
+iter=247 pAp_d=2.3385781949e-41 pAp_p=7.5231638453e-37 pAp_pn=-7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=2.062e-15
+iter=248 pAp_d=4.8360090351e-40 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.518e-37 diff_naive=7.518e-37
+  residual=2.654e-16
+iter=249 pAp_d=2.0613158846e-41 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.523e-37 diff_naive=2.061e-41
+  residual=1.334e-16
+iter=250 pAp_d=6.6320457849e-42 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=6.273e-17
+iter=251 pAp_d=1.3003882594e-42 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.523e-37 diff_naive=1.300e-42
+  residual=4.098e-17
+iter=252 pAp_d=1.0273129210e-42 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.523e-37 diff_naive=1.027e-42
+  residual=6.482e-18
+iter=253 pAp_d=5.3803881362e-44 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=1.669e-18
+iter=254 pAp_d=2.0773817829e-45 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.523e-37 diff_naive=2.077e-45
+  residual=9.828e-19
+iter=255 pAp_d=8.8573955665e-46 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.523e-37 diff_naive=8.857e-46
+  residual=8.393e-19
+iter=256 pAp_d=5.2694522933e-46 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=5.767e-19
+iter=257 pAp_d=1.3746601193e-46 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=3.636e-19
+iter=258 pAp_d=1.4809586237e-46 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.523e-37 diff_naive=1.481e-46
+  residual=2.836e-19
+iter=259 pAp_d=3.7497910564e-47 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=3.938e-19
+iter=260 pAp_d=3.7408814958e-47 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=4.751e-19
+iter=261 pAp_d=1.3839646418e-46 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=1.230e-18
+iter=262 pAp_d=5.3029864798e-47 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=2.556e-18
+iter=263 pAp_d=1.8626194881e-45 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.523e-37 diff_naive=1.863e-45
+  residual=1.221e-18
+iter=264 pAp_d=1.0492810206e-46 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=1.238e-18
+iter=265 pAp_d=1.5610963994e-46 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=1.256e-18
+iter=266 pAp_d=5.1121375535e-47 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=1.570e-18
+iter=267 pAp_d=8.1684012956e-46 pAp_p=7.5231638453e-37 pAp_pn=-7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=1.095e-18
+iter=268 pAp_d=5.3603339901e-46 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=6.699e-19
+iter=269 pAp_d=4.3892165821e-46 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=1.863e-19
+iter=270 pAp_d=4.7822835012e-47 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=1.238e-19
+iter=271 pAp_d=1.2935980816e-48 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=2.421e-19
+iter=272 pAp_d=1.9013393222e-48 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=1.047e-18
+iter=273 pAp_d=4.4364708542e-47 pAp_p=7.5231638453e-37 pAp_pn=-7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=1.456e-18
+iter=274 pAp_d=2.6573606648e-46 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=1.072e-18
+iter=275 pAp_d=1.6352612035e-46 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=8.114e-19
+iter=276 pAp_d=2.0670142821e-46 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=1.162e-18
+iter=277 pAp_d=2.4581229730e-46 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=5.259e-19
+iter=278 pAp_d=2.0697609034e-47 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=5.324e-19
+iter=279 pAp_d=3.4219450441e-47 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=5.519e-19
+iter=280 pAp_d=3.5950304799e-47 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=1.836e-19
+iter=281 pAp_d=3.4521526451e-48 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.523e-37 diff_naive=3.452e-48
+  residual=4.340e-19
+iter=282 pAp_d=1.1375141126e-47 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=6.904e-19
+iter=283 pAp_d=2.1353304257e-46 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=7.750e-19
+iter=284 pAp_d=5.5633956970e-47 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=1.077e-18
+iter=285 pAp_d=1.4242404134e-46 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.523e-37 diff_naive=1.424e-46
+  residual=4.496e-19
+iter=286 pAp_d=3.5717000704e-47 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.523e-37 diff_naive=3.572e-47
+  residual=2.448e-19
+iter=287 pAp_d=2.0335386111e-47 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=5.707e-19
+iter=288 pAp_d=2.5513671556e-47 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.523e-37 diff_naive=2.551e-47
+  residual=2.983e-19
+iter=289 pAp_d=5.8479219253e-48 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=4.769e-20
+iter=290 pAp_d=5.9850834789e-49 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=2.168e-20
+iter=291 pAp_d=3.2185419209e-50 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=4.083e-20
+iter=292 pAp_d=1.3255555123e-49 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=5.689e-20
+iter=293 pAp_d=4.8256856572e-49 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=8.110e-20
+iter=294 pAp_d=1.3547915966e-48 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=5.041e-20
+iter=295 pAp_d=3.0211148504e-49 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=6.934e-20
+iter=296 pAp_d=4.0649396486e-49 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=1.092e-19
+iter=297 pAp_d=6.3372667500e-49 pAp_p=7.5231638453e-37 pAp_pn=0.0000000000e+00 diff=7.523e-37 diff_naive=6.337e-49
+  residual=1.818e-19
+iter=298 pAp_d=5.3616204626e-49 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=3.957e-20
+iter=299 pAp_d=2.9932851146e-49 pAp_p=7.5231638453e-37 pAp_pn=7.5231638453e-37 diff=7.523e-37 diff_naive=7.523e-37
+  residual=1.024e-19

@@ -1,0 +1,100 @@
+iter=0 pAp_d=1.6510458410e+12 pAp_p=1.6510458410e+12 diff=4.883e-04
+  residual=8.929e+01
+iter=1 pAp_d=2.6332184311e+13 pAp_p=2.6332184311e+13 diff=6.250e-02
+  residual=1.070e+02
+iter=2 pAp_d=2.5123356851e+13 pAp_p=2.5123356851e+13 diff=3.906e-03
+  residual=1.239e+02
+iter=3 pAp_d=3.9068569152e+13 pAp_p=3.9068569152e+13 diff=1.250e-01
+  residual=1.372e+02
+iter=4 pAp_d=4.7834614689e+13 pAp_p=4.7834614689e+13 diff=3.906e-02
+  residual=1.352e+02
+iter=5 pAp_d=2.9264117242e+13 pAp_p=2.9264117242e+13 diff=8.594e-02
+  residual=1.740e+02
+iter=6 pAp_d=5.6037583107e+13 pAp_p=5.6037583107e+13 diff=3.125e-02
+  residual=2.133e+02
+iter=7 pAp_d=9.6030293377e+13 pAp_p=9.6030293377e+13 diff=7.812e-02
+  residual=2.622e+02
+iter=8 pAp_d=2.3697823739e+14 pAp_p=2.3697823739e+14 diff=3.750e-01
+  residual=2.507e+02
+iter=9 pAp_d=1.1793365396e+14 pAp_p=1.1793365396e+14 diff=7.812e-02
+  residual=2.559e+02
+iter=10 pAp_d=8.5225284953e+13 pAp_p=8.5225284953e+13 diff=1.562e-02
+  residual=3.284e+02
+iter=11 pAp_d=2.0613200075e+14 pAp_p=2.0613200075e+14 diff=3.750e-01
+  residual=4.089e+02
+iter=12 pAp_d=3.3508799726e+14 pAp_p=3.3508799726e+14 diff=7.500e-01
+  residual=4.475e+02
+iter=13 pAp_d=2.9418010502e+14 pAp_p=2.9418010502e+14 diff=7.500e-01
+  residual=4.964e+02
+iter=14 pAp_d=3.7721948321e+14 pAp_p=3.7721948321e+14 diff=6.250e-02
+  residual=5.650e+02
+iter=15 pAp_d=5.6487953528e+14 pAp_p=5.6487953528e+14 diff=8.750e-01
+  residual=5.814e+02
+iter=16 pAp_d=5.1615993806e+14 pAp_p=5.1615993806e+14 diff=4.375e-01
+  residual=6.885e+02
+iter=17 pAp_d=1.7424109105e+15 pAp_p=1.7424109105e+15 diff=2.250e+00
+  residual=8.494e+02
+iter=18 pAp_d=1.6170330818e+15 pAp_p=1.6170330818e+15 diff=3.250e+00
+  residual=7.433e+02
+iter=19 pAp_d=8.5790678167e+14 pAp_p=8.5790678167e+14 diff=1.250e+00
+  residual=8.594e+02
+iter=20 pAp_d=1.7227341648e+15 pAp_p=1.7227341648e+15 diff=5.000e-01
+  residual=1.004e+03
+iter=21 pAp_d=3.1990581788e+15 pAp_p=3.1990581788e+15 diff=2.000e+00
+  residual=7.913e+02
+iter=22 pAp_d=9.7749727015e+14 pAp_p=9.7749727015e+14 diff=1.000e+00
+  residual=1.076e+03
+iter=23 pAp_d=4.8937762580e+15 pAp_p=4.8937762580e+15 diff=1.800e+01
+  residual=8.055e+02
+iter=24 pAp_d=1.4496194824e+15 pAp_p=1.4496194824e+15 diff=2.500e-01
+  residual=8.795e+02
+iter=25 pAp_d=2.4134233919e+15 pAp_p=2.4134233919e+15 diff=1.000e+01
+  residual=8.339e+02
+iter=26 pAp_d=1.8488288456e+15 pAp_p=1.8488288456e+15 diff=2.500e+00
+  residual=9.357e+02
+iter=27 pAp_d=3.6442887708e+15 pAp_p=3.6442887708e+15 diff=1.000e+00
+  residual=8.423e+02
+iter=28 pAp_d=1.6732938275e+15 pAp_p=1.6732938275e+15 diff=3.000e+00
+  residual=7.675e+02
+iter=29 pAp_d=1.0989283442e+15 pAp_p=1.0989283442e+15 diff=1.375e+00
+  residual=6.692e+02
+iter=30 pAp_d=8.8662300561e+14 pAp_p=8.8662300561e+14 diff=6.250e-01
+  residual=7.168e+02
+iter=31 pAp_d=1.2089323901e+15 pAp_p=1.2089323901e+15 diff=5.000e+00
+  residual=6.031e+02
+iter=32 pAp_d=5.8329895599e+14 pAp_p=5.8329895599e+14 diff=5.000e-01
+  residual=6.048e+02
+iter=33 pAp_d=1.0942939326e+15 pAp_p=1.0942939326e+15 diff=1.000e+00
+  residual=7.615e+02
+iter=34 pAp_d=1.4411244554e+15 pAp_p=1.4411244554e+15 diff=7.500e-01
+  residual=5.988e+02
+iter=35 pAp_d=4.3117777835e+14 pAp_p=4.3117777835e+14 diff=9.375e-01
+  residual=6.765e+02
+iter=36 pAp_d=1.0291261686e+15 pAp_p=1.0291261686e+15 diff=1.375e+00
+  residual=7.446e+02
+iter=37 pAp_d=1.0906555457e+15 pAp_p=1.0906555457e+15 diff=2.000e+00
+  residual=8.613e+02
+iter=38 pAp_d=2.3514282362e+15 pAp_p=2.3514282362e+15 diff=2.500e+00
+  residual=7.835e+02
+iter=39 pAp_d=8.9283875985e+14 pAp_p=8.9283875985e+14 diff=5.000e-01
+  residual=8.020e+02
+iter=40 pAp_d=1.9644246267e+15 pAp_p=1.9644246267e+15 diff=7.500e-01
+  residual=1.066e+03
+iter=41 pAp_d=3.5133785152e+15 pAp_p=3.5133785152e+15 diff=3.500e+00
+  residual=9.738e+02
+iter=42 pAp_d=1.5996223212e+15 pAp_p=1.5996223212e+15 diff=2.750e+00
+  residual=8.199e+02
+iter=43 pAp_d=7.3947756079e+14 pAp_p=7.3947756079e+14 diff=1.500e+00
+  residual=1.040e+03
+iter=44 pAp_d=2.8979201267e+15 pAp_p=2.8979201267e+15 diff=2.000e+00
+  residual=1.398e+03
+iter=45 pAp_d=5.4007218027e+15 pAp_p=5.4007218027e+15 diff=1.300e+01
+  residual=9.362e+02
+iter=46 pAp_d=1.5306911880e+15 pAp_p=1.5306911880e+15 diff=5.500e+00
+  residual=1.026e+03
+iter=47 pAp_d=1.6831437738e+15 pAp_p=1.6831437738e+15 diff=3.250e+00
+  residual=9.047e+02
+iter=48 pAp_d=1.3689536819e+15 pAp_p=1.3689536819e+15 diff=1.000e+00
+  residual=1.203e+03
+iter=49 pAp_d=4.3517070320e+15 pAp_p=4.3517070320e+15 diff=1.350e+01
+  residual=9.429e+02
