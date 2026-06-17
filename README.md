@@ -136,3 +136,20 @@ open-source FEM package, not a synthetic test case. On a cantilever test model
 (6 elements, 864 dof), it converges in 12 CG iterations with posit32+quire vs double
 absolute differences in the 1e-9 to 1e-10 range, consistent with the precision-ladder
 findings above. Full integration details, patch, and logs in external/slffea-beam/.
+
+---
+
+## Performance overhead: software-emulated posit vs native double
+
+Measured on x86 (WSL2, -O2) using time-bounded microbenchmark; same vector sizes
+as precision ladder. Each function timed for 1 second per case.
+
+| matrix (n)       | double (ns) | posit32+quire (ns) | quire/double |
+|------------------|-------------|--------------------|--------------|
+| bcsstk03 (112)   | 80.9        | 577,264            | 7,132x       |
+| bcsstk14 (1806)  | 1,042.6     | 8,244,849          | 7,908x       |
+| add32 (4960)     | 2,473.1     | 26,422,731         | 10,684x      |
+
+quire/naive ratio ≈ 1.0 across all cases: the overhead is posit conversion
+(software emulation), not quire accumulation specifically. On hardware with a
+native posit FPU (the motivation for RISC-V posit work), this overhead disappears.
