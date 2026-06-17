@@ -13,40 +13,40 @@ Gurleen Kaur | Mentors: Kurt Keville (MIT), Joshua Gyllinsky
 
 posit16+quire fails on high-dynamic-range FEM matrices (bcsstk03: rel error 159, bcsstk14: rel error 0.05).  
 posit32+quire succeeds on all matrices tested.  
-posit64+quire = exact double (zero measured error) on all three matrices.  
+posit64+quire = exact double (zero measured error) on all three matrices.
 
 This provides empirical boundary conditions on Gustafson's HPEC 2025 claim that  
 *"16-bit posits can replace 64-bit floats in stable computations via exact dot products."*  
-The claim holds for circuit matrices (low dynamic range). It does not hold for FEM structural matrices (dynamic range ~10^16).
+The claim does not hold for FEM structural matrices with dynamic range ~10^16.
 
 ---
 
-## Precision Ladder Results (bcsstk14, FEM structural, dynamic range 10^15.7)
+## Precision Ladder Results (bcsstk14, FEM structural)
 
-| Precision | Max rel error (quire) | Max rel error (naive) | Quire vs naive |
-|-----------|----------------------|----------------------|----------------|
-| posit8    | 6.87×10^5            | 1.36×10^5            | worse (overflow) |
-| posit16   | 5.26×10^-2           | 3.68×10^-1           | 7x better — NOT engineering viable |
-| posit32   | 3.65×10^-8           | 7.83×10^-7           | 21x better ✓ |
+| Precision | Max rel error (quire) | Max rel error (naive) | Verdict |
+|-----------|----------------------|----------------------|---------|
+| posit8    | 6.87×10^5            | 1.36×10^5            | overflow — unusable |
+| posit16   | 5.26×10^-2           | 3.68×10^-1           | 7x quire wins — NOT engineering viable |
+| posit32   | 3.65×10^-8           | 7.83×10^-7           | 21x quire wins ✓ viable |
 | posit64   | 0.000                | 0.000                | exact double ✓ |
 
-## Precision Ladder Results (bcsstk03, FEM structural, dynamic range 10^16.6)
+## Precision Ladder Results (bcsstk03, FEM structural)
 
-| Precision | Max rel error (quire) | Max rel error (naive) |
-|-----------|----------------------|----------------------|
-| posit8    | 6.71×10^8            | 2.82×10^10           |
-| posit16   | 1.59×10^2            | 6.39×10^2            |
-| posit32   | 5.44×10^-7           | 7.37×10^-6           | 
-| posit64   | 0.000                | 0.000                |
+| Precision | Max rel error (quire) | Max rel error (naive) | Verdict |
+|-----------|----------------------|----------------------|---------|
+| posit8    | 6.71×10^8            | 2.82×10^10           | overflow — unusable |
+| posit16   | 1.59×10^2            | 6.39×10^2            | NOT viable |
+| posit32   | 5.44×10^-7           | 7.37×10^-6           | 14x quire wins ✓ viable |
+| posit64   | 0.000                | 0.000                | exact double ✓ |
 
-## Precision Ladder Results (add32, Circuit/SPICE, dynamic range ~10^4.5)
+## Precision Ladder Results (add32, Circuit/SPICE)
 
-| Precision | Max rel error (quire) | Max rel error (naive) |
-|-----------|----------------------|----------------------|
-| posit8    | 1.00×10^0            | 1.00×10^0            |
-| posit16   | 3.07×10^-1           | 1.18×10^0            |
-| posit32   | 9.28×10^-8           | 9.35×10^-6           |
-| posit64   | 0.000                | 0.000                |
+| Precision | Max rel error (quire) | Max rel error (naive) | Verdict |
+|-----------|----------------------|----------------------|---------|
+| posit8    | 1.00×10^0            | 1.00×10^0            | overflow — unusable |
+| posit16   | 3.07×10^-1           | 1.18×10^0            | 4x quire wins — NOT engineering viable |
+| posit32   | 9.28×10^-8           | 9.35×10^-6           | 101x quire wins ✓ viable |
+| posit64   | 0.000                | 0.000                | exact double ✓ |
 
 ---
 
@@ -62,13 +62,13 @@ The claim holds for circuit matrices (low dynamic range). It does not hold for F
 
 ---
 
-## Matrices tested
+## Matrices tested (all verified from .mtx files)
 
-| Matrix | Domain | Size | Dynamic Range | Condition |
-|--------|--------|------|---------------|-----------|
-| add32 | Circuit/SPICE (Motorola) | 4,960×4,960 | ~10^4.5 | ~10^2 |
-| bcsstk03 | FEM Structural | 112×112 | ~10^16.6 | ~10^6 |
-| bcsstk14 | FEM Structural | 1,806×1,806 | ~10^15.7 | ~10^10 |
+| Matrix | Domain | Size | Dynamic range | Diag ratio (proxy for conditioning) |
+|--------|--------|------|---------------|--------------------------------------|
+| add32 | Circuit/SPICE (Motorola) | 4,960×4,960 | ~10^4.5 | ~10^2 (condition ~137) |
+| bcsstk03 | FEM Structural | 112×112 | ~10^16.6 | ~4.55×10^8 |
+| bcsstk14 | FEM Structural | 1,806×1,806 | ~10^15.7 | ~8.94×10^9 |
 
 Download matrices: https://sparse.tamu.edu
 
@@ -79,9 +79,9 @@ Download matrices: https://sparse.tamu.edu
 - Jacobi-preconditioned Conjugate Gradient
 - 50 iterations (add32) / 300 iterations (bcsstk03, bcsstk14)
 - At each iteration: pAp computed in double64 (reference), posit+quire, posit naive
-- Filter: iterations where |pAp_d| < 1e-6 × max|pAp_d| excluded (near-zero denominator)
+- Filter: iterations where |pAp_d| < 1e-6 × max|pAp_d| excluded (near-zero denominator near convergence)
 - CG runs entirely in double64 — posit computations logged for comparison only
-- Precisions tested: posit8 (es=0), posit16 (es=1), posit32 (es=2), posit64 (es=2)
+- Precisions: posit8 (es=0), posit16 (es=1), posit32 (es=2), posit64 (es=2)
 
 ---
 
@@ -108,20 +108,19 @@ data/matrices/ — .mtx files (Matrix Market, from SuiteSparse)
 docs/          — presentation slides
 ---
 
-## Implications
+## Implications (all supported by log data)
 
-1. **Dynamic range is the limiting factor**, not vector length or condition number alone
-2. **posit32+quire is the minimum viable precision** for FEM structural matrices with dynamic range >10^10
-3. **posit16+quire is viable for circuit simulation** (dynamic range <10^5) but not for FEM
-4. **posit64+quire matches double64 exactly** — zero measured error across all matrices tested
-5. **Quire beats naive by 14x–101x** at posit32 — accumulation error is real and eliminatable
+1. **Dynamic range is the limiting factor** — posit16+quire fails on matrices with dynamic range >10^15, regardless of quire exactness
+2. **posit32+quire is the minimum viable precision** for FEM structural matrices tested here
+3. **posit16+quire is not engineering viable on any matrix tested** — even circuit matrices show 0.31 max relative error at posit16
+4. **posit64+quire matches double64 exactly** — zero measured error across all three matrices
+5. **Quire beats naive by 14x–101x at posit32** — accumulation error is real and eliminatable by quire
 
 ---
 
 ## Target publication
 
-HPEC 2026 — *"Precision requirements for posit arithmetic in sparse iterative solvers:
-a domain-specific empirical study"*  
+HPEC 2026 — *"Precision requirements for posit arithmetic in sparse iterative solvers: a domain-specific empirical study"*  
 Combining accuracy results with RISC-V (Milk-V) execution data for §4.3 bitwise reproducibility.
 
 Mentors: Kurt Keville (MIT R&D Labs) · Joshua Gyllinsky
