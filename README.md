@@ -124,3 +124,15 @@ HPEC 2026 — *"Precision requirements for posit arithmetic in sparse iterative 
 Combining accuracy results with RISC-V (Milk-V) execution data for §4.3 bitwise reproducibility.
 
 Mentors: Kurt Keville (MIT R&D Labs) · Joshua Gyllinsky
+
+---
+
+## Real-codebase validation: SLFFEA
+
+The precision-ladder results above use standalone benchmark harnesses on extracted
+SuiteSparse matrices. As a follow-up, posit32+quire dotX was integrated into the
+conjugate gradient solver of SLFFEA v1.5 (beam module) — a real, otherwise-unmodified
+open-source FEM package, not a synthetic test case. On a cantilever test model
+(6 elements, 864 dof), it converges in 12 CG iterations with posit32+quire vs double
+absolute differences in the 1e-9 to 1e-10 range, consistent with the precision-ladder
+findings above. Full integration details, patch, and logs in external/slffea-beam/.

@@ -1,0 +1,130 @@
+What is the name of the file containing the 
+beam structural data? (example: bridge)
+Can't find file bminput
+
+ Memory requrement for doubles is            2232 bytes
+
+ Memory requrement for integers is            3020 bytes
+
+ Memory requrement for XYZPhiI integers is            3236 bytes
+
+ Memory requrement for STRESS doubles is            4388 bytes
+number of elements:6 nodes:7 materials:1 modes:0 dof:42
+
+material (  0) Emod, nu, density, Area, Iy, Iz 2.000e+11 2.700e-01 2.332e+03 1.000e-02 1.000e-03 1.000e-03
+
+connectivity for element (     0)      0      1  with matl   0   and type   2
+connectivity for element (     1)      1      2  with matl   0   and type   2
+connectivity for element (     2)      2      3  with matl   0   and type   2
+connectivity for element (     3)      3      4  with matl   0   and type   2
+connectivity for element (     4)      4      5  with matl   0   and type   2
+connectivity for element (     5)      5      6  with matl   0   and type   2
+
+coordinate (     0) coordinates   1.000000e+00   0.000000e+00   0.000000e+00 
+coordinate (     1) coordinates   2.000000e+00   0.000000e+00   0.000000e+00 
+coordinate (     2) coordinates   3.000000e+00   0.000000e+00   0.000000e+00 
+coordinate (     3) coordinates   4.000000e+00   0.000000e+00   0.000000e+00 
+coordinate (     4) coordinates   5.000000e+00   0.000000e+00   0.000000e+00 
+coordinate (     5) coordinates   6.000000e+00   0.000000e+00   0.000000e+00 
+coordinate (     6) coordinates   7.000000e+00   0.000000e+00   0.000000e+00 
+
+local z axis for element: (   -10)
+
+node (     0) has an x prescribed displacement of:   0.000000e+00
+node (   -10) has an x prescribed displacement of: 
+
+node (     0) has an y prescribed displacement of:   0.000000e+00
+node (   -10) has an y prescribed displacement of: 
+
+node (     0) has an z prescribed displacement of:   0.000000e+00
+node (     1) has an z prescribed displacement of:   0.000000e+00
+node (     2) has an z prescribed displacement of:   0.000000e+00
+node (     3) has an z prescribed displacement of:   0.000000e+00
+node (     4) has an z prescribed displacement of:   0.000000e+00
+node (     5) has an z prescribed displacement of:   0.000000e+00
+node (     6) has an z prescribed displacement of:   0.000000e+00
+node (   -10) has an z prescribed displacement of: 
+
+node (     0) has a prescribed angle phi x of:   0.000000e+00
+node (     1) has an phix prescribed displacement of:   0.000000e+00
+node (     2) has an phix prescribed displacement of:   0.000000e+00
+node (     3) has an phix prescribed displacement of:   0.000000e+00
+node (     4) has an phix prescribed displacement of:   0.000000e+00
+node (     5) has an phix prescribed displacement of:   0.000000e+00
+node (     6) has an phix prescribed displacement of:   0.000000e+00
+node (   -10) has an phix prescribed displacement of: 
+
+node (     0) has a prescribed angle phi y of:   0.000000e+00
+node (     1) has an phiy prescribed displacement of:   0.000000e+00
+node (     2) has an phiy prescribed displacement of:   0.000000e+00
+node (     3) has an phiy prescribed displacement of:   0.000000e+00
+node (     4) has an phiy prescribed displacement of:   0.000000e+00
+node (     5) has an phiy prescribed displacement of:   0.000000e+00
+node (     6) has an phiy prescribed displacement of:   0.000000e+00
+node (   -10) has an phiy prescribed displacement of: 
+
+node (     0) has a prescribed angle phi z of:   0.000000e+00
+node (   -10) has an phiz prescribed displacement of: 
+
+force vector for node: (   -10)
+
+distributed load for element: (     5)  -6.000000e+03   0.000000e+00
+distributed load for element: (   -10)
+
+stress for ele: (   -10)
+
+ 
+
+
+ We are in case   2
+
+ Conjugate gradient 
+
+
+ Memory requrement for disp calc. with             864 doubles is           11300 bytes
+
+ Which is       1.0776e-02 MB
+
+ This is numel, numel_K, numel_P     6     6     0
+
+ iteration   0 iteration max 2000 
+
+   0   1.00000000e+03
+    [dotX double=2.9979073660e-02 posit32+quire=2.9979073908e-02 diff=2.477e-10]
+
+   1   2.99790737e-02
+    [dotX double=8.2636511186e-02 posit32+quire=8.2636511885e-02 diff=6.988e-10]
+
+   2   8.26365112e-02
+    [dotX double=9.3201517623e-02 posit32+quire=9.3201519456e-02 diff=1.833e-09]
+
+   3   9.32015176e-02
+    [dotX double=3.5101304330e-01 posit32+quire=3.5101304576e-01 diff=2.462e-09]
+
+   4   3.51013043e-01
+    [dotX double=1.3409727188e-01 posit32+quire=1.3409727067e-01 diff=1.209e-09]
+
+   5   1.34097272e-01
+    [dotX double=1.8055909484e-01 posit32+quire=1.8055909686e-01 diff=2.019e-09]
+
+   6   1.80559095e-01
+    [dotX double=5.4927441880e-02 posit32+quire=5.4927442223e-02 diff=3.432e-10]
+
+   7   5.49274419e-02
+    [dotX double=8.4414148165e-02 posit32+quire=8.4414150100e-02 diff=1.935e-09]
+
+   8   8.44141482e-02
+    [dotX double=4.6492328848e-02 posit32+quire=4.6492329333e-02 diff=4.853e-10]
+
+   9   4.64923288e-02
+    [dotX double=4.3672522974e-01 posit32+quire=4.3672523461e-01 diff=4.877e-09]
+
+  10   4.36725230e-01
+    [dotX double=9.7830079518e-02 posit32+quire=9.7830079030e-02 diff=4.875e-10]
+
+  11   9.78300795e-02
+    [dotX double=7.9648445971e-18 posit32+quire=7.9646508030e-18 diff=1.938e-22]
+
+
+ elapsed CPU = 37.490000
+

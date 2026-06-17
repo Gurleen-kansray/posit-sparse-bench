@@ -1,0 +1,25 @@
+diff --git a/beam/beam/bmconj.c b/beam/beam/bmconj.c
+index cf286ed..3da5b1c 100644
+--- a/beam/beam/bmconj.c
++++ b/beam/beam/bmconj.c
+@@ -340,6 +340,7 @@ int bmConjGrad(double *A, BOUND bc, int *connect, double *coord, int *el_matl,
+ 		}
+ 
+ 		check = dotX(&fdum2, r, z, dof);
++            { double fdum2_posit; extern int dotX_posit(double*, double*, double*, int); dotX_posit(&fdum2_posit, r, z, dof); printf("    [dotX double=%.10e posit32+quire=%.10e diff=%.3e]\n", fdum2, fdum2_posit, fabs(fdum2-fdum2_posit)); }
+ 		beta = fdum2/(SMALL + fdum);
+ 		fdum = fdum2;
+ 
+diff --git a/beam/beam/fembeam.c b/beam/beam/fembeam.c
+index cdd08ca..45d1458 100644
+--- a/beam/beam/fembeam.c
++++ b/beam/beam/fembeam.c
+@@ -204,7 +204,7 @@ int main(int argc, char** argv)
+ 	dof=numnp*ndof;
+ 	sdof=numnp*nsd;
+ 
+-	numnp_LUD_max = 500;
++	numnp_LUD_max = 5;
+ 
+ /* Assuming Conjugate gradient method is used, determine how much RAM is needed.
+    This determines the largest problem that can be run on this machine.
