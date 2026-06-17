@@ -1,0 +1,5 @@
+method,iters,final_res_rel,converged
+double,68,5.244660e-09,YES
+posit32+quire,68,5.244664e-09,YES
+posit16+quire,303,7.002933e+79,NO
+posit16+naive,3,6.649744e+32,NO
