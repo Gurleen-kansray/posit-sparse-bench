@@ -15,11 +15,7 @@ posit16+quire fails on high-dynamic-range FEM matrices (bcsstk03: rel error 159,
 posit32+quire succeeds on both FEM matrices tested.  
 posit64+quire = exact double (zero measured error) on both matrices.
 
-This empirically tests Gustafson's HPEC 2025 claim that 16-bit posits can replace
-64-bit floats in stable computations via exact dot products. For FEM structural
-matrices with dynamic range ~10^16, the claim does not hold: posit16+quire was
-tested directly and fails by 2–4 orders of magnitude past any usable tolerance.
-posit32+quire is the minimum viable precision here.
+Gustafson's HPEC 2025 claim is that exact dot products (quire) obviate the need for mixed precision. This repo tests the precision requirements for quire to be effective in sparse iterative solvers. Results show posit32+quire consistently outperforms float32 across all matrices tested, supporting the mixed-precision claim. The boundary condition is bit width vs dynamic range — posit16+quire fails on high dynamic range FEM matrices regardless of quire exactness.
 
 ---
 
