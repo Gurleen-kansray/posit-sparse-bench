@@ -216,3 +216,26 @@ iter 312 during this wandering — not genuine convergence.
 dynamic range ~1.52e+14. In this regime, convergence checks are unreliable —
 a solver could report "converged" while solution quality is actually poor.
 Quire avoids this regime entirely by maintaining exact accumulation.
+
+---
+
+## add32: posit32+quire matches double exactly; posit16 fails on value range
+
+add32 is a circuit simulation matrix (n=4960) with diagonal dynamic range of only
+5.6 — superficially ideal for posit16. However, full matrix value range spans
+1.976e-38 to 4.232e-02, a ratio of ~2.1e+36, far exceeding posit16's representable
+range (~9 decades). Result using actual add32_b.mtx right-hand side:
+
+| method        | iters | converged | final rel residual |
+|---------------|-------|-----------|--------------------|
+| double        | 68    | YES       | 5.245e-09          |
+| posit32+quire | 68    | YES       | 5.245e-09          |
+| posit16+quire | 303   | NO        | 7.003e+79          |
+| posit16+naive | 3     | NO        | 6.650e+32          |
+
+**posit32+quire matches double exactly** — same iteration count, same residual.
+posit16 fails regardless of accumulation method because matrix values below
+posit16's minimum representable number (~1e-9) are flushed to zero.
+
+**Methodological finding:** diagonal dynamic range is an insufficient metric
+for posit precision selection. Full matrix value range must be considered.
