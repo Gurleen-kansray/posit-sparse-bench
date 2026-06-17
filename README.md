@@ -287,3 +287,33 @@ MARGINAL — a higher-ratio matrix outperforms a lower-ratio one. Mass matrices
 (bcsstm*) and stiffness matrices (bcsstk*) may have systematically different
 posit16 behavior at the same diag_ratio. Treat diag_ratio as a useful predictor
 of posit16 viability, not a strict threshold.
+
+## ML-scale test: does quire obviate mixed precision outside FEM?
+
+All results above are FEM/circuit matrices with large dynamic range from
+physical units (stiffness, capacitance). Neural net weights/activations are
+normalized (He/Xavier init, LayerNorm/BatchNorm) to a tight range ~[-3,3] --
+a different regime. This experiment tests Gustafson's HPEC claim directly in
+that regime: synthetic dot products at ML layer scale (L=256/512/1024/4096),
+weights ~N(0,1/L), activations ~N(0,1) clipped to [-3,3], 300 trials per
+length, double64 reference.
+
+Compared: fp16 naive (storage+accumulate in fp16), fp32-mixed (fp16 storage,
+fp32 accumulate -- the actual industry mixed-precision pattern), posit16
+naive, posit16+quire (posit16 storage, exact accumulate, round once).
+
+| L    | fp32mix max | fp32mix mean | posit16+quire max | posit16+quire mean |
+|------|------------|--------------|--------------------|---------------------|
+| 256  | 9.20e-2    | 1.16e-3      | 2.01e-2            | 4.52e-4             |
+| 512  | 1.14e-2    | 7.98e-4      | 9.87e-3            | 5.21e-4             |
+| 1024 | 8.48e-3    | 6.28e-4      | 8.33e-3            | 4.22e-4             |
+| 4096 | 1.88e-2    | 7.18e-4      | 1.31e-2            | 6.17e-4             |
+
+**Finding:** posit16+quire matches or beats fp32-accumulate -- the real
+mixed-precision standard, not just naive fp16 -- on both mean and max
+relative error at every length tested, using a 16-bit accumulator instead
+of a 32-bit one. This is the first result in this repo where posit16
+outright wins, and it's the domain (ML, not FEM) where Gustafson's HPEC
+claim was actually made. Source: src/ml_precision_experiment.cpp,
+log: results/logs/ml_precision_experiment.log.
+
