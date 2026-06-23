@@ -135,3 +135,7 @@ posit64+quire matches the double64 reference to within 1e-11 (or exactly) across
 
 *bcsstk03: high error confined to near-convergence regime (iters 181-201, pAp < 1e-30)
 
+
+**Key finding:** No single matrix property (diagonal ratio or value range) cleanly predicts quire gain. sts4098 has the highest value range (1e+54) yet lowest quire gain (36x), suggesting quire benefit depends on the interaction of value distribution, matrix size, and CG search direction evolution.
+
+![Property vs quire gain](results/figures/property_vs_quire_gain.png)
