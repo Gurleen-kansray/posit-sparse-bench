@@ -109,3 +109,7 @@ posit64+quire matches the double64 reference to within 1e-11 (or exactly) across
 | nasasrb  | 0.00e+00 | 0.00e+00 |
 | mhd4800b | 0.00e+00 | 6.72e-11 |
 | s3dkt3m2 | 2.01e-11 | 3.70e-11 |
+
+## Quire Accuracy Gain Summary
+
+![Quire gain barchart](results/figures/quire_gain_barchart.png)
