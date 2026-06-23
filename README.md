@@ -134,3 +134,24 @@ posit64+quire matches the double64 reference to within 1e-11 (or exactly) across
 **Key finding:** No single matrix property (diagonal ratio or value range) cleanly predicts quire gain. sts4098 has the highest value range (1e+54) yet lowest quire gain (36x), suggesting quire benefit depends on the interaction of value distribution, matrix size, and CG search direction evolution.
 
 ![Property vs quire gain](results/figures/property_vs_quire_gain.png)
+
+## Extended Results (10 matrices)
+
+| Matrix | n | Diag ratio | Val ratio | p32q max err | p32 naive max err | Quire gain |
+|--------|---|-----------|-----------|-------------|------------------|------------|
+| bcsstk03 | 112 | 1.52e+06 | 3.78e+16 | 3.22e-02* | 2.12e-01 | 3,588x |
+| bcsstk14 | 1806 | 8.94e+09 | 5.53e+36 | 3.33e-06 | 1.31e-04 | 1,827x |
+| bcsstk36 | 23052 | 1.74e+09 | 1.13e+37 | 1.53e-06 | 1.01e-03 | 662x |
+| bcsstk37 | 25503 | 9.61e+08 | 8.81e+27 | 1.46e-06 | 6.67e-04 | 458x |
+| bcsstk38 | 8032 | 9.26e+12 | 2.00e+38 | 4.39e-07 | 6.75e-05 | 26,890x |
+| nasasrb | 54870 | 2.55e+05 | 2.32e+22 | 9.93e-08 | 9.96e-05 | 43,214x |
+| mhd4800b | 4800 | 3.73e+12 | 5.75e+20 | 6.54e-05 | 2.94e-02 | 111,342x |
+| s3dkt3m2 | 90449 | 2.52e+07 | 1.01e+40 | 7.25e-06 | 2.74e-02 | 445,382x |
+| s3dkq4m2 | 90449 | 1.44e+07 | 1.62e+26 | 5.22e-06 | 1.35e-02 | 2,591x |
+| sts4098 | 4098 | 6.02e+07 | 5.66e+54 | 1.13e-07 | 4.07e-06 | 36x |
+
+*bcsstk03: high error confined to near-convergence regime (iters 181-201, pAp < 1e-30)
+
+**Key finding:** No single matrix property (diagonal ratio or value range) cleanly predicts quire gain. sts4098 has the highest value range (1e+54) yet lowest quire gain (36x), suggesting quire benefit depends on the interaction of value distribution, matrix size, and CG search direction evolution.
+
+![Property vs quire gain](results/figures/property_vs_quire_gain.png)
