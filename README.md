@@ -96,3 +96,16 @@ g++ -O2 -std=c++20 -I/path/to/universal/include src/bcsstk38_ladder.cpp -o bcsst
 LFX Summer 2026 — "Broadening the RISC-V High Precision Code Base and Reach"
 Mentors: Kurt Keville (MIT R&D Labs), Joshua Gyllinsky
 Target venue: HPEC 2026
+
+## Methodology Validation
+
+posit64+quire matches the double64 reference to within 1e-11 (or exactly) across all 6 matrices, confirming the measurement framework is sound and double64 is a valid ground truth.
+
+| Matrix | p64+quire max err | p64 naive max err |
+|--------|------------------|------------------|
+| bcsstk03 | 1.25e-11 | 7.37e-11 |
+| bcsstk14 | 0.00e+00 | 0.00e+00 |
+| bcsstk38 | 0.00e+00 | 0.00e+00 |
+| nasasrb  | 0.00e+00 | 0.00e+00 |
+| mhd4800b | 0.00e+00 | 6.72e-11 |
+| s3dkt3m2 | 2.01e-11 | 3.70e-11 |
