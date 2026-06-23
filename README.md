@@ -139,3 +139,18 @@ posit64+quire matches the double64 reference to within 1e-11 (or exactly) across
 **Key finding:** No single matrix property (diagonal ratio or value range) cleanly predicts quire gain. sts4098 has the highest value range (1e+54) yet lowest quire gain (36x), suggesting quire benefit depends on the interaction of value distribution, matrix size, and CG search direction evolution.
 
 ![Property vs quire gain](results/figures/property_vs_quire_gain.png)
+
+## Full CG Solver Convergence
+
+Beyond measuring a single inner product, we ran complete CG solvers in double64, float32, and posit32+quire simultaneously across 5 matrices, tracking residual norm per iteration.
+
+![CG convergence comparison](results/figures/cg_convergence_compare.png)
+
+Key observations:
+- **bcsstk14**: posit32+quire convergence curve is visually indistinguishable from double64 — a drop-in replacement result
+- **sts4098**: float32 diverges from double64 after iter 200; posit32+quire tracks double64 to the end — posit32+quire beats float32
+- **mhd4800b**: all three converge in 70 iterations; posit32+quire reaches 1e-10 vs double64's 1e-13
+- **bcsstk03**: double64 converges to 1e-38; posit32+quire plateaus cleanly at 1e-10 (precision floor, no divergence)
+- **bcsstk38**: ill-conditioned, none converge — but posit32+quire does not make behavior worse
+
+posit32+quire matches or exceeds float32 behavior across all tested matrices in full solver context.
