@@ -6,3 +6,13 @@ bcsstk14_posit64
 precision_mapper
 boundary_fine
 boundary_res
+# binaries
+*_ladder
+cg_compare
+generic_ladder
+ml_precision_experiment
+# data tarballs and raw matrix files
+*.tar.gz
+*.mtx
+data/*.tar.gz
+mhd1280b/
