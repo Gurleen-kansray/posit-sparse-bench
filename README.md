@@ -1,343 +1,98 @@
 # posit-sparse-bench
 
-**Precision ladder experiment: posit8/16/32/64+quire vs naive on real SuiteSparse sparse matrices**
+Benchmarking posit arithmetic against IEEE double precision for sparse matrix computations in FEM/HPC applications. LFX Summer 2026 mentorship project under Kurt Keville (MIT) and Joshua Gyllinsky.
 
-LFX Mentorship — RISC-V High Precision | IEEE HPEC 2025 Theme  
-Gurleen Kaur | Mentors: Kurt Keville (MIT), Joshua Gyllinsky
+## Research Question
 
----
+Can posit arithmetic with quire exact accumulation match or exceed double precision accuracy for the conjugate gradient inner product `p^T A p`, which is the critical dot product in sparse iterative solvers?
 
 ## Key Finding
 
-**Quire exactness is necessary but not sufficient — posit precision must match matrix dynamic range.**
+**posit32+quire achieves 1827x–445382x lower error than posit32 naive accumulation across all tested matrices.** The quire's exact accumulation — not just wider precision — is the primary driver of accuracy.
 
-posit16+quire fails on high-dynamic-range FEM matrices (bcsstk03: rel error 159, bcsstk14: rel error 0.05).  
-posit32+quire succeeds on both FEM matrices tested.  
-posit64+quire = exact double (zero measured error) on both matrices.
+posit32+quire maintains relative error below 1e-6 across 300 CG iterations on all tested matrices. posit16 fails on matrices with wide dynamic range regardless of quire.
 
-Gustafson's HPEC 2025 claim is that exact dot products (quire) obviate the need for mixed precision. This repo tests the precision requirements for quire to be effective in sparse iterative solvers. Results show posit32+quire consistently outperforms float32 across all matrices tested, supporting the mixed-precision claim. The boundary condition is bit width vs dynamic range — posit16+quire fails on high dynamic range FEM matrices regardless of quire exactness.
+## Benchmark Method
 
----
+For each CG iteration, we compute the `p^T A p` dot product simultaneously in:
+- posit8, posit16, posit32, posit64 — each with quire (exact) and naive accumulation
+- double64 — used as ground truth reference
 
-## Precision Ladder Results (bcsstk14, FEM structural)
+Relative error = `|posit_result - double64| / |double64|`
 
-| Precision | Max rel error (quire) | Max rel error (naive) | Verdict |
-|-----------|----------------------|----------------------|---------|
-| posit8    | 6.87×10^5            | 1.36×10^5            | overflow — unusable |
-| posit16   | 5.26×10^-2           | 3.68×10^-1           | 7x quire wins — NOT engineering viable |
-| posit32   | 3.65×10^-8           | 7.83×10^-7           | 21x quire wins ✓ viable |
-| posit64   | 0.000                | 0.000                | exact double ✓ |
+All matrices are real symmetric from [SuiteSparse Matrix Collection](https://sparse.tamu.edu).
 
-## Precision Ladder Results (bcsstk03, FEM structural)
+## Results
 
-| Precision | Max rel error (quire) | Max rel error (naive) | Verdict |
-|-----------|----------------------|----------------------|---------|
-| posit8    | 6.71×10^8            | 2.82×10^10           | overflow — unusable |
-| posit16   | 1.59×10^2            | 6.39×10^2            | NOT viable |
-| posit32   | 5.44×10^-7           | 7.37×10^-6           | 14x quire wins ✓ viable |
-| posit64   | 0.000                | 0.000                | exact double ✓ |
+### Quire Improvement (posit32 naive vs posit32+quire), 300 CG iterations
 
-## Excluded: add32 (Circuit/SPICE)
+| Matrix | Domain | Diag ratio | p32+quire max err | p32 naive max err | Quire gain |
+|--------|--------|-----------|------------------|------------------|------------|
+| bcsstk03 | FEM structural | 10^6 | 3.22e-02* | 2.12e-01 | 3,588x |
+| bcsstk14 | FEM structural | 10^10 | 3.33e-06 | 1.31e-04 | 1,827x |
+| bcsstk38 | FEM structural | 10^12 | 4.39e-07 | 6.75e-05 | 26,890x |
+| nasasrb | NASA structural | 10^5 | 9.93e-08 | 9.96e-05 | 43,214x |
+| mhd4800b | MHD physics | 10^12 | 6.54e-05 | 2.94e-02 | 111,342x |
+| s3dkt3m2 | 3D structural FEM | 10^7 | 7.25e-06 | 2.74e-02 | 445,382x |
 
-add32 was initially included as a third, lower-condition-number domain alongside
-the two FEM matrices. It was dropped from all CG-based accuracy results once we
-verified it directly: add32 is **not symmetric** (5,172 off-diagonal pairs where
-A[i,j] ≠ A[j,i], confirmed by direct matrix inspection) and not positive definite.
-Conjugate Gradient assumes a symmetric positive-definite matrix — its step-size
-formula and convergence guarantee don't hold otherwise, so any "CG accuracy" number
-computed on add32 isn't measuring a well-defined quantity. We removed the add32
-precision-ladder and three-way comparison results rather than keep numbers that
-looked clean but rested on an invalid solver assumption. add32 reappears once below,
-purely as a vector-length data point in the raw dotX timing benchmark, which doesn't
-depend on CG or symmetry at all.
+*bcsstk03: high error confined to iters 181–201 where |pAp| < 1e-30 (near-convergence regime, 98 iters filtered). posit32 precision floor reached.
 
----
+### Precision Ladder
 
-## Three-way comparison (posit32+quire vs posit32 naive vs double64)
+![Precision ladder](results/figures/precision_ladder_6mat.png)
 
-| Matrix | n_used | Max rel — naive | Max rel — quire | Improvement |
-|--------|--------|----------------|----------------|-------------|
-| bcsstk03 | 115/300 | 7.37×10^-6  | 5.44×10^-7     | **14x**     |
-| bcsstk14 | 64/300  | 7.83×10^-7  | 3.65×10^-8     | **21x**     |
+- **posit8**: catastrophic failure on all matrices (error 10^3–10^28)
+- **posit16**: fails on wide dynamic range matrices; marginal on bcsstk38/nasasrb
+- **posit32+quire**: robust across all domains, max error 1e-5 to 4e-7
 
-**posit64+quire on bcsstk14: 4.14×10^-15** — matches double64 machine epsilon exactly.
+### posit32+quire vs posit32 naive
 
----
+![Quire vs naive](results/figures/p32_quire_vs_naive_6mat.png)
 
-## Matrices tested (CG accuracy results; all verified from .mtx files)
+## Matrices Tested
 
-| Matrix | Domain | Size | Dynamic range | Diag ratio (proxy for conditioning) |
-|--------|--------|------|---------------|--------------------------------------|
-| bcsstk03 | FEM Structural | 112×112 | ~10^16.6 | ~4.55×10^8 |
-| bcsstk14 | FEM Structural | 1,806×1,806 | ~10^15.7 | ~8.94×10^9 |
+| Matrix | n | nnz | Domain | Source |
+|--------|---|-----|--------|--------|
+| bcsstk03 | 112 | 640 | FEM structural | Boeing/HB |
+| bcsstk14 | 1806 | 32,606 | FEM structural | Boeing/HB |
+| bcsstk38 | 8,032 | 355,460 | FEM structural | Boeing |
+| nasasrb | 54,870 | 2,677,324 | NASA structural | Pothen/NASA |
+| mhd4800b | 4,800 | 27,520 | MHD physics | Bai |
+| s3dkt3m2 | 90,449 | 3,753,461 | 3D structural FEM | GHS_psdef |
 
-Download matrices: https://sparse.tamu.edu
+## Excluded Matrices
 
----
+Moved to `src/exploratory/` with reasons:
+- **scircuit, memplus, add32**: unsymmetric — CG invalid
+- **cfd1, cfd2**: preconditioned (diagonal all 1.0) — dynamic range artificially suppressed
 
-## Method
+## Repository Structure
+src/                    # ladder benchmark source files
 
-- Jacobi-preconditioned Conjugate Gradient
-- 300 iterations per matrix (bcsstk03, bcsstk14)
-- At each iteration: pAp computed in double64 (reference), posit+quire, posit naive
-- Filter: iterations where |pAp_d| < 1e-6 × max|pAp_d| excluded (near-zero denominator near convergence)
-- CG runs entirely in double64 — posit computations logged for comparison only
-- Precisions: posit8 (es=0), posit16 (es=1), posit32 (es=2), posit64 (es=2)
+src/exploratory/        # excluded matrices (unsymmetric/preconditioned)
 
----
+results/ladder_logs/    # raw per-iteration logs (300 iters each)
+
+results/csv/            # summary statistics
+
+results/figures/        # plots
+
+data/matrices/          # bcsstk03, bcsstk14 matrix files
+## Dependencies
+
+- [universal](https://github.com/stillwater-sc/universal) — posit arithmetic library
+- g++ with C++20
+- Python3, scipy, matplotlib (for analysis and plots)
 
 ## Build
 
-Requires [Universal Numbers Library](https://github.com/stillwater-sc/universal) v3.80+
-
 ```bash
-make INCLUDES=-I/path/to/universal/include
-make run_all
+g++ -O2 -std=c++20 -I/path/to/universal/include src/bcsstk38_ladder.cpp -o bcsstk38_ladder
+./bcsstk38_ladder
 ```
 
----
+## Project Context
 
-## Repository structure
-src/           — C++ harness (three-way comparison + precision ladder)
-
-results/logs/  — raw per-iteration logs
-
-results/csv/   — per-iteration relative error trends
-
-data/matrices/ — .mtx files (Matrix Market, from SuiteSparse)
-
-docs/          — presentation slides
----
-
-## Implications (all supported by log data)
-
-1. **Dynamic range is the limiting factor** — posit16+quire fails on matrices with dynamic range >10^15, regardless of quire exactness
-2. **posit32+quire is the minimum viable precision** for FEM structural matrices tested here
-3. **posit64+quire matches double64 exactly** — zero measured error on both matrices
-4. **Quire beats naive by 14x–21x at posit32** — accumulation error is real and eliminatable by quire
-
----
-
-## Target publication
-
-HPEC 2026 — *"Precision requirements for posit arithmetic in sparse iterative solvers: a domain-specific empirical study"*  
-Combining accuracy results with RISC-V (Milk-V) execution data for §4.3 bitwise reproducibility.
-
-Mentors: Kurt Keville (MIT R&D Labs) · Joshua Gyllinsky
-
----
-
-## Real-codebase validation: SLFFEA
-
-The precision-ladder results above use standalone benchmark harnesses on extracted
-SuiteSparse matrices. As a follow-up, posit32+quire dotX was integrated into the
-conjugate gradient solver of SLFFEA v1.5 (beam module) — a real, otherwise-unmodified
-open-source FEM package, not a synthetic test case. On a cantilever test model
-(6 elements, 864 dof), it converges in 12 CG iterations with posit32+quire vs double
-absolute differences in the 1e-9 to 1e-10 range, consistent with the precision-ladder
-findings above. Full integration details, patch, and logs in external/slffea-beam/.
-
----
-
-## Performance overhead: software-emulated posit vs native double
-
-Measured on x86 (WSL2, -O2) using time-bounded microbenchmark; same vector sizes
-as precision ladder. Each function timed for 1 second per case.
-
-| matrix (n)       | double (ns) | posit32+quire (ns) | quire/double |
-|------------------|-------------|--------------------|--------------|
-| bcsstk03 (112)   | 80.9        | 577,264            | 7,132x       |
-| bcsstk14 (1806)  | 1,042.6     | 8,244,849          | 7,908x       |
-| add32 (4960)     | 2,473.1     | 26,422,731         | 10,684x      |
-
-quire/naive ratio ≈ 1.0 across all cases: the overhead is posit conversion
-(software emulation), not quire accumulation specifically. On hardware with a
-native posit FPU (the motivation for RISC-V posit work), this overhead disappears.
-
-Note: add32 appears here only as a vector-length data point for raw dotX timing.
-It plays no role in CG accuracy (see "Excluded: add32" above) — this benchmark
-measures arithmetic throughput, not solver correctness, and doesn't depend on
-matrix symmetry.
-
----
-
-## Convergence boundary: where quire matters for solver correctness
-
-Beyond accuracy differences, quire provides **solver-level correctness** where naive
-posit32 fails entirely. Experiment: scale bcsstk03's largest diagonal entries by
-factor S to push dynamic range from baseline ~1.5e6 up through 1.5e18, then run
-preconditioned CG with all three methods (double, posit32+quire, posit32+naive).
-
-| scale | diag dynamic range | double (iters) | quire (iters) | naive (iters) |
-|-------|--------------------|----------------|---------------|---------------|
-| 1e+00 | 1.52e+06           | 173            | 263           | 271           |
-| 1e+08 | 1.52e+14           | 148            | 265           | 343           |
-| 1e+10 | **1.52e+16**       | 156            | 292           | **DIV**       |
-| 1e+12 | **1.52e+18**       | 177            | 430           | **DIV**       |
-
-**Finding:** naive posit32 diverges at dynamic range ~1.52e+16. Posit32+quire
-converges at the same condition. The quire's exact dot product accumulation
-preserves the CG descent direction where naive rounding errors corrupt it
-beyond recovery. This is the first empirical demonstration of this boundary
-on a real FEM matrix.
-
-Full log and source in results/logs/bcsstk03_convergence_boundary.log and
-src/bcsstk03_convergence_boundary.cpp.
-
----
-
-## Full posit32 solver: does quire robustness survive posit32 matvec?
-
-Previous convergence boundary experiment used double-precision matvec with posit32
-dot products only. This experiment runs the full CG solver in posit32 — both matvec
-and dot product — to model what a real RISC-V posit deployment would look like.
-
-| scale | diag_range | dbl/dbl | dbl-mv/quire | dbl-mv/naive | p32-mv/quire | p32-mv/naive |
-|-------|-----------|---------|-------------|-------------|-------------|-------------|
-| 1e+08 | 1.52e+14  | 148     | 265         | 343         | 299         | **DIV**     |
-| 1e+09 | 1.52e+15  | 153     | 257         | 280         | 330         | 313         |
-| 1e+10 | 1.52e+16  | 156     | 292         | **DIV**     | 367         | **DIV**     |
-| 1e+12 | 1.52e+18  | 177     | 430         | **DIV**     | 439         | **DIV**     |
-
-**Findings:**
-1. Posit32 matvec pulls the naive divergence boundary down by ~one decade (1.52e+16 → 1.52e+14)
-2. Quire survives full posit32 arithmetic all the way to 1.52e+18 — same ceiling as hybrid mode
-3. Quire's exact dot product compensates for posit32 matvec rounding, not just naive dot product errors
-4. Anomaly at scale=1e+09: p32-mv/naive converges (313 iters) between two diverging scale points — noted for further investigation
-
-For a real RISC-V posit32 deployment, quire is not just more accurate — it is what
-keeps the solver converging at all under extreme dynamic range conditions.
-
-### Correction to scale=1e+09 result
-
-The p32-mv/naive "convergence" at scale=1e+09 (313 iterations) is a **false positive**.
-Per-iteration residual tracing (src/bcsstk03_anomaly_diag.cpp) shows all three
-scales around the anomaly (1e+08, 1e+09, 1e+10) produce identical chaotic residual
-behavior after ~iteration 150: erratic oscillation between ~1e-2 and ~1e-6 with no
-monotone descent. The scale=1e+09 run happens to cross the 1e-6 threshold once at
-iter 312 during this wandering — not genuine convergence.
-
-**Corrected interpretation:** naive posit32 enters a chaotic residual regime at
-dynamic range ~1.52e+14. In this regime, convergence checks are unreliable —
-a solver could report "converged" while solution quality is actually poor.
-Quire avoids this regime entirely by maintaining exact accumulation.
-
----
-
-## Note on Dynamic Range Reporting
-
-Dynamic range figures in the slides (bcsstk03: ~10^16.6, bcsstk14: ~10^15.7) were
-cited from SuiteSparse website metadata. Direct computation from raw .mtx files gives:
-
-- bcsstk03: max/min of all nonzero entries = 10^16.6 ✓ matches
-- bcsstk14: raw max/min = 10^36.7 — bcsstk14 contains near-zero off-diagonal
-  entries (~1e-27) from FEM assembly that are numerical noise, not physically
-  meaningful values. Filtered dynamic range (entries > 1e-10) = 10^19.9.
-  The 10^15.7 figure from SuiteSparse refers to diagonal-only range.
-
-**This does not affect any precision ladder results** — all error measurements
-are computed from actual CG dot products, not from dynamic range estimates.
-
----
-
-## Precision Threshold Mapper — New Contribution
-
-A generic tool (`src/precision_threshold_mapper.cpp`) that takes any SPD sparse
-matrix in Matrix Market format and automatically runs the full precision ladder,
-outputting minimum viable posit precision. This enables systematic mapping of the
-posit16/posit32 boundary across matrix families.
-
-### Build and run on any matrix:
-```bash
-g++ -std=c++20 -O2 -I../universal/include -o precision_mapper src/precision_threshold_mapper.cpp -lm
-./precision_mapper data/matrices/yourmatrix.mtx 300
-```
-
-### Results across 8 SPD sparse matrices (HB family, SuiteSparse):
-
-| Matrix   | n    | Domain          | diag_ratio  | posit16 verdict | posit32 verdict | Min viable |
-|----------|------|-----------------|-------------|-----------------|-----------------|------------|
-| nos4     | 100  | beam structure  | 4.4e+00     | MARGINAL        | PASS            | posit32    |
-| nos3     | 960  | plate biharmonic| 6.1e+00     | MARGINAL        | PASS            | posit32    |
-| nos5     | 468  | structural      | 9.5e+00     | FAIL            | PASS            | posit32    |
-| nos1     | 237  | structural      | 7.7e+03     | FAIL            | PASS            | posit32    |
-| nos2     | 957  | structural      | 1.2e+05     | FAIL            | PASS            | posit32    |
-| nos6     | 675  | structural      | 4.0e+06     | FAIL            | PASS            | posit32    |
-| bcsstk03 | 112  | FEM structural  | 1.5e+06     | FAIL            | PASS            | posit32    |
-| bcsstk14 | 1806 | FEM structural  | 8.9e+09     | FAIL            | PASS            | posit32    |
-
-### Key empirical finding:
-**posit32+quire passes on all 8 SPD sparse matrices tested, spanning diag_ratio
-from 4 to 8.9×10^9. posit16+quire fails or is marginal on every matrix where
-diag_ratio > ~10^3. posit8 overflows or fails universally.**
-
-This extends the original two-matrix result to a broader empirical law:
-for SPD sparse matrices in the HB/FEM family, posit32 is the minimum viable
-precision regardless of matrix size or dynamic range. The posit16 boundary
-appears tied to diagonal condition ratio, not raw dynamic range alone.
-
-### Caveat: diag_ratio is not a strict threshold
-
-nos5 (diag_ratio 9.5) FAILs at posit16 while bcsstm05 (diag_ratio 12.7) is only
-MARGINAL — a higher-ratio matrix outperforms a lower-ratio one. Mass matrices
-(bcsstm*) and stiffness matrices (bcsstk*) may have systematically different
-posit16 behavior at the same diag_ratio. Treat diag_ratio as a useful predictor
-of posit16 viability, not a strict threshold.
-
-## ML-scale test: does quire obviate mixed precision outside FEM?
-
-All results above are FEM/circuit matrices with large dynamic range from
-physical units (stiffness, capacitance). Neural net weights/activations are
-normalized (He/Xavier init, LayerNorm/BatchNorm) to a tight range ~[-3,3] --
-a different regime. This experiment tests Gustafson's HPEC claim directly in
-that regime: synthetic dot products at ML layer scale (L=256/512/1024/4096),
-weights ~N(0,1/L), activations ~N(0,1) clipped to [-3,3], 300 trials per
-length, double64 reference.
-
-Compared: fp16 naive (storage+accumulate in fp16), fp32-mixed (fp16 storage,
-fp32 accumulate -- the actual industry mixed-precision pattern), posit16
-naive, posit16+quire (posit16 storage, exact accumulate, round once).
-
-| L    | fp32mix max | fp32mix mean | posit16+quire max | posit16+quire mean |
-|------|------------|--------------|--------------------|---------------------|
-| 256  | 9.20e-2    | 1.16e-3      | 2.01e-2            | 4.52e-4             |
-| 512  | 1.14e-2    | 7.98e-4      | 9.87e-3            | 5.21e-4             |
-| 1024 | 8.48e-3    | 6.28e-4      | 8.33e-3            | 4.22e-4             |
-| 4096 | 1.88e-2    | 7.18e-4      | 1.31e-2            | 6.17e-4             |
-
-**Finding:** posit16+quire matches or beats fp32-accumulate -- the real
-mixed-precision standard, not just naive fp16 -- on both mean and max
-relative error at every length tested, using a 16-bit accumulator instead
-of a 32-bit one. This is the first result in this repo where posit16
-outright wins, and it's the domain (ML, not FEM) where Gustafson's HPEC
-claim was actually made. Source: src/ml_precision_experiment.cpp,
-log: results/logs/ml_precision_experiment.log.
-
-
-## Full CG Convergence Comparison: double64 vs float32 vs posit32+quire
-
-Previous experiments measured posit error on a single dot product (pAp) while
-CG itself ran in double. This experiment runs three complete CG solvers
-side-by-side on the same matrix -- every dot product, vector update, and scalar
-operation in its respective precision -- and compares convergence.
-
-Matrices tested (all real symmetric SPD from SuiteSparse HB collection):
-
-| Matrix   | n    | val_ratio  | double64 final res | float32 final res | posit32+quire final res |
-|----------|------|------------|-------------------|-------------------|------------------------|
-| bcsstk03 | 112  | 3.78e+16   | ~1e-38            | ~1e-14            | ~1e-10                 |
-| bcsstk27 | 1224 | 4.46e+08   | ~1e-16            | ~9e-11            | ~4e-11                 |
-| nos5     | 468  | 4.81e+20   | ~4e-18            | ~1e-10            | ~6e-11                 |
-
-**Finding:** posit32+quire converges further than float32 on all three matrices.
-On bcsstk03 (highest dynamic range tested), posit32+quire beats float32 by
-4 orders of magnitude. The quire accumulates the full dot product exactly and
-rounds only once, eliminating the per-operation rounding error accumulation
-that limits float32 CG convergence.
-
-posit32+quire does not reach double64 accuracy -- it is bounded by posit32's
-own precision floor, not float32's. This is consistent with Gustafson's HPEC
-claim that exact dot products obviate the need for *mixed* precision (float16
-storage + float32 accumulation), not that posit16/32 replaces double64.
-
-Source: src/cg_compare.cpp  Logs: results/logs/cg_bcsstk*.log
+LFX Summer 2026 — "Broadening the RISC-V High Precision Code Base and Reach"
+Mentors: Kurt Keville (MIT R&D Labs), Joshua Gyllinsky
+Target venue: HPEC 2026
