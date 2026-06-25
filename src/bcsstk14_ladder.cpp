@@ -43,7 +43,7 @@ void compute_pAp(const std::vector<double>& p, const std::vector<double>& Ap, in
 }
 
 int main(){
-    MTX A=read_mtx("/mnt/d/posits-work/bcsstk14/bcsstk14.mtx");
+    MTX A=read_mtx("data/matrices/bcsstk14.mtx");
     int n=A.n;
     std::vector<double> diagA(n,1.0);
     for(int k=0;k<(int)A.row.size();k++)
@@ -53,7 +53,7 @@ int main(){
     for(int i=0;i<n;i++) p[i]=z[i];
     double rz_d=0; for(int i=0;i<n;i++) rz_d+=r[i]*z[i];
 
-    FILE* log=fopen("/mnt/d/posits-work/bcsstk14_ladder.log","w");
+    FILE* log=fopen("results/bcsstk14_ladder.log","w");
     fprintf(log,"iter pAp_d p8q p8n p16q p16n p32q p32n p64q p64n residual\n");
 
     for(int iter=0;iter<300;iter++){
