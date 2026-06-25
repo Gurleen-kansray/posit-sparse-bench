@@ -16,3 +16,7 @@ ml_precision_experiment
 *.mtx
 data/*.tar.gz
 mhd1280b/
+# logs
+*.log
+# results logs (generated at runtime)
+results/*.log
