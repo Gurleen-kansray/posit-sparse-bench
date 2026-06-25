@@ -21,7 +21,7 @@ WORKDIR /work
 COPY posit-sparse-bench/src/ ./src/
 COPY posit-sparse-bench/Makefile ./Makefile
 COPY posit-sparse-bench/data/ ./data/
+COPY posit-sparse-bench/run_all.sh ./run_all.sh
 
 RUN mkdir -p results
-
 RUN make INCLUDES=-I/universal/include
