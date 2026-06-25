@@ -22,6 +22,14 @@ Relative error = `|posit_result - double64| / |double64|`
 
 All matrices are real symmetric from [SuiteSparse Matrix Collection](https://sparse.tamu.edu).
 
+
+## Implementation Details
+
+**Quire configuration:** `quire<N,ES,2>` throughout — capacity parameter 2 gives a 512-bit quire for posit32 (per §3.2, 2022 Posit Standard), supporting exact accumulation of up to 2^31 terms. bcsstk03 has 640 nonzeros, well within this bound.
+
+**CG solver:** Jacobi-preconditioned CG — diagonal preconditioner `z[i] = r[i]/diagA[i]`. 300 iterations per run.
+
+**es values:** posit8 es=0, posit16 es=1, posit32 es=2, posit64 es=2 — matching the 2022 Posit Standard recommendations.
 ## Results
 
 ### Quire Improvement (posit32 naive vs posit32+quire), 300 CG iterations
@@ -154,3 +162,16 @@ Key observations:
 - **bcsstk38**: ill-conditioned, none converge — but posit32+quire does not make behavior worse
 
 posit32+quire matches or exceeds float32 behavior across all tested matrices in full solver context.
+
+## Reproducing Results (Docker)
+
+Requirements: Docker, git
+
+```bash
+git clone https://github.com/Gurleen-kansray/posit-sparse-bench
+cd posit-sparse-bench
+docker build -t posit-bench .
+docker run --rm posit-bench bash run_all.sh
+```
+
+Environment: Ubuntu 22.04, g++ 11, Universal v3.80, quire<N,ES,2>, 300 CG iterations per matrix.
