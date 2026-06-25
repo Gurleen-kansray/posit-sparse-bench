@@ -3,7 +3,7 @@ CXXFLAGS = -std=c++20 -O2
 INCLUDES = -I../universal/include
 LDFLAGS = -lm
 
-all: bcsstk03_ladder bcsstk14_ladder bcsstk38_ladder mhd4800b_ladder \
+all: bcsstk03_ladder bcsstk14_ladder bcsstk38_ladder mhd4800b_ladder bmwcra_1_ladder offshore_ladder \
      bcsstk03_posit bcsstk14_posit bcsstk14_posit64
 
 bcsstk03_ladder: src/bcsstk03_ladder.cpp
@@ -30,3 +30,15 @@ bcsstk14_posit64: src/bcsstk14_posit64.cpp
 clean:
 	rm -f bcsstk03_ladder bcsstk14_ladder bcsstk38_ladder mhd4800b_ladder \
 	      bcsstk03_posit bcsstk14_posit bcsstk14_posit64
+
+bmwcra_1_ladder: src/bmwcra_1_ladder.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $< $(LDFLAGS)
+
+offshore_ladder: src/offshore_ladder.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $< $(LDFLAGS)
+
+bodyy4_ladder: src/bodyy4_ladder.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $< $(LDFLAGS)
+
+nasa4704_ladder: src/nasa4704_ladder.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $< $(LDFLAGS)
