@@ -40,7 +40,7 @@ int main(){
     for(int i=0;i<n;i++) p[i]=z[i];
     double rz_d=0; for(int i=0;i<n;i++) rz_d+=r[i]*z[i];
     FILE* log=fopen("results/nasa4704_ladder.log","w");
-    for(int iter=0;iter<50;iter++){
+    for(int iter=0;iter<300;iter++){
         matvec(A,p.data(),Ap.data());
         double pAp_d=0; for(int i=0;i<n;i++) pAp_d+=p[i]*Ap[i];
         double p8q,p8n,p16q,p16n,p32q,p32n,p64q,p64n;
