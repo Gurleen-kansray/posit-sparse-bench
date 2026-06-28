@@ -59,7 +59,7 @@ All matrices are real symmetric from [SuiteSparse Matrix Collection](https://spa
 
 ## Matrices Tested
 
-See Extended Results table below for full 10-matrix list with properties.
+See Extended Results table below for full 13-matrix list with properties.
 
 ### Primary 6 matrices (used in ladder & methodology validation)
 
@@ -126,7 +126,7 @@ posit64+quire matches the double64 reference to within 1e-11 (or exactly) across
 
 ![Quire gain barchart](results/figures/quire_gain_barchart.png)
 
-## Extended Results (10 matrices)
+## Extended Results (13 matrices)
 
 | Matrix | n | Diag ratio | Val ratio | p32q max err | p32 naive max err | Quire gain |
 |--------|---|-----------|-----------|-------------|------------------|------------|
@@ -140,6 +140,9 @@ posit64+quire matches the double64 reference to within 1e-11 (or exactly) across
 | s3dkt3m2 | 90449 | 2.52e+07 | 1.01e+40 | 7.25e-06 | 2.74e-02 | 3,781x |
 | s3dkq4m2 | 90449 | 1.44e+07 | 1.62e+26 | 5.22e-06 | 1.35e-02 | 2,591x |
 | sts4098 | 4098 | 6.02e+07 | 5.66e+54 | 1.13e-07 | 4.07e-06 | 36x |
+| nasa4704 | 4704 | 1.52e+05 | 2.60e+20 | 4.67e-08 | 3.85e-07 | 8x |
+| nos2 | 957 | 1.23e+05 | 2.46e+05 | 7.99e-07 | 7.72e-06 | 10x |
+| bodyy4 | 17546 | 2.45e+02 | 1.84e+19 | 6.23e-03 | 7.96e-01 | 128x |
 
 *bcsstk03: high error confined to near-convergence regime (iters 181-201, pAp < 1e-30)
 
