@@ -37,6 +37,16 @@ void compute_pAp(const std::vector<double>& p, const std::vector<double>& Ap, in
     pAp_naive=double(pnaive);
 }
 
+template<size_t N, size_t ES>
+void compute_rz(const std::vector<double>& r, const std::vector<double>& z, int n,
+                double& rz_quire, double& rz_naive){
+    quire<N,ES,2> q=0;
+    for(int i=0;i<n;i++){ posit<N,ES> pa(r[i]),pb(z[i]); q+=quire_mul(pa,pb); }
+    posit<N,ES> pr; convert(q.to_value(),pr); rz_quire=double(pr);
+    posit<N,ES> pnaive=0;
+    for(int i=0;i<n;i++){ posit<N,ES> pa(r[i]),pb(z[i]); pnaive=pnaive+pa*pb; }
+    rz_naive=double(pnaive);
+}
 int main(int argc, char* argv[]){
     if(argc<3){ printf("usage: generic_ladder <matrix.mtx> <logfile>\n"); return 1; }
     const char* mtx_path = argv[1];
@@ -70,9 +80,16 @@ int main(int argc, char* argv[]){
         compute_pAp<16,1>(p,Ap,n,p16q,p16n);
         compute_pAp<32,2>(p,Ap,n,p32q,p32n);
         compute_pAp<64,2>(p,Ap,n,p64q,p64n);
-        fprintf(log,"iter=%d pAp_d=%.10e p8q=%.10e p8n=%.10e p16q=%.10e p16n=%.10e p32q=%.10e p32n=%.10e p64q=%.10e p64n=%.10e\n",
-                iter,pAp_d,p8q,p8n,p16q,p16n,p32q,p32n,p64q,p64n);
-        double alpha=rz_d/pAp_d;
+        double rz32q, rz32n;
+        compute_rz<32,2>(r,z,n,rz32q,rz32n);
+        double alpha_d    = rz_d/pAp_d;
+        double alpha_p32q = (p32q != 0.0) ? rz_d/p32q : 0.0;
+        double alpha_p32n = (p32n != 0.0) ? rz_d/p32n : 0.0;
+        double alpha_full_q = (p32q != 0.0) ? rz32q/p32q : 0.0;
+        double alpha_full_n = (p32n != 0.0) ? rz32n/p32n : 0.0;
+        fprintf(log,"iter=%d pAp_d=%.10e p8q=%.10e p8n=%.10e p16q=%.10e p16n=%.10e p32q=%.10e p32n=%.10e p64q=%.10e p64n=%.10e alpha_d=%.10e alpha_p32q=%.10e alpha_p32n=%.10e rz32q=%.10e rz32n=%.10e alpha_full_q=%.10e alpha_full_n=%.10e\n",
+                iter,pAp_d,p8q,p8n,p16q,p16n,p32q,p32n,p64q,p64n,alpha_d,alpha_p32q,alpha_p32n,rz32q,rz32n,alpha_full_q,alpha_full_n);
+        double alpha=alpha_d;
         for(int i=0;i<n;i++){x[i]+=alpha*p[i]; r[i]-=alpha*Ap[i];}
         for(int i=0;i<n;i++) z[i]=r[i]/diagA[i];
         double rz2=0; for(int i=0;i<n;i++) rz2+=r[i]*z[i];
