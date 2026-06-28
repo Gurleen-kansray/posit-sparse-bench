@@ -30,7 +30,7 @@ void compute_pAp(const std::vector<double>& p, const std::vector<double>& Ap, in
     pAp_naive=double(pnaive);
 }
 int main(){
-    MTX A=read_mtx("/mnt/d/posits-work/nasasrb/nasasrb.mtx");
+    MTX A=read_mtx("data/matrices/s3dkt3m2.mtx");
     int n=A.n;
     std::vector<double> diagA(n,1.0);
     for(int k=0;k<(int)A.row.size();k++)
@@ -39,7 +39,7 @@ int main(){
     for(int i=0;i<n;i++) z[i]=r[i]/diagA[i];
     for(int i=0;i<n;i++) p[i]=z[i];
     double rz_d=0; for(int i=0;i<n;i++) rz_d+=r[i]*z[i];
-    FILE* log=fopen("/mnt/d/posits-work/nasasrb_ladder.log","w");
+    FILE* log=fopen("results/s3dkt3m2_ladder.log","w");
     for(int iter=0;iter<300;iter++){
         matvec(A,p.data(),Ap.data());
         double pAp_d=0; for(int i=0;i<n;i++) pAp_d+=p[i]*Ap[i];
