@@ -1,0 +1,10 @@
+parameter,posit8,posit16,posit32,posit64
+nbits,8,16,32,64
+es,0,1,2,2
+quire_capacity_param,2,2,2,2
+quire_bits,26,114,482,994
+epsilon,3.125e-02,2.441e-04,7.451e-09,1.735e-18
+accumulation,exact_quire,exact_quire,exact_quire,exact_quire
+iterations,300,300,300,300
+preconditioner,jacobi,jacobi,jacobi,jacobi
+solver,CG,CG,CG,CG
