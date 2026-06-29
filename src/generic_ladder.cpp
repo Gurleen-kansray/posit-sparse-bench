@@ -76,10 +76,13 @@ int main(int argc, char* argv[]){
         matvec(A,p.data(),Ap.data());
         double pAp_d=0; for(int i=0;i<n;i++) pAp_d+=p[i]*Ap[i];
         double p8q,p8n,p16q,p16n,p32q,p32n,p64q,p64n;
-        compute_pAp<8,0> (p,Ap,n,p8q, p8n);
-        compute_pAp<16,1>(p,Ap,n,p16q,p16n);
-        compute_pAp<32,2>(p,Ap,n,p32q,p32n);
-        compute_pAp<64,2>(p,Ap,n,p64q,p64n);
+        double p8q_e2,p8n_e2,p16q_e2,p16n_e2;
+        compute_pAp<8,0> (p,Ap,n,p8q,   p8n);
+        compute_pAp<8,2> (p,Ap,n,p8q_e2, p8n_e2);
+        compute_pAp<16,1>(p,Ap,n,p16q,  p16n);
+        compute_pAp<16,2>(p,Ap,n,p16q_e2,p16n_e2);
+        compute_pAp<32,2>(p,Ap,n,p32q,  p32n);
+        compute_pAp<64,2>(p,Ap,n,p64q,  p64n);
         double rz32q, rz32n;
         compute_rz<32,2>(r,z,n,rz32q,rz32n);
         double alpha_d    = rz_d/pAp_d;
@@ -87,8 +90,8 @@ int main(int argc, char* argv[]){
         double alpha_p32n = (p32n != 0.0) ? rz_d/p32n : 0.0;
         double alpha_full_q = (p32q != 0.0) ? rz32q/p32q : 0.0;
         double alpha_full_n = (p32n != 0.0) ? rz32n/p32n : 0.0;
-        fprintf(log,"iter=%d pAp_d=%.10e p8q=%.10e p8n=%.10e p16q=%.10e p16n=%.10e p32q=%.10e p32n=%.10e p64q=%.10e p64n=%.10e alpha_d=%.10e alpha_p32q=%.10e alpha_p32n=%.10e rz32q=%.10e rz32n=%.10e alpha_full_q=%.10e alpha_full_n=%.10e\n",
-                iter,pAp_d,p8q,p8n,p16q,p16n,p32q,p32n,p64q,p64n,alpha_d,alpha_p32q,alpha_p32n,rz32q,rz32n,alpha_full_q,alpha_full_n);
+        fprintf(log,"iter=%d pAp_d=%.10e p8q=%.10e p8n=%.10e p8q_e2=%.10e p8n_e2=%.10e p16q=%.10e p16n=%.10e p16q_e2=%.10e p16n_e2=%.10e p32q=%.10e p32n=%.10e p64q=%.10e p64n=%.10e alpha_d=%.10e alpha_p32q=%.10e alpha_p32n=%.10e rz32q=%.10e rz32n=%.10e alpha_full_q=%.10e alpha_full_n=%.10e\n",
+                iter,pAp_d,p8q,p8n,p8q_e2,p8n_e2,p16q,p16n,p16q_e2,p16n_e2,p32q,p32n,p64q,p64n,alpha_d,alpha_p32q,alpha_p32n,rz32q,rz32n,alpha_full_q,alpha_full_n);
         double alpha=alpha_d;
         for(int i=0;i<n;i++){x[i]+=alpha*p[i]; r[i]-=alpha*Ap[i];}
         for(int i=0;i<n;i++) z[i]=r[i]/diagA[i];
