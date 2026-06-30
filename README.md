@@ -149,6 +149,8 @@ posit64+quire matches the double64 reference to within 1e-11 (or exactly) across
 
 **Key finding:** No single matrix property (diagonal ratio or value range) cleanly predicts quire gain. sts4098 has the highest value range (1e+54) yet relatively low quire gain (39x), suggesting quire benefit depends on the interaction of value distribution, matrix size, and CG search direction evolution.
 
+**posit16 failure predictor — negative result:** We tested whether posit16 (es=1 or es=2) failure could be predicted from value ratio, diagonal ratio, matrix size (n), or value-ratio-per-n. None separate failing matrices (bcsstk03, mhd4800b, bodyy4, bcsstk14) from passing matrices (bcsstk36, bcsstk37, bcsstk38, nasasrb, s3dkt3m2, s3dkq4m2, sts4098, nasa4704, nos2) cleanly. Notably, bcsstk38 has the highest value-ratio-per-n (2.49e+34) of any tested matrix yet does not fail, while mhd4800b fails with a value-ratio-per-n three orders of magnitude lower (1.19e+17). This extends the quire-gain finding above: arithmetic reliability under posit16 depends on the interaction of value distribution shape and CG search direction evolution across iterations, not a static summary statistic of the matrix.
+
 ![Property vs quire gain](results/figures/property_vs_quire_gain.png)
 
 ## Full CG Solver Convergence
@@ -157,11 +159,19 @@ Beyond measuring a single inner product, we ran complete CG solvers in double64,
 
 ![CG convergence comparison](results/figures/cg_convergence_compare.png)
 
+Iteration-to-converge (residual < 1e-10), verified per-iteration from raw logs:
+
+| Matrix | double64 | float32 | posit32+quire |
+|---|---|---|---|
+| bcsstk03 | converges iter 198 | converges iter 382 | enters bounded precision-floor regime (residual 1e-10 to 1e-9, never above 1e-9 after iter 450) from ~iter 450 through 1000 iterations (extended run) — no divergence, no further improvement |
+| mhd4800b | converges iter 55 | converges iter 69 | converges iter 69 — exact match with float32 |
+| bcsstk14, bcsstk36, bcsstk37, bcsstk38, nasasrb, sts4098 | does not converge (500 iters) | does not converge | does not converge — posit32+quire does not perform worse than double64 or float32 on ill-conditioned matrices |
+
 Key observations:
 - **bcsstk14**: posit32+quire convergence curve is visually indistinguishable from double64 — a drop-in replacement result
 - **sts4098**: float32 diverges from double64 after iter 200; posit32+quire tracks double64 to the end — posit32+quire beats float32
 - **mhd4800b**: all three converge in 70 iterations; posit32+quire reaches 1e-10 vs double64's 1e-13
-- **bcsstk03**: double64 converges to 1e-38; posit32+quire plateaus cleanly at 1e-10 (precision floor, no divergence)
+- **bcsstk03**: double64 converges to 1e-38; posit32+quire enters a bounded precision-floor regime (no divergence), confirmed stable through an extended 1000-iteration run
 - **bcsstk38**: ill-conditioned, none converge — but posit32+quire does not make behavior worse
 
 posit32+quire matches or exceeds float32 behavior across all tested matrices in full solver context.
