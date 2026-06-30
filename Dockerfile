@@ -18,10 +18,10 @@ RUN git clone --branch v3.80 --depth 1 https://github.com/stillwater-sc/universa
 ENV UNIVERSAL_INCLUDE=/universal/include
 
 WORKDIR /work
-COPY posit-sparse-bench/src/ ./src/
-COPY posit-sparse-bench/Makefile ./Makefile
-COPY posit-sparse-bench/data/ ./data/
-COPY posit-sparse-bench/run_all.sh ./run_all.sh
+COPY src/ ./src/
+COPY Makefile ./Makefile
+COPY data/ ./data/
+COPY run_all.sh ./run_all.sh
 
 RUN mkdir -p results
 RUN make INCLUDES=-I/universal/include
