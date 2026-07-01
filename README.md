@@ -195,12 +195,11 @@ Per-iteration relative error tracking (posit32 quire vs naive, against double64 
 
 | Matrix | Divergence Iter | Max Err (Quire) | Max Err (Naive) | Gain (Max) |
 |---|---|---|---|---|
-| bcsstk03 | 0 | 3.22e-02 | 2.12e-01 | 6.6x |
+| bcsstk03 | none (floors out) | 3.22e-02 | 2.12e-01 | 6.6x |
 | bcsstk14 | 32 | 3.33e-06 | 1.31e-04 | 39.2x |
 | bcsstk36 | 6 | 1.56e-08 | 1.73e-06 | 110.7x |
 | bcsstk37 | 0 | 3.51e-08 | 3.27e-06 | 93.2x |
 | bcsstk38 | 0 | 3.47e-08 | 1.95e-06 | 56.3x |
-| bmwcra_1 | 0 | 3.01e-09 | 6.99e-07 | 231.8x |
 | bodyy4 | 0 | 6.23e-03 | 7.96e-01 | 127.8x |
 | mhd4800b | 6 | 1.77e-02 | 4.01e-01 | 22.6x |
 | nasa4704 | 0 | 4.67e-08 | 3.85e-07 | 8.2x |
