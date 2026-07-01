@@ -10,7 +10,7 @@ Can posit arithmetic with quire exact accumulation match or exceed double precis
 
 **posit32+quire achieves 7x–4,531x lower error than posit32 naive accumulation across all tested matrices.** The quire's exact accumulation — not just wider precision — is the primary driver of accuracy.
 
-posit32+quire maintains relative error below 1e-2 across 300 CG iterations on all tested matrices; below 1e-6 on well-conditioned matrices. posit16 is unreliable on high dynamic range matrices; behavior is matrix-dependent (marginal on bcsstk38/nasasrb, catastrophic failure on others).
+posit32+quire maintains relative error below 4e-2 across 300 CG iterations on all tested matrices (below 1e-2 on 11 of 13; two matrices near precision floor reach ~2-3e-2); below 1e-6 on well-conditioned matrices. posit16 is unreliable on high dynamic range matrices; behavior is matrix-dependent (marginal on bcsstk38/nasasrb, catastrophic failure on others).
 
 ## Benchmark Method
 
@@ -100,7 +100,7 @@ data/matrices/          # bcsstk03, bcsstk14 matrix files
 
 ```bash
 g++ -O2 -std=c++20 -I/path/to/universal/include src/generic_ladder.cpp -o generic_ladder
-./generic_ladder data/matrices/bcsstk38.mtx results/ladder_logs/bcsstk38_ladder.log
+./generic_ladder data/matrices/bcsstk38.mtx results/bcsstk38_ladder.log
 ```
 
 ## Project Context
@@ -155,7 +155,7 @@ posit64+quire matches the double64 reference to within 1e-11 (or exactly) across
 
 ## Full CG Solver Convergence
 
-Beyond measuring a single inner product, we ran complete CG solvers in double64, float32, and posit32+quire simultaneously across 5 matrices, tracking residual norm per iteration.
+Beyond measuring a single inner product, we ran complete CG solvers in double64, float32, and posit32+quire simultaneously across 8 matrices, tracking residual norm per iteration.
 
 ![CG convergence comparison](results/figures/cg_convergence_compare.png)
 
