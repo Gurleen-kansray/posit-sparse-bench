@@ -188,3 +188,26 @@ docker run --rm posit-bench bash run_all.sh
 ```
 
 Environment: Ubuntu 22.04, g++ 11, Universal v3.80, quire<N,ES,2>, 300 CG iterations per matrix.
+
+## Divergence Analysis
+
+Per-iteration relative error tracking (posit32 quire vs naive, against double64 reference) across 300 CG iterations for all 13 test matrices. Divergence point defined as naive error exceeding quire error by >10x, sustained for 5+ iterations.
+
+| Matrix | Divergence Iter | Max Err (Quire) | Max Err (Naive) | Gain (Max) |
+|---|---|---|---|---|
+| bcsstk03 | 0 | 3.22e-02 | 2.12e-01 | 6.6x |
+| bcsstk14 | 32 | 3.33e-06 | 1.31e-04 | 39.2x |
+| bcsstk36 | 6 | 1.56e-08 | 1.73e-06 | 110.7x |
+| bcsstk37 | 0 | 3.51e-08 | 3.27e-06 | 93.2x |
+| bcsstk38 | 0 | 3.47e-08 | 1.95e-06 | 56.3x |
+| bmwcra_1 | 0 | 3.01e-09 | 6.99e-07 | 231.8x |
+| bodyy4 | 0 | 6.23e-03 | 7.96e-01 | 127.8x |
+| mhd4800b | 6 | 1.77e-02 | 4.01e-01 | 22.6x |
+| nasa4704 | 0 | 4.67e-08 | 3.85e-07 | 8.2x |
+| nasasrb | 0 | 9.28e-09 | 7.37e-07 | 79.4x |
+| nos2 | 2 | 7.99e-07 | 7.72e-06 | 9.7x |
+| s3dkq4m2 | 0 | 1.11e-07 | 5.05e-04 | 4531.5x |
+| s3dkt3m2 | 0 | 1.12e-07 | 1.72e-04 | 1535.0x |
+| sts4098 | 12 | 3.65e-07 | 1.43e-05 | 39.1x |
+
+Full per-iteration data: `results/csv/divergence_summary.csv`
