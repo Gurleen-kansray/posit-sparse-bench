@@ -8,7 +8,7 @@ Can posit arithmetic with quire exact accumulation match or exceed double precis
 
 ## Key Finding
 
-**posit32+quire achieves 7x–4,531x lower error than posit32 naive accumulation across all tested matrices.** The quire's exact accumulation — not just wider precision — is the primary driver of accuracy.
+**posit32+quire achieves 6.6x–4,531x lower error than posit32 naive accumulation across all tested matrices.** The quire's exact accumulation — not just wider precision — is the primary driver of accuracy.
 
 posit32+quire maintains relative error below 4e-2 across 300 CG iterations on all tested matrices (below 1e-2 on 11 of 13; two matrices near precision floor reach ~2-3e-2); below 1e-6 on well-conditioned matrices. posit16 is unreliable on high dynamic range matrices; behavior is matrix-dependent (marginal on bcsstk38/nasasrb, catastrophic failure on others).
 
@@ -36,7 +36,7 @@ All matrices are real symmetric from [SuiteSparse Matrix Collection](https://spa
 
 | Matrix | Domain | Diag ratio | p32+quire max err | p32 naive max err | Quire gain |
 |--------|--------|-----------|------------------|------------------|------------|
-| bcsstk03 | FEM structural | 10^6 | 3.22e-02* | 2.12e-01 | 7x |
+| bcsstk03 | FEM structural | 10^6 | 3.22e-02* | 2.12e-01 | 6.6x |
 | bcsstk14 | FEM structural | 10^10 | 3.33e-06 | 1.31e-04 | 39x |
 | bcsstk38 | FEM structural | 10^12 | 3.47e-08 | 1.95e-06 | 56x |
 | nasasrb | NASA structural | 10^5 | 9.28e-09 | 7.37e-07 | 79x |
@@ -130,7 +130,7 @@ posit64+quire matches the double64 reference to within 1e-11 (or exactly) across
 
 | Matrix | n | Diag ratio | Val ratio | p32q max err | p32 naive max err | Quire gain |
 |--------|---|-----------|-----------|-------------|------------------|------------|
-| bcsstk03 | 112 | 1.52e+06 | 3.78e+16 | 3.22e-02* | 2.12e-01 | 7x |
+| bcsstk03 | 112 | 1.52e+06 | 3.78e+16 | 3.22e-02* | 2.12e-01 | 6.6x |
 | bcsstk14 | 1806 | 8.94e+09 | 5.53e+36 | 3.33e-06 | 1.31e-04 | 39x |
 | bcsstk36 | 23052 | 1.74e+09 | 1.13e+37 | 1.56e-08 | 1.73e-06 | 111x |
 | bcsstk37 | 25503 | 9.61e+08 | 8.81e+27 | 3.51e-08 | 3.27e-06 | 93x |
