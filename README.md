@@ -51,7 +51,7 @@ All matrices are real symmetric from [SuiteSparse Matrix Collection](https://spa
 
 - **posit8**: catastrophic failure on all matrices (error 10^3–10^28)
 - **posit16**: fails on wide dynamic range matrices; marginal on bcsstk38/nasasrb
-- **posit32+quire**: robust across all domains, max error 1e-5 to 4e-7
+- **posit32+quire**: robust across all domains, max error 9.28e-09 to 3.22e-02 (two matrices near the posit32 precision floor account for the upper end; well-conditioned matrices stay below 1e-6)
 
 ### posit32+quire vs posit32 naive
 
@@ -83,13 +83,13 @@ src/                    # ladder benchmark source files
 
 src/exploratory/        # excluded matrices (unsymmetric/preconditioned)
 
-results/ladder_logs/    # raw per-iteration logs (300 iters each)
+results/                # raw per-iteration logs (300 iters each, gitignored — regenerate via run_all.sh)
 
 results/csv/            # summary statistics
 
 results/figures/        # plots
 
-data/matrices/          # bcsstk03, bcsstk14 matrix files
+data/matrices/          # 13 tested matrices (see Excluded Matrices for others present but not used)
 ## Dependencies
 
 - [universal](https://github.com/stillwater-sc/universal) — posit arithmetic library
