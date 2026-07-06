@@ -25,7 +25,7 @@ All matrices are real symmetric from [SuiteSparse Matrix Collection](https://spa
 
 ## Implementation Details
 
-**Quire configuration:** `quire<N,ES,2>` throughout — capacity parameter 2 gives a 482-bit quire for posit32 (per §3.2, 2022 Posit Standard), supporting exact accumulation of up to 2^31 terms. bcsstk03 has 640 nonzeros, well within this bound.
+**Quire configuration:** `quire<N,ES,2>` throughout — capacity parameter 2 gives a 482-bit quire for posit32, derived directly from the Universal library source (qbits = escale*(4*nbits-8) + capacity, where escale = 2^es). Capacity=2 formally guarantees exact accumulation of up to 4 worst-case-magnitude (maxpos^2) terms; in practice, real matrix entries are far below maxpos^2 in magnitude, so overflow does not occur even with hundreds of thousands of accumulations (e.g., bcsstk38's 355,460 nonzeros).
 
 **CG solver:** Jacobi-preconditioned CG — diagonal preconditioner `z[i] = r[i]/diagA[i]`. 300 iterations per run.
 
