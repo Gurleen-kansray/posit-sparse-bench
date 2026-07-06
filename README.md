@@ -29,7 +29,7 @@ All matrices are real symmetric from [SuiteSparse Matrix Collection](https://spa
 
 **CG solver:** Jacobi-preconditioned CG — diagonal preconditioner `z[i] = r[i]/diagA[i]`. 300 iterations per run.
 
-**es values:** posit8 es=0, posit16 es=1, posit32 es=2, posit64 es=2 — matching the 2022 Posit Standard recommendations.
+**es values:** Per the 2022 Posit Standard (es=2 for all sizes), confirmed directly with John Gustafson — thank you to Prof. Gustafson for clarifying this. Our ladder results below include both configurations: the legacy variable-es convention (posit8 es=0, posit16 es=1, posit32/64 es=2) used in earlier posit literature, and the standard-compliant es=2 uniform configuration, to show how the fixed exponent size affects posit8/16 behavior relative to the older convention.
 ## Results
 
 ### Quire Improvement (posit32 naive vs posit32+quire), 300 CG iterations
