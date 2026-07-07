@@ -209,4 +209,22 @@ Per-iteration relative error tracking (posit32 quire vs naive, against double64 
 | s3dkt3m2 | 0 | 1.12e-07 | 1.72e-04 | 1535.0x |
 | sts4098 | 12 | 3.65e-07 | 1.43e-05 | 39.1x |
 
+### Divergence Mechanism (mhd4800b)
+
+Note: this analysis uses a different divergence signal than the table above.
+The table's iter=6 is from `divergence_track.py` (ladder benchmark pAp relative
+error, 10x-sustained rule). The iter≈19 below is from the full-solver
+(`cg_compare_bin`) residual comparison — a different signal, not directly
+comparable without applying the same sustained-threshold rule to both.
+
+Per-term dynamic range of the pAp dot product stays consistently high throughout
+(10^9–10^13), so range alone does not explain why the full-solver posit32 naive
+vs posit32+quire residuals start diverging around iteration 19. Tracking pAp
+magnitude itself tells the story: it collapses from ~2.3e12 (iter 0) to ~5.25e4
+(iter 19) — an 8-order-of-magnitude drop — while the dynamic range stays roughly
+constant. As the CG solution converges, signal magnitude shrinks toward the scale
+of the dynamic range itself, and that is when posit32's limited fraction bits stop
+being able to represent the small terms accurately relative to the large ones in
+the sum.
+
 Full per-iteration data: `results/csv/divergence_summary.csv`
