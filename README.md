@@ -242,4 +242,14 @@ of the dynamic range itself, and that is when posit32's limited fraction bits st
 being able to represent the small terms accurately relative to the large ones in
 the sum.
 
+![posit32 relative error comparison](results/figures/p32_relerror_compare.png)
+
+For mhd4800b, naive posit32's relative error stays roughly flat (~1e-5 to 1e-4)
+through iteration ~17-19, then becomes visibly noisier and elevated (spiking to
+~1e-3) beyond that point — consistent with the pAp-magnitude-collapse mechanism
+above. posit32+quire's error stays low and comparatively stable throughout.
+bcsstk38 shows no such regime change; naive error is consistently ~2-3 orders of
+magnitude above quire's across all iterations, with no sharp transition.
+
+
 Full per-iteration data: `results/csv/divergence_summary.csv`
