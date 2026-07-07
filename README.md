@@ -151,6 +151,21 @@ posit64+quire matches the double64 reference to within 1e-11 (or exactly) across
 
 **posit16 failure predictor — negative result:** We tested whether posit16 (es=1 or es=2) failure could be predicted from value ratio, diagonal ratio, matrix size (n), or value-ratio-per-n. None separate failing matrices (bcsstk03, mhd4800b, bodyy4, bcsstk14) from passing matrices (bcsstk36, bcsstk37, bcsstk38, nasasrb, s3dkt3m2, s3dkq4m2, sts4098, nasa4704, nos2) cleanly. Notably, bcsstk38 has the highest value-ratio-per-n (2.49e+34) of any tested matrix yet does not fail, while mhd4800b fails with a value-ratio-per-n three orders of magnitude lower (1.19e+17). This extends the quire-gain finding above: arithmetic reliability under posit16 depends on the interaction of value distribution shape and CG search direction evolution across iterations, not a static summary statistic of the matrix.
 
+### posit16 saturation mechanism (bcsstk38 vs mhd4800b)
+
+To probe this further, we plotted the actual pAp trajectory (ground-truth double64
+value vs. posit16+quire vs. posit16 naive) per iteration for both matrices:
+
+![posit16 saturation comparison](results/figures/p16_saturation_compare.png)
+
+bcsstk38's posit16 tracks double64 closely across all iterations — pAp stays within
+posit16's representable range. mhd4800b's posit16 (both quire and naive) saturates
+at a fixed ceiling (~2.68e+08) from iteration 0 onward, while the true pAp value
+climbs to ~6e+14. This is a hard dynamic-range ceiling, not a rounding-error effect:
+posit16's max representable magnitude (~2^28 with es=2) is far below mhd4800b's
+actual pAp magnitudes, so it saturates immediately rather than degrading gradually.
+
+
 ![Property vs quire gain](results/figures/property_vs_quire_gain.png)
 
 ## Full CG Solver Convergence
