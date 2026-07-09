@@ -198,13 +198,15 @@ We extended the full CG solver comparison from 300 to 2000 iterations to check w
 
 Iterations to converge (residual < 1e-10):
 
-| Matrix | Quire gain | double64 | float32 | posit32+quire | posit32 naive |
+| Matrix | Iter gain (naive/quire) | double64 | float32 | posit32+quire | posit32 naive |
 |---|---|---|---|---|---|
-| mhd4800b | 22.61x | 55 | 69 | 69 | 79 |
-| bcsstk14 | 39.23x | 694 | 726 | 730 | 1026 |
-| sts4098 | 39.05x | 634 | 800 | 706 | 1093 |
+| mhd4800b | 1.14x | 55 | 69 | 69 | 79 |
+| bcsstk14 | 1.41x | 694 | 726 | 730 | 1026 |
+| sts4098 | 1.55x | 634 | 800 | 706 | 1093 |
 
-Across every matrix that reaches clean convergence, posit32+quire never trails float32 — on sts4098 it converges faster outright (706 vs 800 iterations), not just closer to double64 in accuracy. Naive posit32 lags all three variants in every case.
+"Iter gain" here is naive iterations / quire iterations to reach 1e-10 residual — a different metric from the pAp accuracy-gain figures reported elsewhere in this README (e.g. 39x, 4,531x), which measure per-iteration relative error, not iteration count. An earlier version of this table reused the accuracy-gain figures in this column by mistake; the values above are recomputed directly from the iteration counts in this table.
+
+Across every matrix that reaches clean convergence, posit32+quire never trails float32 — on sts4098 it converges faster outright (706 vs 800 iterations), not just closer to double64 in accuracy. Naive posit32 lags all three variants in every case, though the iteration-count margin (1.1x–1.6x) is far smaller than the pAp accuracy-gain margin — the two metrics are not interchangeable.
 
 bcsstk38, nasasrb, bcsstk36, bcsstk37 did not reach the 1e-10 threshold within 2000 iterations. bcsstk38 is still decaying monotonically (residual ~8.4e2 to 1.0e3 range at iter 1999) and would likely converge with more iterations. The other three oscillate in double64 itself with no clear downward trend — a solver-conditioning limit under plain Jacobi preconditioning, not an arithmetic-precision effect, reported separately from the accuracy comparison.
 
@@ -267,6 +269,8 @@ Per-iteration relative error tracking (posit32 quire vs naive, against double64 
 | s3dkq4m2 | 0 | 1.11e-07 | 5.05e-04 | 4531.5x |
 | s3dkt3m2 | 0 | 1.12e-07 | 1.72e-04 | 1535.0x |
 | sts4098 | 12 | 3.65e-07 | 1.43e-05 | 39.1x |
+
+*"Divergence Iter" tracks the pAp per-iteration relative-error metric defined above (naive error exceeding quire error by >10x, sustained for 5+ iterations) — it is distinct from the full-solver residual-convergence discussion elsewhere in this README. bcsstk03's "none (floors out)" here means no such error-ratio divergence was detected (confirmed via `results/divergence_summary.csv`), which is a separate observation from the residual/precision-floor behavior described in the Full CG Solver Convergence section (error concentrated at iters 181–201, where |pAp| < 1e-30).
 
 ## Divergence Mechanism (mhd4800b) - Confirmed via Controlled Isolation
 
