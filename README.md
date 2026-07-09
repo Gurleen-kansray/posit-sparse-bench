@@ -224,32 +224,24 @@ Per-iteration relative error tracking (posit32 quire vs naive, against double64 
 | s3dkt3m2 | 0 | 1.12e-07 | 1.72e-04 | 1535.0x |
 | sts4098 | 12 | 3.65e-07 | 1.43e-05 | 39.1x |
 
-### Divergence Mechanism (mhd4800b)
+## Divergence Mechanism (mhd4800b) - Confirmed via Controlled Isolation
 
-Note: this analysis uses a different divergence signal than the table above.
-The table's iter=6 is from `divergence_track.py` (ladder benchmark pAp relative
-error, 10x-sustained rule). The iter≈19 below is from the full-solver
-(`cg_compare_bin`) residual comparison — a different signal, not directly
-comparable without applying the same sustained-threshold rule to both.
+We investigated why naive posit32 (no quire) fails to match float32 on mhd4800b's full CG solver (converges at iteration 79 vs float32/posit32+quire at 69), through four successive tests - two hypotheses ruled out, one confirmed causally, not just correlationally.
 
-Per-term dynamic range of the pAp dot product stays consistently high throughout
-(10^9–10^13), so range alone does not explain why the full-solver posit32 naive
-vs posit32+quire residuals start diverging around iteration 19. Tracking pAp
-magnitude itself tells the story: it collapses from ~2.3e12 (iter 0) to ~5.25e4
-(iter 19) — an 8-order-of-magnitude drop — while the dynamic range stays roughly
-constant. As the CG solution converges, signal magnitude shrinks toward the scale
-of the dynamic range itself, and that is when posit32's limited fraction bits stop
-being able to represent the small terms accurately relative to the large ones in
-the sum.
+**Hypothesis 1 (ruled out): individual term-magnitude precision loss.** We measured what fraction of individual p[i]*Ap[i] terms fall outside posit32's precision-favorable magnitude zone (empirically ~3.16e-5 to ~1e5, from an analytical posit32-vs-float32 relative-precision sweep, src/posit_precision_curve.cpp). At the iterations where naive posit32 first diverges (15-25), only 0.04-2.9% of individual terms fall outside this zone - this cannot explain the gap (src/term_probe.cpp).
 
-![posit32 relative error comparison](results/figures/p32_relerror_compare.png)
+**Hypothesis 2 (ruled out): catastrophic cancellation.** We measured the ratio of the largest running partial sum to the final accumulated result during pAp accumulation. This ratio stayed ~1.0 for both float32 and posit32-naive at iterations 20-24 - no significant cancellation was occurring (src/cancellation_probe.cpp).
 
-For mhd4800b, naive posit32's relative error stays roughly flat (~1e-5 to 1e-4)
-through iteration ~17-19, then becomes visibly noisier and elevated (spiking to
-~1e-3) beyond that point — consistent with the pAp-magnitude-collapse mechanism
-above. posit32+quire's error stays low and comparatively stable throughout.
-bcsstk38 shows no such regime change; naive error is consistently ~2-3 orders of
-magnitude above quire's across all iterations, with no sharp transition.
+**Confirmed mechanism: magnitude-dependent rounding of the accumulated pAp scalar, compounding through CG's recurrence.** Tracking the relative L2 drift of the p search-direction vector against a double64 ground truth, from iteration 0 onward (src/trajectory_probe.cpp), showed posit32-naive's trajectory deviates from ground truth more than float32's at every iteration from the start - not a sudden fork at iteration 19, but a gradual, compounding divergence that only becomes visible in the residual norm once it's accumulated enough.
 
+To isolate the cause, we ran a controlled hybrid experiment (src/hybrid_probe.cpp): three otherwise-identical double64 CG solvers, differing ONLY in how the scalar pAp is rounded each iteration (unrounded control; rounded via float32; rounded via posit32). With everything else held at double64, posit32's rounding of pAp alone produced 30-45x more downstream trajectory deviation than float32's rounding of the same value, sustained across iterations 0-18.
 
-Full per-iteration data: `results/csv/divergence_summary.csv`
+Finally, we directly compared single-value rounding error of the true pAp scalar (from an unperturbed double64 trajectory) through posit32 vs float32 at its actual observed magnitude each iteration (src/pAp_rounding_probe.cpp), and correlated this against the precision-curve zone from Hypothesis 1's analysis:
+
+- Iterations 0-16: pAp magnitude ranges 1e9-1e13, OUTSIDE posit32's favorable zone (upper bound ~1e5). Posit32's rounding error is 10-90x larger than float32's here.
+- Iterations 17-18: pAp crosses into the zone boundary (~1e5-1e6); rounding errors converge (ratio ~1.0).
+- Iterations 19+: pAp drops to 10^2-10^4, INSIDE posit32's favorable zone. Posit32 becomes MORE accurate than float32 per-step (ratio 0.001-0.22) - but by this point the earlier compounded error has already been baked into the trajectory.
+
+**Summary:** naive posit32's disadvantage is not caused by individual-term precision loss or cancellation, but by the ACCUMULATED pAp scalar sitting outside posit32's precision-favorable magnitude range during CG's early iterations (when pAp is largest), producing measurably larger single-step rounding error than float32 during exactly this window. This early-iteration error compounds through CG's own recurrence (each iteration's search direction depends on the previous iteration's rounding error), producing the observed ~10-iteration convergence lag - even though posit32 would out-precision float32 later in the same run, once pAp's magnitude shrinks into its favorable zone. Quire eliminates this entirely by accumulating pAp exactly regardless of magnitude, which is why posit32+quire matches float32/double64 from iteration 0.
+
+Full per-iteration data: results/posit_precision_curve.log, results/term_probe_mhd4800b.log, results/term_probe_bcsstk38.log, results/trajectory_mhd4800b.log, results/hybrid_mhd4800b.log, results/pAp_rounding_mhd4800b.log
