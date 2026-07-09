@@ -299,3 +299,32 @@ Full per-iteration data: results/posit_precision_curve.log, results/term_probe_m
 Prof. John Gustafson identified that early results used a pre-ratified, variable-es posit convention rather than the 2022 Posit Standard (es=2 uniformly across all sizes), and provided the ratified standard document. Rerunning with es=2 improved posit16 accuracy by up to 1,043x (e.g. nos2), and the corrected es=2 results are reflected throughout this README. Prof. Gustafson also posed the open question of which matrix property predicts quire gain — still unresolved (see Extended Results).
 
 Prof. James Quinlan (University of Maine) suggested cross-validating the pAp-based accuracy claims against CG's own alpha update, leading to the Alpha-Metric Cross-Validation section above.
+
+## Alpha-Level Error Propagation (mhd4800b) — Extending the Divergence Mechanism
+
+The mechanism analysis above explains why naive posit32's *pAp* value diverges early in mhd4800b's CG run. A natural follow-up question: does this error simply pass through to α = rz/pAp, or does something more complex happen when two independently-rounded posit32 quantities are combined?
+
+We logged `alpha_full_n` and `alpha_full_q` (α computed fully in posit32, naive and quire respectively) alongside `alpha_d` (the double64 α that actually drives the solver) for exactly this purpose, but had not previously analyzed the relationship. We do so here for mhd4800b, iterations 0–29.
+
+**Finding: alpha_full_q is stable; alpha_full_n is volatile, with gain-over-quire ranging from 5x to 243x iteration-to-iteration** (vs. a flat ~22.6x pAp-level gain for the same matrix). This volatility is not noise — it has an exact algebraic explanation.
+
+**Mechanism:** since α = rz/pAp, first-order error propagation through division gives
+
+```
+rel_err(alpha_full_n) ≈ rel_err(rz32n) − rel_err(pAp32n)
+```
+
+i.e., naive posit32's error in α is approximately the *difference*, not the sum or the worse, of the independent rounding errors already present in rz32n and pAp32n. We verified this directly against the logged data (`results/ladder_logs/mhd4800b_ladder.log`, iterations 0–9):
+
+| iter | rel_err(rz32n) | rel_err(pAp32n) | predicted (diff) | actual alpha_full_n err |
+|---|---|---|---|---|
+| 0 | +6.33e-6 | −2.60e-5 | +3.23e-5 | +3.35e-5 |
+| 2 | −6.64e-5 | −3.22e-4 | +2.56e-4 | +2.57e-4 |
+| 3 | −7.57e-5 | −6.36e-5 | −1.21e-5 | −1.38e-5 |
+
+The predicted-vs-actual match at iteration 2 (the largest alpha-level gain observed, 177x) is essentially exact, confirming the difference-of-errors mechanism rather than a worst-case or additive model.
+
+**Implication:** when rz32n and pAp32n happen to round in a correlated direction with similar magnitude (e.g. iterations 3, 4, 9), their errors partially cancel, and alpha_full_n looks deceptively accurate on that iteration despite both inputs being individually wrong. When the two errors diverge in sign or magnitude (e.g. iteration 2), they compound instead. This means naive posit32's apparent accuracy on any single iteration cannot be trusted as evidence of reliability — it may simply reflect a favorable but coincidental cancellation between two independently unreliable quantities. Quire removes this lottery entirely: because each accumulated quantity (pAp, rz) is independently exact, there is no cancellation to rely on and no risk of the two errors compounding unfavorably on a bad iteration.
+
+**Status:** this is a preliminary analysis on one matrix (mhd4800b), iterations 0–29 of 300. The first-order propagation model has not been validated on other matrices or over the full iteration range, and has not yet been checked against a rigorous second-order error bound. Flagged here for mentor review before extending or including in the paper.
+
