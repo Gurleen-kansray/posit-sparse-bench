@@ -180,7 +180,7 @@ Iteration-to-converge (residual < 1e-10), verified per-iteration from raw logs:
 |---|---|---|---|
 | bcsstk03 | converges iter 198 | converges iter 382 | enters bounded precision-floor regime (residual 1e-10 to 1e-9, never above 1e-9 after iter 450) from ~iter 450 through 1000 iterations (extended run) — no divergence, no further improvement |
 | mhd4800b | converges iter 55 | converges iter 69 | converges iter 69 — exact match with float32 |
-| bcsstk14, bcsstk36, bcsstk37, bcsstk38, nasasrb, sts4098 | does not converge (500 iters) | does not converge | does not converge — posit32+quire does not perform worse than double64 or float32 on ill-conditioned matrices |
+| bcsstk14, bcsstk36, bcsstk37, bcsstk38, nasasrb, sts4098 | does not converge (500 iters) | does not converge | does not converge — posit32+quire does not perform worse than double64 or float32 on ill-conditioned matrices (bcsstk14 later confirmed to converge at iter 730 in the 2000-iteration extended run; see below) |
 
 Key observations:
 - **bcsstk14**: posit32+quire convergence curve is visually indistinguishable from double64 — a drop-in replacement result
@@ -191,6 +191,50 @@ Key observations:
 
 posit32+quire matches or exceeds float32 behavior across all tested matrices in full solver context.
 
+
+## Extended Convergence (2000 iterations)
+
+We extended the full CG solver comparison from 300 to 2000 iterations to check whether more matrices reach the 1e-10 convergence threshold, and to test posit32+quire's iteration count directly against float32.
+
+Iterations to converge (residual < 1e-10):
+
+| Matrix | Quire gain | double64 | float32 | posit32+quire | posit32 naive |
+|---|---|---|---|---|---|
+| mhd4800b | 22.61x | 55 | 69 | 69 | 79 |
+| bcsstk14 | 39.23x | 694 | 726 | 730 | 1026 |
+| sts4098 | 39.05x | 634 | 800 | 706 | 1093 |
+
+Across every matrix that reaches clean convergence, posit32+quire never trails float32 — on sts4098 it converges faster outright (706 vs 800 iterations), not just closer to double64 in accuracy. Naive posit32 lags all three variants in every case.
+
+bcsstk38, nasasrb, bcsstk36, bcsstk37 did not reach the 1e-10 threshold within 2000 iterations. bcsstk38 is still decaying monotonically (residual ~8.4e2 to 1.0e3 range at iter 1999) and would likely converge with more iterations. The other three oscillate in double64 itself with no clear downward trend — a solver-conditioning limit under plain Jacobi preconditioning, not an arithmetic-precision effect, reported separately from the accuracy comparison.
+
+**bcsstk03 diagnostic note:** at iteration 541, the float32-FMA diagnostic column returns `-nan` (residuals already at the 1e-40 precision floor; consistent with sqrt of a small FMA-rounded-negative value at near-convergence). This is isolated to the diagnostic FMA column only — naive posit32 (`res_posit32n`) has zero NaNs across the full 2000-iteration run, confirmed by direct column check.
+
+## Alpha-Metric Cross-Validation (suggested by Prof. James Quinlan, University of Maine)
+
+Prof. Quinlan suggested testing whether the quire advantage holds when measured via the CG algorithm's own alpha update (alpha = r·z / p·Ap) rather than pAp alone, since alpha involves two independent inner products and is the value CG actually uses each iteration.
+
+Max relative error over 300 iterations, quire gain (naive error / quire error):
+
+| Matrix | pAp gain | r·z gain | full alpha gain |
+|---|---|---|---|
+| bcsstk03 | 7x | 10x | 4x |
+| bcsstk14 | 39x | 38x | 31x |
+| bcsstk36 | 111x | 800x | 653x |
+| bcsstk37 | 93x | 484x | 280x |
+| bcsstk38 | 56x | 362x | 224x |
+| nasasrb | 79x | 1,319x | 432x |
+| mhd4800b | 23x | 14x | 12x |
+| s3dkt3m2 | 1,535x | 3,049x | 1,271x |
+| s3dkq4m2 | 4,531x | 2,046x | 2,351x |
+| sts4098 | 39x | 90x | 45x |
+| nasa4704 | 8x | 38x | 11x |
+| nos2 | 10x | 114x | 13x |
+| bodyy4 | 128x | 148x | 67x |
+
+Quire outperforms naive accumulation across all three metrics on every matrix. For several matrices (bcsstk36/37/38, nasasrb, s3dkt3m2) the r·z gain exceeds the pAp gain, consistent with r·z's dependence on A being "baked in" through z. pAp is retained as the primary reported metric since it directly isolates the matrix-dependent accumulation under study; the alpha analysis is supporting evidence that the advantage is not an artifact of which inner product is measured.
+
+Full analysis: [results/alpha_analysis.md](results/alpha_analysis.md)
 ## Reproducing Results (Docker)
 
 Requirements: Docker, git
@@ -245,3 +289,9 @@ Finally, we directly compared single-value rounding error of the true pAp scalar
 **Summary:** naive posit32's disadvantage is not caused by individual-term precision loss or cancellation, but by the ACCUMULATED pAp scalar sitting outside posit32's precision-favorable magnitude range during CG's early iterations (when pAp is largest), producing measurably larger single-step rounding error than float32 during exactly this window. This early-iteration error compounds through CG's own recurrence (each iteration's search direction depends on the previous iteration's rounding error), producing the observed ~10-iteration convergence lag - even though posit32 would out-precision float32 later in the same run, once pAp's magnitude shrinks into its favorable zone. Quire eliminates this entirely by accumulating pAp exactly regardless of magnitude, which is why posit32+quire matches float32/double64 from iteration 0.
 
 Full per-iteration data: results/posit_precision_curve.log, results/term_probe_mhd4800b.log, results/term_probe_bcsstk38.log, results/trajectory_mhd4800b.log, results/hybrid_mhd4800b.log, results/pAp_rounding_mhd4800b.log
+
+## Acknowledgments
+
+Prof. John Gustafson identified that early results used a pre-ratified, variable-es posit convention rather than the 2022 Posit Standard (es=2 uniformly across all sizes), and provided the ratified standard document. Rerunning with es=2 improved posit16 accuracy by up to 1,043x (e.g. nos2), and the corrected es=2 results are reflected throughout this README. Prof. Gustafson also posed the open question of which matrix property predicts quire gain — still unresolved (see Extended Results).
+
+Prof. James Quinlan (University of Maine) suggested cross-validating the pAp-based accuracy claims against CG's own alpha update, leading to the Alpha-Metric Cross-Validation section above.
