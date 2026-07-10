@@ -1,0 +1,9 @@
+nohup: ignoring input
+Matrix: data/matrices/nasasrb.mtx  n=54870  nnz=2677324
+Computing ILU(0) factorization...
+ILU(0) done.
+Running Jacobi baseline...
+jacobi did NOT converge within 2000 iters (final res=4.753e+03)
+Running ILU(0)...
+ilu0 did NOT converge within 2000 iters (final res=2.196e+03)
+Done. Log: results/ilu_test_nasasrb.log
