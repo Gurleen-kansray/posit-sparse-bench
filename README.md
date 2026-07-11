@@ -14,8 +14,8 @@ posit32+quire maintains relative error below 4e-2 across 300 CG iterations on al
 
 ## Benchmark Method
 
-For each CG iteration, we compute the `p^T A p` dot product simultaneously in:
-- posit8, posit16, posit32, posit64 — each with quire (exact) and naive accumulation
+For each CG iteration, we compute the `p^T A p` dot product simultaneously
+
 - double64 — used as ground truth reference
 
 Relative error = `|posit_result - double64| / |double64|`
