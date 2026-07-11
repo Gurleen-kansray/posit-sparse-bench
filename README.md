@@ -178,7 +178,7 @@ Iteration-to-converge (residual < 1e-10), verified per-iteration from raw logs:
 
 | Matrix | double64 | float32 | posit32+quire |
 |---|---|---|---|
-| bcsstk03 | converges iter 198 | converges iter 382 | enters bounded precision-floor regime (residual 1e-10 to 1e-9, never above 1e-9 after iter 450) from ~iter 450 through 1000 iterations (extended run) — no divergence, no further improvement |
+| bcsstk03 | converges iter 198 | converges iter 382 | does not floor at 1e-10 as earlier believed (that was an early-exit artifact in the original 500-iteration run); with the early-exit disabled, continues improving through an extended run, reaching 8.8e-13 by iteration ~906 — tracking downward similarly to double64. Whether it eventually floors lower, or matches double64's ~1e-38, is unresolved and needs a longer run |
 | mhd4800b | converges iter 55 | converges iter 69 | converges iter 69 — exact match with float32 |
 | bcsstk14, bcsstk36, bcsstk37, bcsstk38, nasasrb, sts4098 | does not converge (500 iters) | does not converge | does not converge — posit32+quire does not perform worse than double64 or float32 on ill-conditioned matrices (bcsstk14 later confirmed to converge at iter 730 in the 2000-iteration extended run; see below) |
 
@@ -186,7 +186,7 @@ Key observations:
 - **bcsstk14**: posit32+quire convergence curve is visually indistinguishable from double64 — a drop-in replacement result
 - **sts4098**: float32 diverges from double64 after iter 200; posit32+quire tracks double64 to the end — posit32+quire beats float32
 - **mhd4800b**: all three converge in 70 iterations; posit32+quire reaches 1e-10 vs double64's 1e-13
-- **bcsstk03**: double64 converges to 1e-38; posit32+quire enters a bounded precision-floor regime (no divergence), confirmed stable through an extended 1000-iteration run
+- **bcsstk03**: double64 converges to 1e-38; posit32+quire does *not* floor at ~1e-10 as originally reported (that was an early-exit artifact, corrected 30 Jun) — with early-exit disabled, it keeps improving, reaching 8.8e-13 by iteration ~906. Whether it eventually floors lower or matches double64's ~1e-38 depth is unresolved
 - **bcsstk38**: ill-conditioned, none converge — but posit32+quire does not make behavior worse
 
 posit32+quire matches or exceeds float32 behavior across all tested matrices in full solver context.
