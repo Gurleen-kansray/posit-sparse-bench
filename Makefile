@@ -3,7 +3,10 @@ CXXFLAGS = -std=c++20 -O2
 INCLUDES = -I../universal/include
 LDFLAGS = -lm
 
-all: generic_ladder cg_compare
+all: generic_ladder cg_compare static_conditioning
+
+static_conditioning: src/static_conditioning.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $< $(LDFLAGS)
 
 generic_ladder: src/generic_ladder.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $< $(LDFLAGS)
