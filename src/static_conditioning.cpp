@@ -1,5 +1,4 @@
-// static_conditioning.cpp
-// Prof. Quinlan's Part A: static quantization/conditioning sweep, per matrix per bit-width T
+// static_conditioning.cpp  (v2 - per-bitwidth quantization fix)
 #include <cstdint>
 #include <cstdio>
 #include <cmath>
@@ -24,6 +23,16 @@ MTX read_mtx(const char* f){
         m.row.push_back(r-1); m.col.push_back(c-1); m.val.push_back(v);
         if(r!=c){m.row.push_back(c-1); m.col.push_back(r-1); m.val.push_back(v);}
     } fclose(fp); return m;
+}
+
+template <size_t nbits, size_t es>
+MTX quantize_matrix(const MTX& A){
+    MTX Aq = A;
+    for(size_t k=0;k<Aq.val.size();k++){
+        posit<nbits,es> p(Aq.val[k]);
+        Aq.val[k] = double(p);
+    }
+    return Aq;
 }
 
 void matvec_d(const MTX& A, const std::vector<double>& x, std::vector<double>& y){
@@ -61,6 +70,7 @@ void jacobi_pcg(const MTX& A, const std::vector<double>& b, std::vector<double>&
     int n = A.n;
     std::vector<double> diag(n,0.0);
     for(int k=0;k<(int)A.row.size();k++) if(A.row[k]==A.col[k]) diag[A.row[k]] += A.val[k];
+    for(int i=0;i<n;i++) if(std::fabs(diag[i]) < 1e-300) diag[i] = 1.0;
     x.assign(n,0.0);
     std::vector<double> r=b, z(n), p, Ap(n);
     for(int i=0;i<n;i++) z[i] = r[i]/diag[i];
@@ -72,13 +82,14 @@ void jacobi_pcg(const MTX& A, const std::vector<double>& b, std::vector<double>&
     for(int it=0; it<max_iters; it++){
         matvec_d(A, p, Ap);
         double pAp=0; for(int i=0;i<n;i++) pAp += p[i]*Ap[i];
-        if(pAp==0) break;
+        if(pAp==0 || !std::isfinite(pAp)) break;
         double alpha = rz_old/pAp;
         for(int i=0;i<n;i++){ x[i]+=alpha*p[i]; r[i]-=alpha*Ap[i]; }
         double rnorm=0; for(double ri:r) rnorm+=ri*ri; rnorm=std::sqrt(rnorm);
-        if(rnorm/bnorm < tol) break;
+        if(!std::isfinite(rnorm) || rnorm/bnorm < tol) break;
         for(int i=0;i<n;i++) z[i]=r[i]/diag[i];
         double rz_new=0; for(int i=0;i<n;i++) rz_new += r[i]*z[i];
+        if(rz_old==0 || !std::isfinite(rz_new)) break;
         double beta = rz_new/rz_old;
         for(int i=0;i<n;i++) p[i] = z[i] + beta*p[i];
         rz_old = rz_new;
@@ -124,6 +135,22 @@ void saturation_and_nnz(const std::vector<double>& vals, long& sat, long& nnz_q,
     }
 }
 
+template <size_t nbits, size_t es>
+void run_bitwidth(const MTX& A, const std::string& name, int bits, std::ofstream& csv){
+    MTX Aq = quantize_matrix<nbits,es>(A);
+    double lambda_max = power_iteration_lambda_max(Aq);
+    double condest = cmsw_condest(Aq);
+
+    long sat, nnz_q, total;
+    saturation_and_nnz<nbits,es>(A.val, sat, nnz_q, total);
+
+    printf("[static_conditioning] %s bits=%d lambda_max=%.6e condest=%.6e sat_frac=%.4f\n",
+           name.c_str(), bits, lambda_max, condest, total?double(sat)/total:0.0);
+
+    csv << name << "," << bits << "," << lambda_max << "," << condest << ","
+        << nnz_q << "," << sat << "," << total << "," << (total?double(sat)/total:0) << "\n";
+}
+
 int main(int argc, char* argv[]){
     if(argc<2){ printf("usage: static_conditioning <matrix.mtx>\n"); return 1; }
     std::string path = argv[1];
@@ -133,28 +160,15 @@ int main(int argc, char* argv[]){
     MTX A = read_mtx(argv[1]);
     printf("[static_conditioning] %s: n=%d nnz=%zu\n", name.c_str(), A.n, A.val.size());
 
-    double lambda_max = power_iteration_lambda_max(A);
-    double condest = cmsw_condest(A);
-    printf("[static_conditioning] lambda_max=%.6e condest=%.6e\n", lambda_max, condest);
-
     bool write_header = false;
     { std::ifstream test("results/csv/static_conditioning.csv"); write_header = !test.good(); }
     std::ofstream csv("results/csv/static_conditioning.csv", std::ios::app);
     if(write_header) csv << "matrix,bitwidth,lambda_max,condest_cmsw,nnz_static,saturated_count,total_entries,sat_fraction\n";
 
-    long sat, nnz_q, total;
-
-    saturation_and_nnz<8,0>(A.val, sat, nnz_q, total);
-    csv << name << ",8," << lambda_max << "," << condest << "," << nnz_q << "," << sat << "," << total << "," << (total?double(sat)/total:0) << "\n";
-
-    saturation_and_nnz<16,1>(A.val, sat, nnz_q, total);
-    csv << name << ",16," << lambda_max << "," << condest << "," << nnz_q << "," << sat << "," << total << "," << (total?double(sat)/total:0) << "\n";
-
-    saturation_and_nnz<32,2>(A.val, sat, nnz_q, total);
-    csv << name << ",32," << lambda_max << "," << condest << "," << nnz_q << "," << sat << "," << total << "," << (total?double(sat)/total:0) << "\n";
-
-    saturation_and_nnz<64,2>(A.val, sat, nnz_q, total);
-    csv << name << ",64," << lambda_max << "," << condest << "," << nnz_q << "," << sat << "," << total << "," << (total?double(sat)/total:0) << "\n";
+    run_bitwidth<8,0>(A, name, 8, csv);
+    run_bitwidth<16,1>(A, name, 16, csv);
+    run_bitwidth<32,2>(A, name, 32, csv);
+    run_bitwidth<64,2>(A, name, 64, csv);
 
     csv.close();
     printf("[static_conditioning] appended results for %s to results/csv/static_conditioning.csv\n", name.c_str());
