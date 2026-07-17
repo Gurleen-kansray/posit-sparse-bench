@@ -455,18 +455,35 @@ The predicted-vs-actual match at iteration 2 (the largest alpha-level gain obser
 | 13 | 1.6335995180e+00 | 1.6335993891e+00 | 1.6335989293e+00 |
 | 14 | 1.5850056896e+00 | 1.5850055991e+00 | 1.5850057795e+00 |
 
-## Formal Quire Error Bound (independent of nnz)
+## Quire's Role in Accumulation Error
 
-**Claim:** For posit32+quire accumulation of the CG inner product p^T A p, the relative error is bounded by the unit roundoff u ≈ 2^-28 (posit32, es=2), independent of the number of nonzero terms accumulated.
+We initially hypothesized a clean nnz-independent bound (rel_err <= u) for
+quire-accumulated pAp. Direct isolated testing (single-shot pAp on clean
+double64-derived inputs, cast once to posit32, no CG loop) disproved this:
+rel_err exceeded u by 100-250x on bcsstk03, bcsstk38, and nasasrb, while
+holding on mhd4800b.
 
-**Argument:** The quire is a fixed-point accumulator with sufficient guard bits (482 for posit32, capacity=2) to represent the exact sum of all products before any rounding occurs. Rounding happens exactly once, at final read-out from quire to posit32. This contrasts with naive floating-point accumulation, where each of the nnz additions introduces an independent rounding step, so worst-case error grows with nnz (classical bound ~nnz·u under sequential summation). Because quire defers rounding to a single step:
+**Root cause (confirmed via direct measurement, not the accumulation step):**
+the gap is not accumulation rounding -- quire's fixed-point accumulator is
+exact by construction, verified via a cancellation-ratio check (kappa =
+sum|p_i * Ap_i| / |pAp|) which stayed within 1.02-1.16 across all four
+matrices, ruling out cancellation as the cause. The actual source is
+**input quantization**: casting p_i and Ap_i to posit32 before they enter
+the quire. This error is governed by the same term-magnitude mechanism
+established in the Divergence Mechanism section above -- posit32
+represents values in the range ~3.16e-5 to ~1e5 with favorable precision;
+outside that zone, per-element rounding error grows. bcsstk03/bcsstk38/
+nasasrb all have |Ap| entries reaching 1e9-1e11, far outside this zone;
+mhd4800b's |Ap| stays within [7e-11, 1.04], inside it -- matching the
+observed pass/fail pattern exactly.
 
-rel_err(pAp_quire) ≤ u, for all nnz, provided no overflow occurs (guaranteed by capacity=2 up to 4 · maxpos² in magnitude).
-
-**Empirical validation:** confirmed across all 13 test matrices, nnz ranging from 640 (bcsstk03) to 4,824,880 (s3dkq4m2) — a 7,500x range in term count — with observed relative error staying within the single-rounding bound in every case, no growth trend with nnz. This distinguishes quire's advantage from a "wider mantissa" argument alone: it is the exactness of accumulation, not extra bits, that removes the nnz-dependence entirely.
-
-**Quire saturation margin:** across all 13 matrices, the quire's used dynamic range stays 23–33 orders of magnitude below its representable ceiling, confirming capacity=2 is far from tight and overflow risk is not a practical concern for this matrix class.
-
+**Correct claim:** quire eliminates accumulation-step rounding entirely
+(the only rounding in the pipeline is the single final quire-to-posit32
+cast, exact by construction). It does NOT eliminate input-quantization
+error, which remains governed by the term-magnitude zone already
+characterized in this README. This is a narrower but fully validated
+claim -- quire removes one specific, nnz-scaling error source, not all
+error sources in the computation.
 
 ## Static/Dynamic Conditioning Extension (Prof. Quinlan's three-part experiment)
 
