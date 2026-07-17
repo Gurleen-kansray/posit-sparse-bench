@@ -500,3 +500,35 @@ While mhd4800b was the original case study for the divergence mechanism, sts4098
 
 sts4098 (2000-iteration extended run): posit32+quire converges to 1e-10 residual in **706 iterations**, vs float32's **800 iterations** — an 11.75% reduction in iteration count, with double64 as reference at 634 iterations. This is a direct wall-clock/compute win, independent of any accuracy-margin argument: fewer CG iterations means fewer sparse matrix-vector products, the dominant cost in large sparse solves.
 
+
+## Quire Bound Self-Correction (important: overclaim caught and corrected)
+
+We initially derived and stated a formal bound: rel_err(pAp_quire) <= u (posit32 unit
+roundoff, ~3.7e-9), independent of nnz. The argument was: quire accumulates all
+products exactly in fixed-point, rounds only once at final readout, so total error equals
+exactly one rounding step, bounded by u regardless of term count.
+
+We tested this with a controlled isolated experiment: single-shot pAp computation on
+clean double64-derived p and Ap vectors, cast once to posit32, no CG loop, no
+compounding from prior iterations. This is the minimal possible test of the bound.
+
+Results (rel_err vs u=3.725e-09):
+- bcsstk03 (nnz=640):    rel_err=8.95e-07  FAIL (240x above u)
+- mhd4800b (nnz=27520):  rel_err=1.07e-09  PASS
+- bcsstk38 (nnz=355460): rel_err=3.74e-07  FAIL (100x above u)
+- nasasrb  (nnz=2677324):rel_err=3.55e-07  FAIL (95x above u)
+
+Root cause confirmed: NOT the accumulation step (which is genuinely exact, verified
+separately). The residual error is input quantization: casting each p[i] and Ap[i] into
+posit32 before entering the quire introduces magnitude-dependent rounding error per
+element, governed by the same favorable-zone mechanism established in the Divergence
+section. bcsstk03/bcsstk38/nasasrb all have |Ap| entries reaching 1e10-1e11 (outside
+posit32's favorable zone ~3.16e-5 to 1e5). mhd4800b's |Ap| stays within [7e-11, 1.04]
+(inside the zone) -- explaining the pass/fail pattern exactly.
+
+Corrected claim: quire eliminates accumulation-rounding error (the nnz-scaling
+compounding term). It does NOT eliminate input-quantization error, which remains
+governed by per-element magnitude-zone sensitivity. This is a narrower but fully
+verified, defensible claim. The overclaimed nnz-independent bound has been removed
+from all paper drafts.
+
