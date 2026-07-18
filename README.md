@@ -198,7 +198,7 @@ Iteration-to-converge (residual < 1e-10), verified per-iteration from raw logs:
 
 | Matrix | double64 | float32 | posit32+quire |
 |---|---|---|---|
-| bcsstk03 | converges iter 198 | converges iter 382 | does not floor at 1e-10 as earlier believed (that was an early-exit artifact in the original 500-iteration run); with the early-exit disabled, continues improving through an extended run, reaching 8.8e-13 by iteration ~906 — tracking downward similarly to double64. Whether it eventually floors lower, or matches double64's ~1e-38, is unresolved and needs a longer run |
+| bcsstk03 | converges iter 198 | converges iter 382 | with the early-exit disabled, continues improving through an extended run, reaching 8.8e-13 by iteration ~906 — tracking downward similarly to double64. Whether it eventually floors lower, or matches double64's ~1e-38, is unresolved and needs a longer run |
 | mhd4800b | converges iter 55 | converges iter 69 | converges iter 69 — exact match with float32 |
 | bcsstk14, bcsstk36, bcsstk37, bcsstk38, nasasrb, sts4098 | does not converge (500 iters) | does not converge | does not converge — posit32+quire does not perform worse than double64 or float32 on ill-conditioned matrices (bcsstk14 later confirmed to converge at iter 730 in the 2000-iteration extended run; see below) |
 
