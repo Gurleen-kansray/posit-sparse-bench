@@ -214,31 +214,202 @@ void chol_back_solve(const SparseChol& C, const std::vector<double>& z, std::vec
         }
     }
 }
-
 double cmsw_condest_true(const MTX& A_reordered, bool& success){
     success = true;
     SparseChol C = sparse_cholesky(A_reordered);
     if(!C.ok){ success = false; return -1.0; }
-
     int n = A_reordered.n;
     std::vector<double> colsum(n,0.0);
     for(size_t k=0;k<A_reordered.row.size();k++) colsum[A_reordered.col[k]] += std::fabs(A_reordered.val[k]);
     double norm1_A = 0.0;
     for(double cs : colsum) norm1_A = std::max(norm1_A, cs);
-
     std::vector<double> z, e_chosen;
     chol_forward_greedy(C, z, e_chosen);
     std::vector<double> y;
     chol_back_solve(C, z, y);
-
     double norm1_y=0, norm1_z=0;
     for(double zi : z) norm1_z += std::fabs(zi);
     for(double yi : y) norm1_y += std::fabs(yi);
-
     if(norm1_z <= 0.0 || !std::isfinite(norm1_y)){ success = false; return -1.0; }
-
     double est_norm_Ainv = norm1_y / norm1_z;
     return est_norm_Ainv * norm1_A;
+}
+bool cg_solve(const MTX& A, const std::vector<double>& b, std::vector<double>& x,
+              int max_iters=2000, double tol=1e-10){
+    int n = A.n;
+    x.assign(n, 0.0);
+    std::vector<double> r = b, p, Ap(n);
+    p = r;
+    double rs_old = 0;
+    for(int i=0;i<n;i++) rs_old += r[i]*r[i];
+    double b_norm = std::sqrt(rs_old);
+    if(b_norm == 0.0) return true;
+
+    for(int it=0; it<max_iters; it++){
+        matvec_d(A, p, Ap);
+        double pAp = 0;
+        for(int i=0;i<n;i++) pAp += p[i]*Ap[i];
+        if(pAp == 0.0 || !std::isfinite(pAp)) return false;
+        double alpha = rs_old / pAp;
+        for(int i=0;i<n;i++){ x[i] += alpha*p[i]; r[i] -= alpha*Ap[i]; }
+        double rs_new = 0;
+        for(int i=0;i<n;i++) rs_new += r[i]*r[i];
+        if(std::sqrt(rs_new) < tol*b_norm) return true;
+        for(int i=0;i<n;i++) p[i] = r[i] + (rs_new/rs_old)*p[i];
+        rs_old = rs_new;
+        if(!std::isfinite(rs_old)) return false;
+    }
+    return true;
+}
+
+double inverse_power_lambda_min(const MTX& A, bool& success, int max_outer=100, double tol=1e-8){
+    int n = A.n;
+    std::vector<double> v(n), y(n), Av(n);
+    std::mt19937 rng(7);
+    std::uniform_real_distribution<double> dist(-1.0,1.0);
+    for(int i=0;i<n;i++) v[i]=dist(rng);
+    auto normalize=[&](std::vector<double>& x){
+        double norm=0; for(double xi:x) norm+=xi*xi; norm=std::sqrt(norm);
+        if(norm>0) for(double& xi:x) xi/=norm;
+    };
+    normalize(v);
+
+    double lambda=0, lambda_old=0;
+    success = true;
+    for(int it=0; it<max_outer; it++){
+        bool ok = cg_solve(A, v, y);
+        if(!ok){ success = false; return -1.0; }
+        normalize(y);
+        v = y;
+        matvec_d(A, v, Av);
+        double rayleigh=0, vv=0;
+        for(int i=0;i<n;i++){ rayleigh += v[i]*Av[i]; vv += v[i]*v[i]; }
+        lambda = rayleigh/vv;
+        if(std::fabs(lambda-lambda_old) < tol*std::fabs(lambda)) break;
+        lambda_old = lambda;
+    }
+    if(!std::isfinite(lambda) || lambda == 0.0){ success = false; return -1.0; }
+    return lambda;
+}
+
+double condest_with_fallback(const MTX& A, const MTX& A_rcm, double lambda_max,
+                              std::string& method){
+    bool chol_ok;
+    double condest = cmsw_condest_true(A_rcm, chol_ok);
+    if(chol_ok){
+        method = "CHOL";
+        return condest;
+    }
+    bool inv_ok;
+    double lambda_min = inverse_power_lambda_min(A, inv_ok);
+    if(inv_ok && lambda_min > 0.0){
+        method = "INVPOWER";
+        return lambda_max / lambda_min;
+    }
+    method = "FAIL";
+    return -1.0;
+
+}
+struct DenseLU {
+    int n;
+    std::vector<std::vector<double>> LU;
+    std::vector<int> piv;
+    bool ok = true;
+};
+
+DenseLU dense_lu_decompose(const MTX& A){
+    int n = A.n;
+    DenseLU R; R.n = n; R.ok = true;
+    R.LU.assign(n, std::vector<double>(n, 0.0));
+    R.piv.resize(n);
+    for(int i=0;i<n;i++) R.piv[i] = i;
+
+    for(size_t k=0;k<A.row.size();k++) R.LU[A.row[k]][A.col[k]] += A.val[k];
+
+    for(int col=0; col<n; col++){
+        int pivot_row = col;
+        double maxval = std::fabs(R.LU[col][col]);
+        for(int r=col+1; r<n; r++){
+            if(std::fabs(R.LU[r][col]) > maxval){
+                maxval = std::fabs(R.LU[r][col]);
+                pivot_row = r;
+            }
+        }
+        if(maxval < 1e-300){ R.ok = false; return R; }
+        if(pivot_row != col){
+            std::swap(R.LU[pivot_row], R.LU[col]);
+            std::swap(R.piv[pivot_row], R.piv[col]);
+        }
+        for(int r=col+1; r<n; r++){
+            double factor = R.LU[r][col] / R.LU[col][col];
+            R.LU[r][col] = factor;
+            for(int c=col+1; c<n; c++) R.LU[r][c] -= factor * R.LU[col][c];
+        }
+    }
+    return R;
+}
+
+void lu_forward_solve(const DenseLU& R, const std::vector<double>& b, std::vector<double>& y){
+    int n = R.n;
+    y.assign(n, 0.0);
+    for(int i=0;i<n;i++){
+        double sum = b[R.piv[i]];
+        for(int j=0;j<i;j++) sum -= R.LU[i][j]*y[j];
+        y[i] = sum;
+    }
+}
+
+void lu_back_solve(const DenseLU& R, const std::vector<double>& y, std::vector<double>& x){
+    int n = R.n;
+    x.assign(n, 0.0);
+    for(int i=n-1;i>=0;i--){
+        double sum = y[i];
+        for(int j=i+1;j<n;j++) sum -= R.LU[i][j]*x[j];
+        if(std::fabs(R.LU[i][i]) < 1e-300){ x[i] = 0.0; continue; }
+        x[i] = sum / R.LU[i][i];
+    }
+}
+
+double lu_condest(const MTX& A, bool& success, int max_n_allowed=6000){
+    success = true;
+    int n = A.n;
+    if(n > max_n_allowed){ success = false; return -1.0; }
+
+    DenseLU R = dense_lu_decompose(A);
+    if(!R.ok){ success = false; return -1.0; }
+
+    std::vector<double> colsum(n,0.0);
+    for(size_t k=0;k<A.row.size();k++) colsum[A.col[k]] += std::fabs(A.val[k]);
+    double norm1_A = 0.0;
+    for(double cs : colsum) norm1_A = std::max(norm1_A, cs);
+
+    std::vector<double> e(n, 1.0), y, z;
+    lu_forward_solve(R, e, y);
+    lu_back_solve(R, y, z);
+
+    double norm1_z = 0.0;
+    for(double zi : z) norm1_z += std::fabs(zi);
+    if(norm1_z <= 0.0 || !std::isfinite(norm1_z)){ success = false; return -1.0; }
+
+    double est_norm_Ainv = norm1_z;
+    return est_norm_Ainv * norm1_A;
+}
+
+double condest_three_way(const MTX& A, const MTX& A_rcm, double lambda_max,
+                          std::string& method){
+    bool chol_ok;
+    double condest = cmsw_condest_true(A_rcm, chol_ok);
+    if(chol_ok){ method = "CHOL"; return condest; }
+
+    bool inv_ok;
+    double lambda_min = inverse_power_lambda_min(A, inv_ok);
+    if(inv_ok && lambda_min > 0.0){ method = "INVPOWER"; return lambda_max / lambda_min; }
+
+    bool lu_ok;
+    double lu_est = lu_condest(A, lu_ok);
+    if(lu_ok){ method = "LU"; return lu_est; }
+    method = "FAIL";
+    return -1.0;
 }
 
 template <size_t nbits, size_t es>
@@ -263,13 +434,13 @@ void run_bitwidth(const MTX& A, const MTX& A_rcm, const std::string& name, int b
     MTX Aq_rcm = quantize_matrix<nbits,es>(A_rcm);
     double lambda_max = power_iteration_lambda_max(Aq);
 
-    bool chol_ok;
-    double condest = cmsw_condest_true(Aq_rcm, chol_ok);
+    std::string condest_method;
+    double condest = condest_three_way(Aq, Aq_rcm, lambda_max, condest_method);
     std::string condest_str;
-    if(chol_ok){
+    if(condest_method != "FAIL"){
         char buf[64]; snprintf(buf,64,"%.6e", condest); condest_str = buf;
     } else {
-        condest_str = "CHOL_FAIL";
+        condest_str = "FAIL";
     }
 
     long sat, nnz_q, total;
@@ -278,7 +449,7 @@ void run_bitwidth(const MTX& A, const MTX& A_rcm, const std::string& name, int b
     printf("[static_conditioning] %s bits=%d lambda_max=%.6e condest=%s sat_frac=%.4f\n",
            name.c_str(), bits, lambda_max, condest_str.c_str(), total?double(sat)/total:0.0);
 
-    csv << name << "," << bits << "," << lambda_max << "," << condest_str << ","
+    csv << name << "," << bits << "," << lambda_max << "," << condest_str << "," << condest_method << ","
         << nnz_q << "," << sat << "," << total << "," << (total?double(sat)/total:0) << "\n";
 }
 
@@ -299,7 +470,7 @@ int main(int argc, char* argv[]){
     bool write_header = false;
     { std::ifstream test("results/csv/static_conditioning.csv"); write_header = !test.good(); }
     std::ofstream csv("results/csv/static_conditioning.csv", std::ios::app);
-    if(write_header) csv << "matrix,bitwidth,lambda_max,condest_cmsw,nnz_static,saturated_count,total_entries,sat_fraction\n";
+    if(write_header) csv << "matrix,bitwidth,lambda_max,condest_cmsw,condest_method,nnz_static,saturated_count,total_entries,sat_fraction\n";
 
     run_bitwidth<8,0>(A, A_rcm, name, 8, csv);
     run_bitwidth<16,1>(A, A_rcm, name, 16, csv);
