@@ -67,6 +67,17 @@ double dot_p_naive(const std::vector<P32>& a, const std::vector<P32>& b, int n){
     return double(s);
 }
 
+double sat_fraction(const std::vector<P32>& v, int n){
+    static P32 maxp( SpecificValue::maxpos );
+    static P32 minp( SpecificValue::minpos );
+    int count = 0;
+    for(int i=0;i<n;i++){
+        P32 av = (v[i] < P32(0)) ? -v[i] : v[i];
+        if(av == maxp || av == minp) count++;
+    }
+    return (double)count / n;
+}
+
 int main(int argc, char* argv[]){
     if(argc<3){ printf("usage: cg_compare <matrix.mtx> <logfile>\n"); return 1; }
     MTX A=read_mtx(argv[1]);
@@ -83,7 +94,7 @@ int main(int argc, char* argv[]){
         if(A.row[k]==A.col[k]) diagA[A.row[k]]=A.val[k];
 
     FILE* log=fopen(argv[2],"w");
-    fprintf(log,"iter  res_double64      res_float32      res_posit32q      res_posit32n      res_float32fma      pAp_dynrange      pAp_mag\n");
+    fprintf(log,"iter  res_double64      res_float32      res_posit32q      res_posit32n      res_float32fma      pAp_dynrange      pAp_mag      sat_frac_pq      sat_frac_pn      pAp_double        pAp_naive\n");
 
     // --- double64 CG ---
     std::vector<double> xd(n,0),rd(n,1),pd(n),Apd(n),zd(n);
@@ -163,6 +174,7 @@ int main(int argc, char* argv[]){
         double resp=sqrt(dot_p(rp_tmp,rp_tmp,n));
         double pAp_range = dot_range(pp,App,n);
         double pAp_mag = fabs(pApp);
+        double satp = sat_fraction(pp, n);
 
         // posit naive (no quire) step
         matvec_p(A,pn,Apn);
@@ -175,8 +187,9 @@ int main(int argc, char* argv[]){
         for(int i=0;i<n;i++) pn[i]=zn[i]+betan*pn[i];
         std::vector<P32> rn_tmp(rn);
         double resn=sqrt(dot_p_naive(rn_tmp,rn_tmp,n));
+        double satn = sat_fraction(pn, n);
 
-        fprintf(log,"%4d  %.10e  %.10e  %.10e  %.10e  %.10e  %.6e  %.6e\n",iter,resd,resf,resp,resn,resg,pAp_range,pAp_mag);
+        fprintf(log,"%4d  %.10e  %.10e  %.10e  %.10e  %.10e  %.6e  %.6e  %.6e  %.6e  %.10e  %.10e\n",iter,resd,resf,resp,resn,resg,pAp_range,pAp_mag,satp,satn,pApd,pApn);
 
         // stop if all converged
         if(resd<1e-10 && resf<1e-10 && resp<1e-10 && resn<1e-10 && resg<1e-10) break;

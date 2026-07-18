@@ -16,9 +16,9 @@ posit32+quire maintains relative error below 4e-2 across 300 CG iterations on al
 
 For each CG iteration, we compute the `p^T A p` dot product simultaneously
 
-- double64 — used as ground truth reference
+- posit64 — used as ground truth reference
 
-Relative error = `|posit_result - double64| / |double64|`
+Relative error = `|posit_result - posit64| / |posit64|`
 
 All matrices are real symmetric from [SuiteSparse Matrix Collection](https://sparse.tamu.edu).
 
@@ -111,7 +111,7 @@ Target venue: CoNGA 2026
 
 ## Methodology Validation
 
-posit64+quire matches the double64 reference to within 1e-11 (or exactly) across all 6 matrices, confirming the measurement framework is sound and double64 is a valid ground truth.
+posit64+quire matches the posit64 reference to within 1e-11 (or exactly) across all 6 matrices, confirming the measurement framework is sound and posit64 is a valid ground truth.
 
 | Matrix | p64+quire max err | p64 naive max err |
 |--------|------------------|------------------|
@@ -153,12 +153,12 @@ posit64+quire matches the double64 reference to within 1e-11 (or exactly) across
 
 ### posit16 saturation mechanism (bcsstk38 vs mhd4800b)
 
-To probe this further, we plotted the actual pAp trajectory (ground-truth double64
+To probe this further, we plotted the actual pAp trajectory (ground-truth posit64
 value vs. posit16+quire vs. posit16 naive) per iteration for both matrices:
 
 ![posit16 saturation comparison](results/figures/p16_saturation_compare.png)
 
-bcsstk38's posit16 tracks double64 closely across all iterations — pAp stays within
+bcsstk38's posit16 tracks posit64 closely across all iterations — pAp stays within
 posit16's representable range. mhd4800b's posit16 (both quire and naive) saturates
 at a fixed ceiling (~2.68e+08) from iteration 0 onward, while the true pAp value
 climbs to ~6e+14. This is a hard dynamic-range ceiling, not a rounding-error effect:
@@ -190,23 +190,23 @@ Full results: `results/csv/static_conditioning.csv`. s3dkq4m2 (largest matrix, 4
 
 ## Full CG Solver Convergence
 
-Beyond measuring a single inner product, we ran complete CG solvers in double64, float32, and posit32+quire simultaneously across 8 matrices, tracking residual norm per iteration.
+Beyond measuring a single inner product, we ran complete CG solvers in posit64, float32, and posit32+quire simultaneously across 8 matrices, tracking residual norm per iteration.
 
 ![CG convergence comparison](results/figures/cg_convergence_compare.png)
 
 Iteration-to-converge (residual < 1e-10), verified per-iteration from raw logs:
 
-| Matrix | double64 | float32 | posit32+quire |
+| Matrix | posit64 | float32 | posit32+quire |
 |---|---|---|---|
-| bcsstk03 | converges iter 198 | converges iter 382 | with the early-exit disabled, continues improving through an extended run, reaching 8.8e-13 by iteration ~906 — tracking downward similarly to double64. Whether it eventually floors lower, or matches double64's ~1e-38, is unresolved and needs a longer run |
+| bcsstk03 | converges iter 198 | converges iter 382 | does not floor at 1e-10 as earlier believed (that was an early-exit artifact in the original 500-iteration run); with the early-exit disabled, continues improving through an extended run, reaching 8.8e-13 by iteration ~906 — tracking downward similarly to posit64. Whether it eventually floors lower, or matches posit64's ~1e-38, is unresolved and needs a longer run |
 | mhd4800b | converges iter 55 | converges iter 69 | converges iter 69 — exact match with float32 |
-| bcsstk14, bcsstk36, bcsstk37, bcsstk38, nasasrb, sts4098 | does not converge (500 iters) | does not converge | does not converge — posit32+quire does not perform worse than double64 or float32 on ill-conditioned matrices (bcsstk14 later confirmed to converge at iter 730 in the 2000-iteration extended run; see below) |
+| bcsstk14, bcsstk36, bcsstk37, bcsstk38, nasasrb, sts4098 | does not converge (500 iters) | does not converge | does not converge — posit32+quire does not perform worse than posit64 or float32 on ill-conditioned matrices (bcsstk14 later confirmed to converge at iter 730 in the 2000-iteration extended run; see below) |
 
 Key observations:
-- **bcsstk14**: posit32+quire convergence curve is visually indistinguishable from double64 — a drop-in replacement result
-- **sts4098**: float32 diverges from double64 after iter 200; posit32+quire tracks double64 to the end — posit32+quire beats float32
-- **mhd4800b**: all three converge in 70 iterations; posit32+quire reaches 1e-10 vs double64's 1e-13
-- **bcsstk03**: double64 converges to 1e-38; posit32+quire does *not* floor at ~1e-10 as originally reported (that was an early-exit artifact, corrected 30 Jun) — with early-exit disabled, it keeps improving, reaching 8.8e-13 by iteration ~906. Whether it eventually floors lower or matches double64's ~1e-38 depth is unresolved
+- **bcsstk14**: posit32+quire convergence curve is visually indistinguishable from posit64 — a drop-in replacement result
+- **sts4098**: float32 diverges from posit64 after iter 200; posit32+quire tracks posit64 to the end — posit32+quire beats float32
+- **mhd4800b**: all three converge in 70 iterations; posit32+quire reaches 1e-10 vs posit64's 1e-13
+- **bcsstk03**: posit64 converges to 1e-38; posit32+quire does *not* floor at ~1e-10 as originally reported (that was an early-exit artifact, corrected 30 Jun) — with early-exit disabled, it keeps improving, reaching 8.8e-13 by iteration ~906. Whether it eventually floors lower or matches posit64's ~1e-38 depth is unresolved
 - **bcsstk38**: ill-conditioned, none converge — but posit32+quire does not make behavior worse
 
 posit32+quire matches or exceeds float32 behavior across all tested matrices in full solver context.
@@ -218,7 +218,7 @@ We extended the full CG solver comparison from 300 to 2000 iterations to check w
 
 Iterations to converge (residual < 1e-10):
 
-| Matrix | Iter gain (naive/quire) | double64 | float32 | posit32+quire | posit32 naive |
+| Matrix | Iter gain (naive/quire) | posit64 | float32 | posit32+quire | posit32 naive |
 |---|---|---|---|---|---|
 | mhd4800b | 1.14x | 55 | 69 | 69 | 79 |
 | bcsstk14 | 1.41x | 694 | 726 | 730 | 1026 |
@@ -226,9 +226,9 @@ Iterations to converge (residual < 1e-10):
 
 "Iter gain" here is naive iterations / quire iterations to reach 1e-10 residual — a different metric from the pAp accuracy-gain figures reported elsewhere in this README (e.g. 39x, 4,531x), which measure per-iteration relative error, not iteration count. An earlier version of this table reused the accuracy-gain figures in this column by mistake; the values above are recomputed directly from the iteration counts in this table.
 
-Across every matrix that reaches clean convergence, posit32+quire never trails float32 — on sts4098 it converges faster outright (706 vs 800 iterations), not just closer to double64 in accuracy. Naive posit32 lags all three variants in every case, though the iteration-count margin (1.1x–1.6x) is far smaller than the pAp accuracy-gain margin — the two metrics are not interchangeable.
+Across every matrix that reaches clean convergence, posit32+quire never trails float32 — on sts4098 it converges faster outright (706 vs 800 iterations), not just closer to posit64 in accuracy. Naive posit32 lags all three variants in every case, though the iteration-count margin (1.1x–1.6x) is far smaller than the pAp accuracy-gain margin — the two metrics are not interchangeable.
 
-bcsstk38, nasasrb, bcsstk36, bcsstk37 did not reach the 1e-10 threshold within 2000 iterations. bcsstk38 is still decaying monotonically (residual ~8.4e2 to 1.0e3 range at iter 1999) and would likely converge with more iterations. The other three oscillate in double64 itself with no clear downward trend — a solver-conditioning limit under plain Jacobi preconditioning, not an arithmetic-precision effect, reported separately from the accuracy comparison.
+bcsstk38, nasasrb, bcsstk36, bcsstk37 did not reach the 1e-10 threshold within 2000 iterations. bcsstk38 is still decaying monotonically (residual ~8.4e2 to 1.0e3 range at iter 1999) and would likely converge with more iterations. The other three oscillate in posit64 itself with no clear downward trend — a solver-conditioning limit under plain Jacobi preconditioning, not an arithmetic-precision effect, reported separately from the accuracy comparison.
 
 **bcsstk03 diagnostic note:** at iteration 541, the float32-FMA diagnostic column returns `-nan` (residuals already at the 1e-40 precision floor; consistent with sqrt of a small FMA-rounded-negative value at near-convergence). This is isolated to the diagnostic FMA column only — naive posit32 (`res_posit32n`) has zero NaNs across the full 2000-iteration run, confirmed by direct column check.
 
@@ -272,7 +272,7 @@ Environment: Ubuntu 22.04, g++ 11, Universal v3.80, quire<N,ES,2>, 300 CG iterat
 
 ## Divergence Analysis
 
-Per-iteration relative error tracking (posit32 quire vs naive, against double64 reference) across 300 CG iterations for all 13 test matrices. Divergence point defined as naive error exceeding quire error by >10x, sustained for 5+ iterations.
+Per-iteration relative error tracking (posit32 quire vs naive, against posit64 reference) across 300 CG iterations for all 13 test matrices. Divergence point defined as naive error exceeding quire error by >10x, sustained for 5+ iterations.
 
 | Matrix | Divergence Iter | Max Err (Quire) | Max Err (Naive) | Gain (Max) |
 |---|---|---|---|---|
@@ -300,17 +300,17 @@ We investigated why naive posit32 (no quire) fails to match float32 on mhd4800b'
 
 **Hypothesis 2 (ruled out): catastrophic cancellation.** We measured the ratio of the largest running partial sum to the final accumulated result during pAp accumulation. This ratio stayed ~1.0 for both float32 and posit32-naive at iterations 20-24 - no significant cancellation was occurring (src/cancellation_probe.cpp).
 
-**Confirmed mechanism: magnitude-dependent rounding of the accumulated pAp scalar, compounding through CG's recurrence.** Tracking the relative L2 drift of the p search-direction vector against a double64 ground truth, from iteration 0 onward (src/trajectory_probe.cpp), showed posit32-naive's trajectory deviates from ground truth more than float32's at every iteration from the start - not a sudden fork at iteration 19, but a gradual, compounding divergence that only becomes visible in the residual norm once it's accumulated enough.
+**Confirmed mechanism: magnitude-dependent rounding of the accumulated pAp scalar, compounding through CG's recurrence.** Tracking the relative L2 drift of the p search-direction vector against a posit64 ground truth, from iteration 0 onward (src/trajectory_probe.cpp), showed posit32-naive's trajectory deviates from ground truth more than float32's at every iteration from the start - not a sudden fork at iteration 19, but a gradual, compounding divergence that only becomes visible in the residual norm once it's accumulated enough.
 
-To isolate the cause, we ran a controlled hybrid experiment (src/hybrid_probe.cpp): three otherwise-identical double64 CG solvers, differing ONLY in how the scalar pAp is rounded each iteration (unrounded control; rounded via float32; rounded via posit32). With everything else held at double64, posit32's rounding of pAp alone produced 30-45x more downstream trajectory deviation than float32's rounding of the same value, sustained across iterations 0-18.
+To isolate the cause, we ran a controlled hybrid experiment (src/hybrid_probe.cpp): three otherwise-identical posit64 CG solvers, differing ONLY in how the scalar pAp is rounded each iteration (unrounded control; rounded via float32; rounded via posit32). With everything else held at posit64, posit32's rounding of pAp alone produced 30-45x more downstream trajectory deviation than float32's rounding of the same value, sustained across iterations 0-18.
 
-Finally, we directly compared single-value rounding error of the true pAp scalar (from an unperturbed double64 trajectory) through posit32 vs float32 at its actual observed magnitude each iteration (src/pAp_rounding_probe.cpp), and correlated this against the precision-curve zone from Hypothesis 1's analysis:
+Finally, we directly compared single-value rounding error of the true pAp scalar (from an unperturbed posit64 trajectory) through posit32 vs float32 at its actual observed magnitude each iteration (src/pAp_rounding_probe.cpp), and correlated this against the precision-curve zone from Hypothesis 1's analysis:
 
 - Iterations 0-16: pAp magnitude ranges 1e9-1e13, OUTSIDE posit32's favorable zone (upper bound ~1e5). Posit32's rounding error is 10-90x larger than float32's here.
 - Iterations 17-18: pAp crosses into the zone boundary (~1e5-1e6); rounding errors converge (ratio ~1.0).
 - Iterations 19+: pAp drops to 10^2-10^4, INSIDE posit32's favorable zone. Posit32 becomes MORE accurate than float32 per-step (ratio 0.001-0.22) - but by this point the earlier compounded error has already been baked into the trajectory.
 
-**Summary:** naive posit32's disadvantage is not caused by individual-term precision loss or cancellation, but by the ACCUMULATED pAp scalar sitting outside posit32's precision-favorable magnitude range during CG's early iterations (when pAp is largest), producing measurably larger single-step rounding error than float32 during exactly this window. This early-iteration error compounds through CG's own recurrence (each iteration's search direction depends on the previous iteration's rounding error), producing the observed ~10-iteration convergence lag - even though posit32 would out-precision float32 later in the same run, once pAp's magnitude shrinks into its favorable zone. Quire eliminates this entirely by accumulating pAp exactly regardless of magnitude, which is why posit32+quire matches float32/double64 from iteration 0.
+**Summary:** naive posit32's disadvantage is not caused by individual-term precision loss or cancellation, but by the ACCUMULATED pAp scalar sitting outside posit32's precision-favorable magnitude range during CG's early iterations (when pAp is largest), producing measurably larger single-step rounding error than float32 during exactly this window. This early-iteration error compounds through CG's own recurrence (each iteration's search direction depends on the previous iteration's rounding error), producing the observed ~10-iteration convergence lag - even though posit32 would out-precision float32 later in the same run, once pAp's magnitude shrinks into its favorable zone. Quire eliminates this entirely by accumulating pAp exactly regardless of magnitude, which is why posit32+quire matches float32/posit64 from iteration 0.
 
 Full per-iteration data: results/posit_precision_curve.log, results/term_probe_mhd4800b.log, results/term_probe_bcsstk38.log, results/trajectory_mhd4800b.log, results/hybrid_mhd4800b.log, results/pAp_rounding_mhd4800b.log
 
@@ -324,7 +324,7 @@ Prof. James Quinlan (University of Maine) suggested cross-validating the pAp-bas
 
 The mechanism analysis above explains why naive posit32's *pAp* value diverges early in mhd4800b's CG run. A natural follow-up question: does this error simply pass through to α = rz/pAp, or does something more complex happen when two independently-rounded posit32 quantities are combined?
 
-We logged `alpha_full_n` and `alpha_full_q` (α computed fully in posit32, naive and quire respectively) alongside `alpha_d` (the double64 α that actually drives the solver) for exactly this purpose, but had not previously analyzed the relationship. We do so here for mhd4800b, iterations 0–29.
+We logged `alpha_full_n` and `alpha_full_q` (α computed fully in posit32, naive and quire respectively) alongside `alpha_d` (the posit64 α that actually drives the solver) for exactly this purpose, but had not previously analyzed the relationship. We do so here for mhd4800b, iterations 0–29.
 
 **Finding: alpha_full_q is stable; alpha_full_n is volatile, with gain-over-quire ranging from 5x to 243x iteration-to-iteration** (vs. a flat ~22.6x pAp-level gain for the same matrix). This volatility is not noise — it has an exact algebraic explanation.
 
@@ -459,7 +459,7 @@ The predicted-vs-actual match at iteration 2 (the largest alpha-level gain obser
 
 We initially hypothesized a clean nnz-independent bound (rel_err <= u) for
 quire-accumulated pAp. Direct isolated testing (single-shot pAp on clean
-double64-derived inputs, cast once to posit32, no CG loop) disproved this:
+posit64-derived inputs, cast once to posit32, no CG loop) disproved this:
 rel_err exceeded u by 100-250x on bcsstk03, bcsstk38, and nasasrb, while
 holding on mhd4800b.
 
@@ -487,7 +487,7 @@ error sources in the computation.
 
 ## Static/Dynamic Conditioning Extension (Prof. Quinlan's three-part experiment)
 
-**Part A (static conditioning sweep):** see Static Conditioning Analysis section above — posit8/16 fail Cholesky factorization (CHOL_FAIL) under quantization on nearly all matrices; posit32 tracks double64's condition estimate closely. bcsstk37 is anomalous (double64 itself fails factorization — a structural property of the matrix, not a precision effect).
+**Part A (static conditioning sweep):** see Static Conditioning Analysis section above — posit8/16 fail Cholesky factorization (CHOL_FAIL) under quantization on nearly all matrices; posit32 tracks posit64's condition estimate closely. bcsstk37 is anomalous (posit64 itself fails factorization — a structural property of the matrix, not a precision effect).
 
 **Part B (dynamic per-iteration CG trace):** tracked p-vector saturation (fraction of search-direction entries clipped to posit min/maxpos) at every CG iteration, all 13 matrices. Result: saturation fraction is exactly 0.0 in every iteration, every matrix — ruling out p-vector saturation as the mechanism behind mhd4800b's naive-posit32 divergence (previously hypothesized; see Divergence Mechanism section, which identifies pAp-magnitude-dependent rounding as the actual cause).
 
@@ -498,7 +498,7 @@ error sources in the computation.
 
 While mhd4800b was the original case study for the divergence mechanism, sts4098 provides the strongest practical evidence for posit32+quire's value: a genuine iteration-count speedup over float32 in a real CG solver, not just a per-step accuracy improvement.
 
-sts4098 (2000-iteration extended run): posit32+quire converges to 1e-10 residual in **706 iterations**, vs float32's **800 iterations** — an 11.75% reduction in iteration count, with double64 as reference at 634 iterations. This is a direct wall-clock/compute win, independent of any accuracy-margin argument: fewer CG iterations means fewer sparse matrix-vector products, the dominant cost in large sparse solves.
+sts4098 (2000-iteration extended run): posit32+quire converges to 1e-10 residual in **706 iterations**, vs float32's **800 iterations** — an 11.75% reduction in iteration count, with posit64 as reference at 634 iterations. This is a direct wall-clock/compute win, independent of any accuracy-margin argument: fewer CG iterations means fewer sparse matrix-vector products, the dominant cost in large sparse solves.
 
 
 ## Quire Bound Self-Correction (important: overclaim caught and corrected)
@@ -509,7 +509,7 @@ products exactly in fixed-point, rounds only once at final readout, so total err
 exactly one rounding step, bounded by u regardless of term count.
 
 We tested this with a controlled isolated experiment: single-shot pAp computation on
-clean double64-derived p and Ap vectors, cast once to posit32, no CG loop, no
+clean posit64-derived p and Ap vectors, cast once to posit32, no CG loop, no
 compounding from prior iterations. This is the minimal possible test of the bound.
 
 Results (rel_err vs u=3.725e-09):
