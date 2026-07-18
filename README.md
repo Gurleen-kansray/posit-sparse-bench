@@ -172,7 +172,7 @@ actual pAp magnitudes, so it saturates immediately rather than degrading gradual
 
 Following Prof. James Quinlan's proposed three-part experiment extension, we conducted a static quantization and conditioning sweep — independent of any CG iteration — measuring how quantizing each matrix to a given posit bitwidth (before any solving begins) affects its fundamental numerical properties.
 
-For each matrix, at each bitwidth (posit8, posit16, posit32, double64), we compute:
+For each matrix, at each bitwidth (posit8, posit16, posit32, posit64), we compute:
 - **lambda_max**: largest eigenvalue via power iteration
 - **Condition estimate**: classical CMSW (Cline-Moler-Stewart-Wilkinson) estimator, computed via sparse Cholesky factorization -- the LINPACK-style predecessor to MATLAB's `condest` and LAPACK's `rcond`
 - **Saturation fraction**: proportion of entries clipped to posit's minpos/maxpos bounds under quantization (not underflow-to-zero, since posits lack that floating-point mechanism)
@@ -182,9 +182,9 @@ A RCM (Reverse Cuthill-McKee) bandwidth-reduction reordering step was added ahea
 
 ### Findings (12 of 13 matrices complete)
 
-Consistent pattern across nearly all tested matrices: posit8 and posit16 fail the condition estimate outright (CHOL_FAIL -- quantization destroys positive-definiteness), correlating with high saturation fractions (posit8 typically >80%, posit16 often <10% but still sufficient to break the factorization on ill-conditioned matrices). posit32 closely tracks double64's condition estimate in nearly every case, often matching to within a small percentage.
+Consistent pattern across nearly all tested matrices: posit8 and posit16 fail the condition estimate outright (CHOL_FAIL -- quantization destroys positive-definiteness), correlating with high saturation fractions (posit8 typically >80%, posit16 often <10% but still sufficient to break the factorization on ill-conditioned matrices). posit32 closely tracks posit64's condition estimate in nearly every case, often matching to within a small percentage.
 
-**Anomaly (bcsstk37):** unlike every other matrix, double64 itself fails the Cholesky factorization here, not just the lower-precision posit formats. This indicates the issue is not quantization-related but a structural/numerical property of this specific matrix under this factorization approach -- flagged as an open caveat rather than a clean data point.
+**Anomaly (bcsstk37):** unlike every other matrix, posit64 itself fails the Cholesky factorization here, not just the lower-precision posit formats. This indicates the issue is not quantization-related but a structural/numerical property of this specific matrix under this factorization approach -- flagged as an open caveat rather than a clean data point.
 
 Full results: `results/csv/static_conditioning.csv`. s3dkq4m2 (largest matrix, 4.82M nnz) is still running; results to be added once complete.
 
