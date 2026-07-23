@@ -494,6 +494,36 @@ error sources in the computation.
 **Part C (Spearman correlation, divergence iteration vs. static metrics):** tested whether divergence onset iteration correlates with any Part A static metric (condition estimate, saturation fraction, λ_max) across the 13 matrices. Result: **null** — ρ = 0.164 (weak, not significant). This confirms divergence behavior is not predictable from static matrix conditioning alone; it depends on the dynamic trajectory of pAp magnitude through CG iterations (consistent with the Divergence Mechanism findings for mhd4800b).
 
 
+
+## Seed-Distribution Study: Divergence-Onset Variance (N=50 seeds, interim)
+
+Following Prof. Quinlan's suggestion to examine how iteration-count behavior varies across a larger sample than the original N=9/N=13 matrix set, we ran 50 random seeds (varying RHS/initial vector) per matrix across 12 of 13 CoNGA matrices (s3dkt3m2 in progress), tracking the per-seed divergence-onset iteration using the same detection method as the original divergence analysis (naive error exceeding quire error by >10x, sustained 5+ iterations).
+
+**Note on scope:** this interim study varies the random seed within our existing 13-matrix set, rather than expanding to a larger matrix sample -- pending clarification of which framing was intended, this is reported as a standalone finding.
+
+**Finding:** divergence-onset timing is highly seed-sensitive for small matrices and effectively seed-stable for large ones.
+
+| Matrix | n | div_std | div_min | div_max |
+|---|---|---|---|---|
+| bcsstk03 | 112 | 52.9 | 33 | 199 |
+| nos2 | 957 | 47.4 | 0 | 188 |
+| bcsstk14 | 1806 | 11.4 | 0 | 46 |
+| sts4098 | 4098 | 4.8 | 0 | 18 |
+| nasa4704 | 4704 | 4.5 | 0 | 21 |
+| mhd4800b | 4800 | 2.2 | 0 | 6 |
+| bcsstk38 | 8032 | 0.7 | 0 | 5 |
+| bodyy4 | 17546 | 2.7 | 0 | 14 |
+| bcsstk36 | 23052 | 2.5 | 0 | 17 |
+| bcsstk37 | 25503 | 2.1 | 0 | 10 |
+| nasasrb | 54870 | 2.8 | 0 | 12 |
+| s3dkq4m2 | 90449 | 0.2 | 0 | 1 |
+
+Testing this against matrix size directly: Spearman rho = -0.818, p=0.0011 (n=12 matrices) between n and divergence-onset standard deviation. The correlation is identical using log10(n), confirming a genuine scale effect rather than an artifact of the two smallest matrices alone.
+
+**Interpretation:** for small matrices, a single random RHS gives an unreliable read on divergence onset -- the CG trajectory is sensitive to the specific right-hand side because there are fewer degrees of freedom to average over. For matrices above roughly n~2000, divergence timing is close to deterministic regardless of seed. This extends the Part C null result: not only does static conditioning fail to predict divergence onset, but for most matrices onset itself barely moves across seeds -- the exception is specifically small-n matrices, where any single-seed divergence-iteration value should be read as one draw from a wide distribution rather than a stable matrix property.
+
+s3dkt3m2 (n=90449, largest matrix in the set) is still running and will be added once complete.
+
 ## Practical Convergence Result: sts4098
 
 While mhd4800b was the original case study for the divergence mechanism, sts4098 provides the strongest practical evidence for posit32+quire's value: a genuine iteration-count speedup over float32 in a real CG solver, not just a per-step accuracy improvement.

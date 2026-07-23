@@ -415,7 +415,7 @@ double condest_three_way(const MTX& A, const MTX& A_rcm, double lambda_max,
 template <size_t nbits, size_t es>
 void saturation_and_nnz(const std::vector<double>& vals, long& sat, long& nnz_q, long& total){
     posit<nbits,es> maxp, minp;
-    maxpos(maxp); minpos(minp);
+    maxp.maxpos(); minp.minpos();
     double maxv = double(maxp), minv = double(minp);
     sat = 0; nnz_q = 0; total = (long)vals.size();
     for(double v : vals){
@@ -472,6 +472,19 @@ int main(int argc, char* argv[]){
     std::ofstream csv("results/csv/static_conditioning.csv", std::ios::app);
     if(write_header) csv << "matrix,bitwidth,lambda_max,condest_cmsw,condest_method,nnz_static,saturated_count,total_entries,sat_fraction\n";
 
+    // true unquantized float64 baseline (no posit cast at all)
+    {
+        double lambda_max_f64 = power_iteration_lambda_max(A);
+        std::string method_f64;
+        double condest_f64 = condest_three_way(A, A_rcm, lambda_max_f64, method_f64);
+        std::string condest_str_f64 = (method_f64 != "FAIL")
+            ? [&]{ char buf[64]; snprintf(buf,64,"%.6e", condest_f64); return std::string(buf); }()
+            : "FAIL";
+        printf("[static_conditioning] %s bits=F64raw lambda_max=%.6e condest=%s\n",
+               name.c_str(), lambda_max_f64, condest_str_f64.c_str());
+        csv << name << ",F64raw," << lambda_max_f64 << "," << condest_str_f64 << "," << method_f64
+            << "," << A.val.size() << ",0," << A.val.size() << ",0\n";
+    }
     run_bitwidth<8,0>(A, A_rcm, name, 8, csv);
     run_bitwidth<16,1>(A, A_rcm, name, 16, csv);
     run_bitwidth<32,2>(A, A_rcm, name, 32, csv);
