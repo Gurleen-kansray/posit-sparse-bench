@@ -276,7 +276,7 @@ Per-iteration relative error tracking (posit32 quire vs naive, against posit64 r
 
 | Matrix | Divergence Iter | Max Err (Quire) | Max Err (Naive) | Gain (Max) |
 |---|---|---|---|---|
-| bcsstk03 | none (floors out) | 3.22e-02 | 2.12e-01 | 6.6x |
+| bcsstk03 | none (single-run; only 30% of seeds diverge — see note below) | 3.22e-02 | 2.12e-01 | 6.6x |
 | bcsstk14 | 32 | 3.33e-06 | 1.31e-04 | 39.2x |
 | bcsstk36 | 6 | 1.56e-08 | 1.73e-06 | 110.7x |
 | bcsstk37 | 0 | 3.51e-08 | 3.27e-06 | 93.2x |
@@ -285,12 +285,18 @@ Per-iteration relative error tracking (posit32 quire vs naive, against posit64 r
 | mhd4800b | 6 | 1.77e-02 | 4.01e-01 | 22.6x |
 | nasa4704 | 0 | 4.67e-08 | 3.85e-07 | 8.2x |
 | nasasrb | 0 | 9.28e-09 | 7.37e-07 | 79.4x |
-| nos2 | 2 | 7.99e-07 | 7.72e-06 | 9.7x |
+| nos2 | 2 (single-run; high seed variance — see note below) | 7.99e-07 | 7.72e-06 | 9.7x |
 | s3dkq4m2 | 0 | 1.11e-07 | 5.05e-04 | 4531.5x |
 | s3dkt3m2 | 0 | 1.12e-07 | 1.72e-04 | 1535.0x |
 | sts4098 | 12 | 3.65e-07 | 1.43e-05 | 39.1x |
 
 *"Divergence Iter" tracks the pAp per-iteration relative-error metric defined above (naive error exceeding quire error by >10x, sustained for 5+ iterations) — it is distinct from the full-solver residual-convergence discussion elsewhere in this README. bcsstk03's "none (floors out)" here means no such error-ratio divergence was detected (confirmed via `results/divergence_summary.csv`), which is a separate observation from the residual/precision-floor behavior described in the Full CG Solver Convergence section (error concentrated at iters 181–201, where |pAp| < 1e-30).
+
+**Note on small-matrix divergence onset (seed-distribution study, N=50 seeds/matrix):** for bcsstk03 (n=112), only 15 of 50 random seeds (30%) showed detectable divergence at all under the standard threshold (naive error >10x quire error, sustained 5+ iterations); the remaining 35 seeds (70%) — including the seed behind the single-run "none (floors out)" result above — showed no divergence. Among the 15 seeds that did diverge, onset ranged from iteration 33 to 199 (mean 140.2, std 52.9). For bcsstk03, seed choice determines not just *when* divergence occurs but *whether* it occurs at all.
+
+nos2 (n=957) diverges in 100% of seeds (mean onset iteration 105.9, std 47.4, range 0-188), but with high onset variance — the single-run value reported above (iteration 2) is one draw from this wide distribution, not a stable property of the matrix.
+
+All other matrices (n>~2000) diverge in 100% of seeds with divergence-onset std dev under 5 iterations and are reliably reported as single values. Full data: `results/csv/seed_distribution_summary.csv`.
 
 ## Divergence Mechanism (mhd4800b) - Confirmed via Controlled Isolation
 
