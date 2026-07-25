@@ -16,9 +16,9 @@ posit32+quire maintains relative error below 4e-2 across 300 CG iterations on al
 
 For each CG iteration, we compute the `p^T A p` dot product simultaneously
 
-- posit64 — used as ground truth reference
+- double64 — used as ground truth reference
 
-Relative error = `|posit_result - posit64| / |posit64|`
+Relative error = `|posit_result - double64| / |double64|`
 
 All matrices are real symmetric from [SuiteSparse Matrix Collection](https://sparse.tamu.edu).
 
