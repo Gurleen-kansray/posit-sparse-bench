@@ -503,7 +503,7 @@ error sources in the computation.
 
 ## Seed-Distribution Study: Divergence-Onset Variance (N=50 seeds, interim)
 
-Following Prof. Quinlan's suggestion to examine how iteration-count behavior varies across a larger sample than the original N=9/N=13 matrix set, we ran 50 random seeds (varying RHS/initial vector) per matrix across 12 of 13 CoNGA matrices (s3dkt3m2 in progress), tracking the per-seed divergence-onset iteration using the same detection method as the original divergence analysis (naive error exceeding quire error by >10x, sustained 5+ iterations).
+Following Prof. Quinlan's suggestion to examine how iteration-count behavior varies across a larger sample than the original N=9/N=13 matrix set, we ran 50 random seeds (varying RHS/initial vector) per matrix across all 13 CoNGA matrices, tracking the per-seed divergence-onset iteration using the same detection method as the original divergence analysis (naive error exceeding quire error by >10x, sustained 5+ iterations).
 
 **Note on scope:** this interim study varies the random seed within our existing 13-matrix set, rather than expanding to a larger matrix sample -- pending clarification of which framing was intended, this is reported as a standalone finding.
 
@@ -523,12 +523,12 @@ Following Prof. Quinlan's suggestion to examine how iteration-count behavior var
 | bcsstk37 | 25503 | 2.1 | 0 | 10 |
 | nasasrb | 54870 | 2.8 | 0 | 12 |
 | s3dkq4m2 | 90449 | 0.2 | 0 | 1 |
+| s3dkt3m2 | 90449 | 1.5 | 0 | 6 |
 
-Testing this against matrix size directly: Spearman rho = -0.818, p=0.0011 (n=12 matrices) between n and divergence-onset standard deviation. The correlation is identical using log10(n), confirming a genuine scale effect rather than an artifact of the two smallest matrices alone.
+Testing this against matrix size directly: Spearman rho = -0.8253, p=0.0005 (n=13 matrices) between n and divergence-onset standard deviation. The correlation is identical using log10(n), confirming a genuine scale effect rather than an artifact of the two smallest matrices alone.
 
 **Interpretation:** for small matrices, a single random RHS gives an unreliable read on divergence onset -- the CG trajectory is sensitive to the specific right-hand side because there are fewer degrees of freedom to average over. For matrices above roughly n~2000, divergence timing is close to deterministic regardless of seed. This extends the Part C null result: not only does static conditioning fail to predict divergence onset, but for most matrices onset itself barely moves across seeds -- the exception is specifically small-n matrices, where any single-seed divergence-iteration value should be read as one draw from a wide distribution rather than a stable matrix property.
 
-s3dkt3m2 (n=90449, largest matrix in the set) is still running and will be added once complete.
 
 ## Practical Convergence Result: sts4098
 
@@ -595,7 +595,7 @@ in specific iterations and varies sharply within a single solve.
 
 **Swamping and convergence: independently confirmed, not causally linked.**
 mhd4800b also shows a naive-vs-quire convergence gap (naive converges at
-iteration 59 vs. 48 for quire+quire). We checked whether the early swamping
+iteration 79 vs. 69 for posit32+quire). We checked whether the early swamping
 burst (iterations 0-7) explains this gap by examining the per-iteration
 residual difference between naive and quire during that window. We found no
 systematic divergence — the gap is small (order of single digits against
