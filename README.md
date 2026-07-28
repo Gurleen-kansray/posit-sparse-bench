@@ -568,3 +568,37 @@ governed by per-element magnitude-zone sensitivity. This is a narrower but fully
 verified, defensible claim. The overclaimed nnz-independent bound has been removed
 from all paper drafts.
 
+
+## Dot-product swamping analysis (cond/n_eff, per-iteration)
+
+Following Theo's shared background on Kulisch's super-accumulator framing, we
+instrumented `cg_compare.cpp` to compute, at every CG iteration, the dot-product
+condition number cond(p,Ap) = 2·|p|'|Ap| / |p'Ap| and n_eff (the count of terms
+in the dot product that are not "swamped" — i.e. not too small relative to the
+running accumulator peak to matter numerically).
+
+**Bug found and fixed:** an initial pass used the double-precision unit roundoff
+(1.11e-16) as the swamping threshold, which is far too strict — it flagged
+essentially every term as "effective" on every matrix, producing a flat, 
+uninformative n_eff = n on every iteration. Switching to the float32 unit
+roundoff (2^-24 ≈ 5.96e-08), matching our earlier single-vector probe script,
+revealed real structure.
+
+**Finding:** swamping is not a fixed property of a matrix — it is concentrated
+in specific iterations and varies sharply within a single solve.
+
+- **sts4098**: never shows meaningful swamping. Max swamped fraction across
+  1094 iterations is 1.7%; zero iterations exceed 5%.
+- **mhd4800b**: shows a severe early-iteration swamping burst — up to 79% of
+  dot-product terms swamped in iterations 0-7 — which decays sharply and
+  drops below 15% by iteration 8, staying low for the rest of the solve.
+
+**Swamping and convergence: independently confirmed, not causally linked.**
+mhd4800b also shows a naive-vs-quire convergence gap (naive converges at
+iteration 59 vs. 48 for quire+quire). We checked whether the early swamping
+burst (iterations 0-7) explains this gap by examining the per-iteration
+residual difference between naive and quire during that window. We found no
+systematic divergence — the gap is small (order of single digits against
+residuals in the thousands) and alternates sign, consistent with noise rather
+than a swamping-driven effect. We report these as two independently real
+findings on the same matrix, not a demonstrated causal relationship.
