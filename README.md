@@ -505,6 +505,8 @@ error sources in the computation.
 
 Following Prof. Quinlan's suggestion to examine how iteration-count behavior varies across a larger sample than the original N=9/N=13 matrix set, we ran 50 random seeds (varying RHS/initial vector) per matrix across all 13 CoNGA matrices, tracking the per-seed divergence-onset iteration using the same detection method as the original divergence analysis (naive error exceeding quire error by >10x, sustained 5+ iterations).
 
+**Reproducibility note:** each seed is an integer passed to `generic_ladder_seeded` (src/generic_ladder_seeded.cpp), which seeds a `std::mt19937` Mersenne Twister RNG; the RHS is drawn as n i.i.d. uniform values on [0.5, 1.5]. This is bit-for-bit reproducible — running the same seed twice regenerates the identical RHS and thus the identical CG trajectory, since `std::mt19937` is a deterministic, standard-specified generator. Each log file (results/ladder_logs/seed_dist/<matrix>_seed<N>.log) records the matrix, n, value range, and seed in its header line for provenance.
+
 **Note on scope:** this interim study varies the random seed within our existing 13-matrix set, rather than expanding to a larger matrix sample -- pending clarification of which framing was intended, this is reported as a standalone finding.
 
 **Finding:** divergence-onset timing is highly seed-sensitive for small matrices and effectively seed-stable for large ones.
