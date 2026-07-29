@@ -23,7 +23,6 @@ MTX read_mtx(const char* f){
     } fclose(fp); return m;
 }
 
-// matvec for each precision
 void matvec_d(const MTX& A, const std::vector<double>& x, std::vector<double>& y){
     for(int i=0;i<A.n;i++) y[i]=0;
     for(int k=0;k<(int)A.row.size();k++) y[A.row[k]]+=A.val[k]*x[A.col[k]];
@@ -37,7 +36,6 @@ void matvec_p(const MTX& A, const std::vector<P32>& x, std::vector<P32>& y){
     for(int k=0;k<(int)A.row.size();k++) y[A.row[k]]=y[A.row[k]]+P32(A.val[k])*x[A.col[k]];
 }
 
-// dot products
 double dot_d(const std::vector<double>& a, const std::vector<double>& b, int n){
     double s=0; for(int i=0;i<n;i++) s+=a[i]*b[i]; return s;
 }
@@ -78,49 +76,56 @@ double sat_fraction(const std::vector<P32>& v, int n){
     return (double)count / n;
 }
 
+// NEW: cond(x,y) and n_eff per Kulisch/Wilkinson framing, computed on double p/Ap
+void cond_neff(const std::vector<double>& x, const std::vector<double>& y, int n,
+               double& cond, long& n_eff){
+    std::vector<double> prod(n);
+    double absxy=0, dot=0;
+    for(int i=0;i<n;i++){ prod[i]=x[i]*y[i]; absxy+=fabs(x[i])*fabs(y[i]); dot+=prod[i]; }
+    cond = (dot!=0) ? 2.0*absxy/fabs(dot) : INFINITY;
+    double partial=0, peak=0;
+    for(int i=0;i<n;i++){ partial+=prod[i]; if(fabs(partial)>peak) peak=fabs(partial); }
+    double u = 5.9604644775390625e-08; // float32 unit roundoff (2^-24), matches cond_swamping.py probe
+    n_eff = 0;
+    for(int i=0;i<n;i++) if(fabs(prod[i]) >= u*peak) n_eff++;
+}
+
 int main(int argc, char* argv[]){
     if(argc<3){ printf("usage: cg_compare <matrix.mtx> <logfile>\n"); return 1; }
     MTX A=read_mtx(argv[1]);
     int n=A.n;
 
-    // print matrix info
     double vmin=1e300,vmax=0;
     for(double v:A.val){double av=fabs(v);if(av>0&&av<vmin)vmin=av;if(av>vmax)vmax=av;}
     printf("Matrix: %s  n=%d  nnz=%zu  val_ratio=%.3e\n",argv[1],n,A.row.size(),vmax/vmin);
 
-    // diagonal preconditioner
     std::vector<double> diagA(n,1.0);
     for(int k=0;k<(int)A.row.size();k++)
         if(A.row[k]==A.col[k]) diagA[A.row[k]]=A.val[k];
 
     FILE* log=fopen(argv[2],"w");
-    fprintf(log,"iter  res_double64      res_float32      res_posit32q      res_posit32n      res_float32fma      pAp_dynrange      pAp_mag      sat_frac_pq      sat_frac_pn      pAp_double        pAp_naive\n");
+    fprintf(log,"iter  res_double64      res_float32      res_posit32q      res_posit32n      res_float32fma      pAp_dynrange      pAp_mag      sat_frac_pq      sat_frac_pn      pAp_double        pAp_naive        cond_pAp          n_eff\n");
 
-    // --- double64 CG ---
     std::vector<double> xd(n,0),rd(n,1),pd(n),Apd(n),zd(n);
     for(int i=0;i<n;i++) zd[i]=rd[i]/diagA[i];
     for(int i=0;i<n;i++) pd[i]=zd[i];
     double rzd=dot_d(rd,zd,n);
 
-    // --- float32 CG ---
     std::vector<float> xf(n,0),rf(n,1),pf(n),Apf(n),zf(n);
     for(int i=0;i<n;i++) zf[i]=(float)(1.0/diagA[i]);
     for(int i=0;i<n;i++) pf[i]=zf[i];
     float rzf=dot_f(rf,zf,n);
 
-    // --- float32 FMA CG ---
     std::vector<float> xg(n,0),rg(n,1),pg(n),Apg(n),zg(n);
     for(int i=0;i<n;i++) zg[i]=(float)(1.0/diagA[i]);
     for(int i=0;i<n;i++) pg[i]=zg[i];
     float rzg=dot_f_fma(rg,zg,n);
 
-    // --- posit32+quire CG ---
     std::vector<P32> xp(n,0),rp(n,1),pp(n),App(n),zp(n);
     for(int i=0;i<n;i++) zp[i]=P32(1.0/diagA[i]);
     for(int i=0;i<n;i++) pp[i]=zp[i];
     double rzp=dot_p(rp,zp,n);
 
-    // --- posit32 naive (no quire) CG ---
     std::vector<P32> xn(n,0),rn(n,1),pn(n),Apn(n),zn(n);
     for(int i=0;i<n;i++) zn[i]=P32(1.0/diagA[i]);
     for(int i=0;i<n;i++) pn[i]=zn[i];
@@ -128,7 +133,6 @@ int main(int argc, char* argv[]){
 
     int maxiter=2000;
     for(int iter=0;iter<maxiter;iter++){
-        // double step
         matvec_d(A,pd,Apd);
         double pApd=dot_d(pd,Apd,n);
         double alphad=rzd/pApd;
@@ -139,7 +143,10 @@ int main(int argc, char* argv[]){
         for(int i=0;i<n;i++) pd[i]=zd[i]+betad*pd[i];
         double resd=sqrt(dot_d(rd,rd,n));
 
-        // float step
+        // NEW: characterize the double-precision p,Ap pair this iteration
+        double cond_this; long n_eff_this;
+        cond_neff(pd, Apd, n, cond_this, n_eff_this);
+
         matvec_f(A,pf,Apf);
         float pApf=dot_f(pf,Apf,n);
         float alphaf=rzf/pApf;
@@ -150,7 +157,6 @@ int main(int argc, char* argv[]){
         for(int i=0;i<n;i++) pf[i]=zf[i]+betaf*pf[i];
         double resf=sqrt((double)dot_f(rf,rf,n));
 
-        // float32 FMA step
         matvec_f(A,pg,Apg);
         float pApg=dot_f_fma(pg,Apg,n);
         float alphag=rzg/pApg;
@@ -161,7 +167,6 @@ int main(int argc, char* argv[]){
         for(int i=0;i<n;i++) pg[i]=zg[i]+betag*pg[i];
         double resg=sqrt((double)dot_f_fma(rg,rg,n));
 
-        // posit+quire step
         matvec_p(A,pp,App);
         double pApp=dot_p(pp,App,n);
         P32 alphap(rzp/pApp);
@@ -176,7 +181,6 @@ int main(int argc, char* argv[]){
         double pAp_mag = fabs(pApp);
         double satp = sat_fraction(pp, n);
 
-        // posit naive (no quire) step
         matvec_p(A,pn,Apn);
         double pApn=dot_p_naive(pn,Apn,n);
         P32 alphan(rzn/pApn);
@@ -189,9 +193,9 @@ int main(int argc, char* argv[]){
         double resn=sqrt(dot_p_naive(rn_tmp,rn_tmp,n));
         double satn = sat_fraction(pn, n);
 
-        fprintf(log,"%4d  %.10e  %.10e  %.10e  %.10e  %.10e  %.6e  %.6e  %.6e  %.6e  %.10e  %.10e\n",iter,resd,resf,resp,resn,resg,pAp_range,pAp_mag,satp,satn,pApd,pApn);
+        fprintf(log,"%4d  %.10e  %.10e  %.10e  %.10e  %.10e  %.6e  %.6e  %.6e  %.6e  %.10e  %.10e  %.6e  %ld\n",
+                iter,resd,resf,resp,resn,resg,pAp_range,pAp_mag,satp,satn,pApd,pApn,cond_this,n_eff_this);
 
-        // stop if all converged
         if(resd<1e-10 && resf<1e-10 && resp<1e-10 && resn<1e-10 && resg<1e-10) break;
     }
     fclose(log);
