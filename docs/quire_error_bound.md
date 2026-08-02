@@ -64,15 +64,35 @@ i.e. naive accumulation error scales linearly with term count, while
 quire's does not scale with nnz at all — it is fixed at a single
 rounding-unit bound regardless of how many terms are summed.
 
-## Empirical confirmation
+## Empirical confirmation (corrected 2026-08-02)
 
-Across all 13 SuiteSparse test matrices (nnz range: 640 to 4,824,880 — a
-7,500x spread), observed rel_err(pAp_quire) stayed within the single-cast
-bound u in every iteration, with no upward trend as nnz increases. This is
-the direct empirical signature predicted by the lemma: naive error grows
-with matrix size/density (consistent with quire gains scaling up to 4,531x
-on the largest, densest matrices — s3dkq4m2, s3dkt3m2), while quire error
-does not.
+An earlier version of this document claimed rel_err(pAp_quire) stayed
+within the single-cast bound u in every iteration across all 13 matrices.
+This was checked directly against the raw per-iteration ladder logs
+(results/ladder_logs/*_ladder.log, real CG search directions, |pAp|>1e-15
+to exclude near-convergence artifacts) and found to be false: the bound
+fails on 20-98% of iterations depending on matrix, with per-iteration
+error reaching 2.5x-1,563x over u at worst (script:
+check_ladder_bound_v2.py, log: results/ladder_bound_check_20260802.log).
+
+A second, independent isolated single-shot test (p, Ap cast once to
+posit32 from an arbitrary random vector, no CG loop -- script:
+src/single_shot_bound_check_seeded.cpp) confirms the same conclusion
+across 10 random seeds per matrix: the bound fails in 100% of seeds on
+12 of 13 matrices; only mhd4800b passes reliably (8/10 seeds).
+
+Both experiment types -- real CG search directions and arbitrary random
+vectors -- agree: the accumulation-only bound rel_err(pAp_quire) <= u does
+NOT hold in general. The lemma's derivation (exact accumulation, single
+final rounding cast) is still correct as a statement about the
+accumulation step itself; what fails is the assumption that inputs
+entering the quire are themselves error-free. In practice, p_i and Ap_i
+are cast into posit32 before entering the quire, and this input
+quantization error is not bounded by u -- it depends on whether |Ap|
+entries stay within posit32's favorable precision zone
+(~3.16e-5 to ~1e5). This is a narrower, corrected claim: quire eliminates
+accumulation-step rounding exactly, but does not provide an
+nnz-independent bound on total error.
 
 ## Open items / caveats for review
 

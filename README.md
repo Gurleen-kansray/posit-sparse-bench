@@ -475,21 +475,28 @@ exact by construction, verified via a cancellation-ratio check (kappa =
 sum|p_i * Ap_i| / |pAp|) which stayed within 1.02-1.16 across all four
 matrices, ruling out cancellation as the cause. The actual source is
 **input quantization**: casting p_i and Ap_i to posit32 before they enter
-the quire. This error is governed by the same term-magnitude mechanism
-established in the Divergence Mechanism section above -- posit32
-represents values in the range ~3.16e-5 to ~1e5 with favorable precision;
-outside that zone, per-element rounding error grows. bcsstk03/bcsstk38/
-nasasrb all have |Ap| entries reaching 1e9-1e11, far outside this zone;
-mhd4800b's |Ap| stays within [7e-11, 1.04], inside it -- matching the
-observed pass/fail pattern exactly.
+the quire.
+
+**Update (2026-08-02):** we initially proposed that this input-quantization
+error was governed by whether |Ap| entries stay within posit32's
+precision-favorable zone (~3.16e-5 to ~1e5), based on this 4-matrix
+comparison. Extending the check to all 13 matrices (term_probe run,
+iterations 0-30, results/term_probe_zone_summary_20260802.log) does NOT
+support this as a general predictor: e.g. nasasrb has 96.8% of terms
+outside the zone yet fails the bound on only 19% of iterations, while
+mhd4800b, s3dkt3m2, and s3dkq4m2 all have <11% of terms outside the zone
+yet fail the bound on 88-92% of iterations -- the opposite of what the
+zone theory predicts. The zone-percentage does not reliably correlate
+with bound-failure rate across the full matrix set.
 
 **Correct claim:** quire eliminates accumulation-step rounding entirely
 (the only rounding in the pipeline is the single final quire-to-posit32
 cast, exact by construction). It does NOT eliminate input-quantization
-error, which remains governed by the term-magnitude zone already
-characterized in this README. This is a narrower but fully validated
-claim -- quire removes one specific, nnz-scaling error source, not all
-error sources in the computation.
+error. What specifically governs the matrix-to-matrix variation in how
+much input-quantization error accumulates is currently unresolved -- the
+term-magnitude-zone hypothesis does not hold up under full 13-matrix
+verification and should not be cited as an explanation without further
+investigation.
 
 ## Static/Dynamic Conditioning Extension (Prof. Quinlan's three-part experiment)
 
@@ -558,17 +565,25 @@ Results (rel_err vs u=3.725e-09):
 
 Root cause confirmed: NOT the accumulation step (which is genuinely exact, verified
 separately). The residual error is input quantization: casting each p[i] and Ap[i] into
-posit32 before entering the quire introduces magnitude-dependent rounding error per
-element, governed by the same favorable-zone mechanism established in the Divergence
-section. bcsstk03/bcsstk38/nasasrb all have |Ap| entries reaching 1e10-1e11 (outside
-posit32's favorable zone ~3.16e-5 to 1e5). mhd4800b's |Ap| stays within [7e-11, 1.04]
-(inside the zone) -- explaining the pass/fail pattern exactly.
+posit32 before entering the quire.
+
+We further verified this bound-failure result across the full 13-matrix set (not just
+these 4) using two independent methods: (1) direct per-iteration check against real CG
+ladder logs for 10 of 13 matrices (results/ladder_bound_check_20260802.log), and (2) the
+same isolated single-shot test repeated across 10 random seeds per matrix
+(results/all13_seed_check_20260802.log). Result: the bound fails on the large majority
+of iterations/seeds on 12 of 13 matrices; only mhd4800b passes reliably (8/10 seeds).
+
+We initially proposed the term-magnitude favorable-zone (~3.16e-5 to ~1e5) as the
+mechanism explaining which matrices pass or fail. This does NOT hold up across the full
+13-matrix set (see Quire's Role in Accumulation Error section above) -- the correlation
+seen in this 4-matrix comparison does not generalize.
 
 Corrected claim: quire eliminates accumulation-rounding error (the nnz-scaling
-compounding term). It does NOT eliminate input-quantization error, which remains
-governed by per-element magnitude-zone sensitivity. This is a narrower but fully
-verified, defensible claim. The overclaimed nnz-independent bound has been removed
-from all paper drafts.
+compounding term). It does NOT eliminate input-quantization error, and it does NOT
+provide an nnz-independent bound on total error. The mechanism governing matrix-to-matrix
+variation in this residual error is currently unresolved. The overclaimed nnz-independent
+bound has been removed from all paper drafts.
 
 
 ## Dot-product swamping analysis (cond/n_eff, per-iteration)
