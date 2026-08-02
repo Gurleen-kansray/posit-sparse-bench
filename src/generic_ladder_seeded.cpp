@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cmath>
 #include <vector>
+#include <random>
 #include <universal/number/posit/posit.hpp>
 #include <universal/number/posit/fdp.hpp>
 using namespace sw::universal;
@@ -15,10 +16,7 @@ MTX read_mtx(const char* f){
     while(fgets(buf,256,fp) && buf[0]=='%');
     int rows,cols,nnz; sscanf(buf,"%d %d %d",&rows,&cols,&nnz);
     m.n=rows; int r,c; double v;
-    while(true){
-        int nread = fscanf(fp,"%d %d %lf",&r,&c,&v);
-        if(nread==2) v=1.0; // pattern format: no value column, implicit 1.0
-        else if(nread!=3) break;
+    while(fscanf(fp,"%d %d %lf",&r,&c,&v)==3){
         m.row.push_back(r-1); m.col.push_back(c-1); m.val.push_back(v);
         if(r!=c){m.row.push_back(c-1); m.col.push_back(r-1); m.val.push_back(v);}
     } fclose(fp); return m;
@@ -51,29 +49,33 @@ void compute_rz(const std::vector<double>& r, const std::vector<double>& z, int 
     rz_naive=double(pnaive);
 }
 int main(int argc, char* argv[]){
-    if(argc<3){ printf("usage: generic_ladder <matrix.mtx> <logfile>\n"); return 1; }
+    if(argc<4){ printf("usage: generic_ladder_seeded <matrix.mtx> <logfile> <seed>\n"); return 1; }
     const char* mtx_path = argv[1];
     const char* log_path = argv[2];
+    unsigned int seed = (unsigned int)atoi(argv[3]);
 
     MTX A=read_mtx(mtx_path);
     int n=A.n;
 
     double vmin=1e300, vmax=0;
     for(double v: A.val){ double av=fabs(v); if(av>0&&av<vmin) vmin=av; if(av>vmax) vmax=av; }
-    printf("Loaded %s: n=%d nnz=%zu\n", mtx_path, n, A.row.size());
+    printf("Loaded %s: n=%d nnz=%zu seed=%u\n", mtx_path, n, A.row.size(), seed);
     printf("Value range: min_abs=%.3e max_abs=%.3e ratio=%.3e\n", vmin, vmax, vmax/vmin);
 
     std::vector<double> diagA(n,1.0);
     for(int k=0;k<(int)A.row.size();k++)
         if(A.row[k]==A.col[k]) diagA[A.row[k]]=A.val[k];
 
-    std::vector<double> x(n,0),r(n,1),p(n),Ap(n),z(n);
+    std::mt19937 rng(seed);
+    std::uniform_real_distribution<double> dist(0.5, 1.5);
+    std::vector<double> x(n,0),r(n),p(n),Ap(n),z(n);
+    for(int i=0;i<n;i++) r[i]=dist(rng);
     for(int i=0;i<n;i++) z[i]=r[i]/diagA[i];
     for(int i=0;i<n;i++) p[i]=z[i];
     double rz_d=0; for(int i=0;i<n;i++) rz_d+=r[i]*z[i];
 
     FILE* log=fopen(log_path,"w");
-    fprintf(log,"matrix=%s n=%d val_range=%.3e/%.3e\n", mtx_path, n, vmin, vmax);
+    fprintf(log,"matrix=%s n=%d val_range=%.3e/%.3e seed=%u\n", mtx_path, n, vmin, vmax, seed);
 
     for(int iter=0;iter<300;iter++){
         matvec(A,p.data(),Ap.data());

@@ -16,7 +16,10 @@ MTX read_mtx(const char* f){
     while(fgets(buf,256,fp) && buf[0]=='%');
     int rows,cols,nnz; sscanf(buf,"%d %d %d",&rows,&cols,&nnz);
     m.n=rows; int r,c; double v;
-    while(fscanf(fp,"%d %d %lf",&r,&c,&v)==3){
+    while(true){
+        int nread = fscanf(fp,"%d %d %lf",&r,&c,&v);
+        if(nread==2) v=1.0; // pattern format: no value column, implicit 1.0
+        else if(nread!=3) break;
         m.row.push_back(r-1); m.col.push_back(c-1); m.val.push_back(v);
         if(r!=c){m.row.push_back(c-1); m.col.push_back(r-1); m.val.push_back(v);}
     } fclose(fp); return m;
