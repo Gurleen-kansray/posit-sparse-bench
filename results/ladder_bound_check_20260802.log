@@ -1,0 +1,10 @@
+results/ladder_logs/bcsstk03_ladder.log: 129/131 FAIL (filtered 169), max ratio_to_u=1562.71
+results/ladder_logs/bcsstk14_ladder.log: 279/300 FAIL (filtered 0), max ratio_to_u=893.75
+results/ladder_logs/bcsstk36_ladder.log: 153/300 FAIL (filtered 0), max ratio_to_u=4.18
+results/ladder_logs/bcsstk37_ladder.log: 226/300 FAIL (filtered 0), max ratio_to_u=9.41
+results/ladder_logs/bcsstk38_ladder.log: 93/300 FAIL (filtered 0), max ratio_to_u=9.31
+results/ladder_logs/mhd4800b_ladder.log: 47/52 FAIL (filtered 248), max ratio_to_u=2057.55
+results/ladder_logs/nasasrb_ladder.log: 56/300 FAIL (filtered 0), max ratio_to_u=2.49
+results/ladder_logs/s3dkq4m2_ladder.log: 264/300 FAIL (filtered 0), max ratio_to_u=29.90
+results/ladder_logs/s3dkt3m2_ladder.log: 275/300 FAIL (filtered 0), max ratio_to_u=30.08
+results/ladder_logs/sts4098_ladder.log: 183/300 FAIL (filtered 0), max ratio_to_u=98.10

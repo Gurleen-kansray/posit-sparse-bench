@@ -1,0 +1,13 @@
+matrix=data/matrices/bcsstk03.mtx n=112 s_exact=9.1006959583e+11 s_quire=9.1006959616e+11 rel_err=3.615578e-10 u=3.725290e-09 ratio_to_u=0.097 PASS
+matrix=data/matrices/bcsstk14.mtx n=1806 s_exact=1.7392087442e+12 s_quire=1.7392100966e+12 rel_err=7.776362e-07 u=3.725290e-09 ratio_to_u=208.745 FAIL
+matrix=data/matrices/bcsstk36.mtx n=23052 s_exact=1.1800762368e+10 s_quire=1.1800756224e+10 rel_err=5.206601e-07 u=3.725290e-09 ratio_to_u=139.764 FAIL
+matrix=data/matrices/bcsstk37.mtx n=25503 s_exact=6.9372068661e+09 s_quire=6.9372067840e+09 rel_err=1.183754e-08 u=3.725290e-09 ratio_to_u=3.178 FAIL
+matrix=data/matrices/bcsstk38.mtx n=8032 s_exact=7.2207074102e+11 s_quire=7.2207040512e+11 rel_err=4.651864e-07 u=3.725290e-09 ratio_to_u=124.873 FAIL
+matrix=data/matrices/nasasrb.mtx n=54870 s_exact=4.9466970265e+11 s_quire=4.9466992230e+11 rel_err=4.440504e-07 u=3.725290e-09 ratio_to_u=119.199 FAIL
+matrix=data/matrices/mhd4800b.mtx n=4800 s_exact=5.1704013397e+01 s_quire=5.1704013348e+01 rel_err=9.614290e-10 u=3.725290e-09 ratio_to_u=0.258 PASS
+matrix=data/matrices/s3dkt3m2.mtx n=90449 s_exact=8.2868345928e+06 s_quire=8.2868350000e+06 rel_err=4.913485e-08 u=3.725290e-09 ratio_to_u=13.190 FAIL
+matrix=data/matrices/s3dkq4m2.mtx n=90449 s_exact=5.6498689876e+06 s_quire=5.6498690000e+06 rel_err=2.201107e-09 u=3.725290e-09 ratio_to_u=0.591 PASS
+matrix=data/matrices/sts4098.mtx n=4098 s_exact=6.3247412562e+08 s_quire=6.3247411200e+08 rel_err=2.152790e-08 u=3.725290e-09 ratio_to_u=5.779 FAIL
+matrix=data/matrices/nasa4704.mtx n=4704 s_exact=1.6869277008e+08 s_quire=1.6869280000e+08 rel_err=1.773627e-07 u=3.725290e-09 ratio_to_u=47.610 FAIL
+matrix=data/matrices/nos2.mtx n=957 s_exact=1.9120401526e+12 s_quire=1.9120405873e+12 rel_err=2.273257e-07 u=3.725290e-09 ratio_to_u=61.022 FAIL
+matrix=data/matrices/bodyy4.mtx n=17546 s_exact=1.1082494309e+06 s_quire=1.1082495000e+06 rel_err=6.239183e-08 u=3.725290e-09 ratio_to_u=16.748 FAIL
