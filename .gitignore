@@ -20,3 +20,10 @@ mhd1280b/
 *.log
 # results logs (generated at runtime)
 results/*.log
+cg_true_error
+static_conditioning
+term_probe
+precision_threshold_mapper
+single_shot_bound_check
+single_shot_bound_check_seeded
+generic_ladder_seeded
