@@ -568,11 +568,43 @@ separately). The residual error is input quantization: casting each p[i] and Ap[
 posit32 before entering the quire.
 
 We further verified this bound-failure result across the full 13-matrix set (not just
-these 4) using two independent methods: (1) direct per-iteration check against real CG
-ladder logs for 10 of 13 matrices (results/ladder_bound_check_20260802.log), and (2) the
-same isolated single-shot test repeated across 10 random seeds per matrix
-(results/all13_seed_check_20260802.log). Result: the bound fails on the large majority
-of iterations/seeds on 12 of 13 matrices; only mhd4800b passes reliably (8/10 seeds).
+these 4) using two independent methods:
+
+**Method 1 -- direct per-iteration check against real CG ladder logs** (script:
+check_ladder_bound_v2.py, output: results/ladder_bound_check_full13_20260802.log).
+Per-matrix fail rate (fraction of iterations where rel_err exceeds u):
+
+| Matrix | Fail rate |
+|---|---|
+| bcsstk03 | 98% |
+| bcsstk14 | 93% |
+| bcsstk36 | 51% |
+| bcsstk37 | 75% |
+| bcsstk38 | 31% |
+| bodyy4 | 84% |
+| mhd4800b | 90% |
+| nasa4704 | 37% |
+| nasasrb | 19% |
+| nos2 | 87% |
+| s3dkq4m2 | 88% |
+| s3dkt3m2 | 92% |
+| sts4098 | 61% |
+
+**Method 2 -- isolated single-shot test, 10 random seeds per matrix** (script:
+src/single_shot_bound_check_seeded.cpp, output: results/all13_seed_check_20260802.log).
+
+The two methods broadly agree that the bound fails on the majority of iterations/seeds
+across most matrices, but they diverge sharply on one matrix: **mhd4800b** (Method 1:
+~90% fail rate; Method 2: 2/10 seeds fail). We have not yet resolved why these two
+methods disagree on mhd4800b specifically, and do not want to report a single number
+for it until we understand the discrepancy. All other matrices show consistent
+directional agreement between the two methods.
+
+Note: an earlier version of the ladder-log fail-rate table used a broken source file
+for nasa4704 (Boeing/nasa4704, pattern-format with no real values, instead of the
+correct Nasa/nasa4704 SPD matrix); nasa4704's fail rate has been corrected from an
+earlier erroneous 98% to the verified 37% shown above after switching to the correct
+file (see data/matrices/nasa4704_BROKEN_pattern_format.mtx.bak for the record).
 
 We initially proposed the term-magnitude favorable-zone (~3.16e-5 to ~1e5) as the
 mechanism explaining which matrices pass or fail. This does NOT hold up across the full
