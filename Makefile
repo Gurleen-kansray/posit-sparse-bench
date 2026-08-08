@@ -3,7 +3,7 @@ CXXFLAGS = -std=c++20 -O2
 INCLUDES = -I../universal/include
 LDFLAGS = -lm
 
-all: generic_ladder cg_compare static_conditioning
+all: generic_ladder cg_compare static_conditioning cg_compare_seeded
 
 static_conditioning: src/static_conditioning.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $< $(LDFLAGS)
@@ -15,4 +15,7 @@ cg_compare: src/cg_compare.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $< $(LDFLAGS)
 
 clean:
-	rm -f generic_ladder cg_compare
+	rm -f generic_ladder cg_compare cg_compare_seeded static_conditioning
+
+cg_compare_seeded: src/cg_compare_seeded.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $< $(LDFLAGS)

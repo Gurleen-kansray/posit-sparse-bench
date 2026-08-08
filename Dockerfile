@@ -22,6 +22,8 @@ COPY src/ ./src/
 COPY Makefile ./Makefile
 COPY data/ ./data/
 COPY run_all.sh ./run_all.sh
+COPY run_seeded_sweep.sh ./run_seeded_sweep.sh
+COPY aggregate_seeded_results.py ./aggregate_seeded_results.py
 
 RUN mkdir -p results
 RUN make INCLUDES=-I/universal/include
