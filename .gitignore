@@ -1,29 +1,8 @@
-add32_posit
-bcsstk03_posit
-bcsstk14_posit
-bcsstk14_posit64
-*.o
-precision_mapper
-boundary_fine
-boundary_res
-# binaries
-*_ladder
-cg_compare
+__pycache__/
+*.pyc
+cg_compare_seeded
 generic_ladder
-ml_precision_experiment
-# data tarballs and raw matrix files
-*.tar.gz
-*.mtx
-data/*.tar.gz
-mhd1280b/
-# logs
-*.log
-# results logs (generated at runtime)
-results/*.log
-cg_true_error
 static_conditioning
-term_probe
-precision_threshold_mapper
-single_shot_bound_check
-single_shot_bound_check_seeded
-generic_ladder_seeded
+cg_compare
+cg_compare_seeded.bak
+*.bak
