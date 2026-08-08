@@ -743,3 +743,17 @@ systematic divergence — the gap is small (order of single digits against
 residuals in the thousands) and alternates sign, consistent with noise rather
 than a swamping-driven effect. We report these as two independently real
 findings on the same matrix, not a demonstrated causal relationship.
+
+## Point 5: pAp gain ratio, mean ± std across seeds (replaces single-run range)
+
+| Matrix   | pAp_gain_mean ± std      | n_seeds |
+|----------|--------------------------|---------|
+| bcsstk03 | 2.3773 ± 3.3742          | 50      |
+| bcsstk14 | 619.9902 ± 744.9851      | 37      |
+| bcsstk36 | 2088.4284 ± 10466.9918   | 50      |
+| bcsstk37 | 1957.1931 ± 2108.3933    | 28      |
+| bcsstk38 | 1.1840 ± 0.7744          | 11      |
+| bodyy4   | 350.5411 ± 861.8260      | 11      |
+| mhd4800b | 96678.8140 ± 222068.4364 | 11      |
+| nasa4704 | 38.9799 ± 122.9731       | 11      |
+| sts4098  | 2511.4200 ± 3261.6432    | 11      |
