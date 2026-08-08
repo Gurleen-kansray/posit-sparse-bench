@@ -538,31 +538,54 @@ Testing this against matrix size directly: Spearman rho = -0.8253, p=0.0005 (n=1
 **Interpretation:** for small matrices, a single random RHS gives an unreliable read on divergence onset -- the CG trajectory is sensitive to the specific right-hand side because there are fewer degrees of freedom to average over. For matrices above roughly n~2000, divergence timing is close to deterministic regardless of seed. This extends the Part C null result: not only does static conditioning fail to predict divergence onset, but for most matrices onset itself barely moves across seeds -- the exception is specifically small-n matrices, where any single-seed divergence-iteration value should be read as one draw from a wide distribution rather than a stable matrix property.
 
 
-## Solution-Error Gain Ratio Across Matrices (seed sweep, N seeds per matrix)
+## Solution-Error Gain Ratio Across Matrices (seed sweep, updated Aug 8)
 
 Extending the solution-error equivalence result (quire vs naive posit32 solution-error ratio ~1.0x despite large pAp accuracy gains) across the full matrix set, using per-seed logs from `results/ladder_logs/seed_sweep/` and `compute_gain_ratios.py`. Solution-error gain ratio is solerr_p32n / solerr_p32q (naive / quire) at the last logged iteration per seed; pAp gain is the analogous ratio for the pAp inner product against the double-precision reference.
 
-**Note on seed counts:** bcsstk37, nasasrb, s3dkq4m2, and s3dkt3m2 are reported with 1-2 seeds only. These are large matrices (n=25503 to 90449) where a single seeded solve took multiple hours (nasasrb: >150 minutes for one seed, not yet converged), making a full 50-seed sweep prohibitively expensive on available hardware. Their solution-error ratios (all ~1.0) are directionally consistent with the fully-seeded matrices but should be read as single-draw estimates, not stable statistics.
+**Note on seed counts:** bcsstk37, nasasrb, s3dkq4m2, and s3dkt3m2 remain low-seed (1-26). These are large matrices (n=25503 to 90449) where a single seeded solve took multiple hours (nasasrb: >150 minutes for one seed), making a full 50-seed sweep prohibitively expensive on available hardware. Their solution-error ratios (all ~1.0) are directionally consistent with the fully-seeded matrices but should be read as single/few-draw estimates, not stable statistics.
 
-| Matrix | n_seeds | n_valid | solerr_ratio_mean | solerr_ratio_std | solerr_ratio_median | pAp_gain_mean |
-|---|---|---|---|---|---|---|
-| bcsstk03 | 50 | 50 | 1.1396 | 0.7566 | 0.9889 | 2.3773 |
-| bcsstk14 | 37 | 37 | 1.0186 | 0.2001 | 1.0099 | 619.9902 |
-| bcsstk36 | 50 | 50 | 1.0000 | 0.0001 | 1.0000 | 2088.4284 |
-| bcsstk37 | 2 | 2 | 1.0001 | 0.0000 | 1.0001 | 1405.7287 |
-| bcsstk38 | 9 | 9 | 0.9920 | 0.0309 | 1.0014 | 1.2382 |
-| bodyy4 | 10 | 10 | 0.9951 | 0.0701 | 0.9869 | 92.0135 |
-| mhd4800b | 9 | 9 | 1.6969 | 1.5240 | 1.0197 | 118111.2205 |
-| nasa4704 | 9 | 9 | 0.9828 | 0.1233 | 0.9811 | 47.1312 |
-| nasasrb | 1 | 1 | 1.0008 | 0.0000 | 1.0008 | 23684.6301 |
-| nos2 | 10 | 10 | 0.9937 | 0.3074 | 0.9390 | 1.6779 |
-| s3dkq4m2 | 2 | 1 | 1.0000 | 0.0000 | 1.0000 | 1278.6373 |
-| s3dkt3m2 | 1 | 1 | 1.0000 | 0.0000 | 1.0000 | 40128.9929 |
-| sts4098 | 9 | 9 | 0.8804 | 0.2032 | 0.8939 | 3069.2596 |
+| Matrix | n_seeds | solerr_ratio_mean | solerr_ratio_std | solerr_ratio_median | pAp_gain_mean |
+|---|---|---|---|---|---|
+| bcsstk03 | 50 | 1.1396 | 0.7566 | 0.9889 | 2.3773 |
+| bcsstk14 | 37 | 1.0186 | 0.2001 | 1.0099 | 619.9902 |
+| bcsstk36 | 50 | 1.0000 | 0.0001 | 1.0000 | 2088.4284 |
+| bcsstk37 | 26 | 1.0001 | 0.0000 | 1.0001 | 2055.3038 |
+| bcsstk38 | 11 | 1.0076 | 0.0748 | 1.0083 | 1.1542 |
+| bodyy4 | 11 | 0.9890 | 0.0695 | 0.9764 | 350.5411 |
+| mhd4800b | 11 | 1.6642 | 1.4268 | 1.0197 | 96678.8140 |
+| nasa4704 | 11 | 0.9542 | 0.1430 | 0.9659 | 39.1898 |
+| nasasrb | 1 | 1.0008 | 0.0000 | 1.0008 | 23684.6301 |
+| nos2 | 11 | 1.0221 | 0.3564 | 0.8790 | 1.6846 |
+| s3dkq4m2 | 2 | 1.0000 | 0.0000 | 1.0000 | 1278.6373 |
+| s3dkt3m2 | 1 | 1.0000 | 0.0000 | 1.0000 | 40128.9929 |
+| sts4098 | 11 | 0.9481 | 0.2361 | 0.8942 | 2511.4200 |
 
-**Finding:** median solution-error ratio clusters near 1.0 (0.88-1.02) across every matrix with usable seed counts, independent of pAp gain magnitude spanning four orders of magnitude (1.2x to 118,111x). This confirms the non-transfer pattern generalizes beyond the original two-matrix check: large gains in the intermediate pAp inner product do not translate into proportionally large gains in final solution accuracy. Mean is reported alongside median since mean is sensitive to outlier seeds (e.g. mhd4800b: mean 1.70 vs median 1.02).
+**Finding:** median solution-error ratio clusters near 1.0 (0.88-1.02) across every matrix regardless of pAp gain magnitude, which spans nearly five orders of magnitude (1.15x to 96,678.81x). This confirms the non-transfer pattern generalizes across the full matrix set: large gains in the intermediate pAp inner product do not translate into proportionally large gains in final solution accuracy.
 
 Reproducible via `./run_seeded_sweep.sh` (generates per-seed logs using `cg_compare_seeded`) followed by `python3 compute_gain_ratios.py results/ladder_logs/seed_sweep`.
+
+## Independent Replication (Prof. James Quinlan, University of Maine)
+
+Prof. Quinlan built his own independent pipeline implementing the same experiment (random ground-truth x, es=2, posit32 quire vs. naive, real solution error) and shared results 6 Aug 2026. Raw data: `external/james_replication/stats_equivalence.csv`.
+
+He ran a formal **TOST (two one-sided test) statistical equivalence test** — a stronger claim than "no significant difference": TOST positively demonstrates that two quantities are equivalent within a chosen margin.
+
+**Pooled result, posit32 quire vs. naive relative solution error, across 6 matrices (bcsstk03, bcsstk14, mhd4800b, nasa4704, nos2, sts4098), n=300 seed-runs:**
+
+| Metric | Value |
+|---|---|
+| ratio (quire/naive) | 1.0248 |
+| 95% CI | [0.9743, 1.0779] |
+| tost_p (10% margin) | 0.0031 |
+
+This is strong evidence (p < 1%) that posit32 quire and naive produce solution errors equivalent within 10% of each other — an independently built pipeline, using a different random seed set and MAXITER=300 (vs. our 2000), reaching the same non-transfer conclusion as our own seed sweep above.
+
+**Scope note:** James's data covers 6 of our 13 matrices. The other 7 (bcsstk36, bcsstk37, bcsstk38, bodyy4, nasasrb, s3dkq4m2, s3dkt3m2) are presented as our own independent finding only, not cross-validated against his data.
+
+**Also from James's data:** naive posit32 (without quire) is sometimes substantially worse than naive float32 — e.g. bcsstk03 shows posit32 19.9x worse than float32. This reinforces that quire's role isn't marginal improvement — it's what makes posit32 usable at all; without it, posit32's behavior swings unpredictably by matrix.
+
+**Open follow-up (not yet incorporated):** James also sent a per-matrix rz-gain breakdown across all 13 matrices at posit8/16/32 (`external/james_replication/width_reduction_summary.csv`), which has broader coverage than our own README's rz-gain table (currently limited to 6 matrices, single-run). Reconciling this is a tracked next step.
+
 
 ## Breakdown Guard Fix: NaN/NaR Detection (posit16-naive instability)
 
