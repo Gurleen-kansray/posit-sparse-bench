@@ -6,3 +6,9 @@ static_conditioning
 cg_compare
 cg_compare_seeded.bak
 *.bak
+cg_true_error
+generic_ladder_seeded
+single_shot_bound_check
+single_shot_bound_check_seeded
+term_probe
+precision_threshold_mapper
