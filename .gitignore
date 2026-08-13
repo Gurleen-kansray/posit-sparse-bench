@@ -1,7 +1,7 @@
 __pycache__/
 *.pyc
 cg_compare_seeded
-generic_ladder
+ladder
 static_conditioning
 cg_compare
 cg_compare_seeded.bak

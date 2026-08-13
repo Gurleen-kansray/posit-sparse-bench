@@ -89,7 +89,7 @@ int main(int argc, char* argv[]){
     FILE* log=fopen(log_path,"w");
     fprintf(log,"matrix=%s n=%d seed=%u\n", mtx_path, n, seed);
     fprintf(log,"iter res_d res_f res_ffma res_p8q res_p8n res_p16q res_p16n res_p32q res_p32n res_p64q res_p64n "
-                "solerr_d solerr_f solerr_p32q solerr_p32n "
+                "solerr_d solerr_f solerr_ffma solerr_p32q solerr_p32n "
                 "pAp_d pAp_p8q pAp_p8n pAp_p16q pAp_p16n pAp_p32q pAp_p32n pAp_p64q pAp_p64n "
                 "rz_d rz_p32q rz_p32n "
                 "guard_p8q guard_p8n guard_p16q guard_p16n guard_p32q guard_p32n guard_p64q guard_p64n\n");
@@ -177,6 +177,8 @@ int main(int argc, char* argv[]){
         float betag=rzg2/rzg; rzg=rzg2;
         for(int i=0;i<n;i++) pg[i]=zg[i]+betag*pg[i];
         double resffma=sqrt((double)dot_f_fma(rg,rg,n));
+        double se_ffma=0; for(int i=0;i<n;i++){ double e=(double)xg[i]-x_true[i]; se_ffma+=e*e; }
+        double solerr_ffma = sqrt(se_ffma)/x_true_norm;
 
 #define STEP_POSIT(W) \
         matvec_p<W>(A,pp##W##q,App##W##q); \
@@ -215,12 +217,12 @@ int main(int argc, char* argv[]){
         double solerr_p32n = sqrt(se32n)/x_true_norm;
 
         fprintf(log,"%d %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e "
-                    "%.10e %.10e %.10e %.10e "
+                    "%.10e %.10e %.10e %.10e %.10e "
                     "%.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e "
                     "%.10e %.10e %.10e "
                     "%d %d %d %d %d %d %d %d\n",
                 iter, resd, resf, resffma, resp8q, resp8n, resp16q, resp16n, resp32q, resp32n, resp64q, resp64n,
-                solerr_d, solerr_f, solerr_p32q, solerr_p32n,
+                solerr_d, solerr_f, solerr_ffma, solerr_p32q, solerr_p32n,
                 pApd, pApp8q, pApp8n, pApp16q, pApp16n, pApp32q, pApp32n, pApp64q, pApp64n,
                 rzd_used, rzp32q_used, rzp32n_used,
                 guard_8q, guard_8n, guard_16q, guard_16n, guard_32q, guard_32n, guard_64q, guard_64n);
