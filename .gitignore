@@ -12,3 +12,5 @@ single_shot_bound_check
 single_shot_bound_check_seeded
 term_probe
 precision_threshold_mapper
+*.log
+data/matrices/*.mtx
