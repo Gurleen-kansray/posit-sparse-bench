@@ -7,10 +7,7 @@
 #include <universal/number/posit/fdp.hpp>
 using namespace sw::universal;
 
-using P8  = posit<8,2>;
-using P16 = posit<16,2>;
 using P32 = posit<32,2>;
-using P64 = posit<64,2>;
 
 struct MTX { int n; std::vector<int> row,col; std::vector<double> val; };
 
@@ -88,11 +85,11 @@ int main(int argc, char* argv[]){
 
     FILE* log=fopen(log_path,"w");
     fprintf(log,"matrix=%s n=%d seed=%u\n", mtx_path, n, seed);
-    fprintf(log,"iter res_d res_f res_ffma res_p8q res_p8n res_p16q res_p16n res_p32q res_p32n res_p64q res_p64n "
+    fprintf(log,"iter res_d res_f res_ffma res_p32q res_p32n "
                 "solerr_d solerr_f solerr_ffma solerr_p32q solerr_p32n "
-                "pAp_d pAp_p8q pAp_p8n pAp_p16q pAp_p16n pAp_p32q pAp_p32n pAp_p64q pAp_p64n "
+                "pAp_d pAp_p32q pAp_p32n "
                 "rz_d rz_p32q rz_p32n "
-                "guard_p8q guard_p8n guard_p16q guard_p16n guard_p32q guard_p32n guard_p64q guard_p64n\n");
+                "guard_p32q guard_p32n\n");
 
     // double
     std::vector<double> xd(n,0),rd(b),pd(n),Apd(n),zd(n);
@@ -125,10 +122,7 @@ int main(int argc, char* argv[]){
     for(int i=0;i<n;i++) pp##W##n[i]=zp##W##n[i]; \
     double rzp##W##n = dot_p_naive<W>(rp##W##n,zp##W##n,n);
 
-    SETUP_POSIT(8)
-    SETUP_POSIT(16)
     SETUP_POSIT(32)
-    SETUP_POSIT(64)
 
     int maxiter = 2000;
     int conv_iter = -1;
@@ -205,10 +199,7 @@ int main(int argc, char* argv[]){
         for(int i=0;i<n;i++) pp##W##n[i]=zp##W##n[i]+betap##W##n*pp##W##n[i]; \
         double resp##W##n = sqrt(dot_p_naive<W>(rp##W##n,rp##W##n,n));
 
-        STEP_POSIT(8)
-        STEP_POSIT(16)
         STEP_POSIT(32)
-        STEP_POSIT(64)
 
         double se32q=0, se32n=0;
         for(int i=0;i<n;i++){ double e=double(xp32q[i])-x_true[i]; se32q+=e*e; }
@@ -216,16 +207,15 @@ int main(int argc, char* argv[]){
         double solerr_p32q = sqrt(se32q)/x_true_norm;
         double solerr_p32n = sqrt(se32n)/x_true_norm;
 
-        fprintf(log,"%d %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e "
+        fprintf(log,"%d %.10e %.10e %.10e %.10e %.10e "
                     "%.10e %.10e %.10e %.10e %.10e "
-                    "%.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e "
                     "%.10e %.10e %.10e "
-                    "%d %d %d %d %d %d %d %d\n",
-                iter, resd, resf, resffma, resp8q, resp8n, resp16q, resp16n, resp32q, resp32n, resp64q, resp64n,
+                    "%.10e %.10e %.10e %d %d\n",
+                iter, resd, resf, resffma, resp32q, resp32n,
                 solerr_d, solerr_f, solerr_ffma, solerr_p32q, solerr_p32n,
-                pApd, pApp8q, pApp8n, pApp16q, pApp16n, pApp32q, pApp32n, pApp64q, pApp64n,
+                pApd, pApp32q, pApp32n,
                 rzd_used, rzp32q_used, rzp32n_used,
-                guard_8q, guard_8n, guard_16q, guard_16n, guard_32q, guard_32n, guard_64q, guard_64n);
+                guard_32q, guard_32n);
 
         if(conv_iter < 0 && (resd/bnorm) < 1e-10) conv_iter = iter;
         if(conv_iter_p32q < 0 && (resp32q/bnorm) < 1e-10) conv_iter_p32q = iter;
