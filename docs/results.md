@@ -22,7 +22,6 @@ Full tables corresponding to the CoNGA26 submission "Exact Accumulation Improves
 
 ## Table 3 — Quire gain, per-iteration (mean, 50-seed sweep, James's pipeline)
 
-Source: external/james_replication/ladder_seeded_summary.csv
 
 | Matrix | pAp gain (mean) | r'z gain (mean) |
 |---|---|---|
@@ -42,9 +41,9 @@ Source: external/james_replication/ladder_seeded_summary.csv
 
 Median across matrices: **260x (pAp)**, **423x (r'z)**.
 
-## Table 4 — Non-transfer: solution-error ratio (quire/naive), James's pipeline
+## Table 4 — Non-transfer: solution-error ratio (quire/naive)
+Script: `aggregate_seeded_results.py` (output: `results/csv/seeded_aggregate_summary.csv`, input logs in `results/ladder_logs/seed_sweep/`).
 
-Source: external/james_replication/ladder_seeded_summary.csv
 
 | Matrix | Seeds | Mean | Std | Median |
 |---|---|---|---|---|
@@ -99,7 +98,7 @@ Source: external/james_replication/stats_equivalence.csv
 
 ## Table 7 — Matvec-quire solution-error ratio (plain/quire matvec, inner products fixed at quire)
 
-Script: not committed to this repo (matvec-quire ablation, likely James's pipeline — confirm with him).
+Performed by James Quinlan (matvec-quire ablation); script not yet added to this repo.
 
 | Matrix | Seeds | Plain err. (mean) | Quire err. (mean) | Ratio |
 |---|---|---|---|---|
