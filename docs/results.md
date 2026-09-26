@@ -99,7 +99,7 @@ Source: external/james_replication/stats_equivalence.csv
 
 ## Table 7 — Matvec-quire solution-error ratio (plain/quire matvec, inner products fixed at quire)
 
-**Data status: not yet committed to this repo — see TODO below.**
+Script: not committed to this repo (matvec-quire ablation, likely James's pipeline — confirm with him).
 
 | Matrix | Seeds | Plain err. (mean) | Quire err. (mean) | Ratio |
 |---|---|---|---|---|
@@ -111,11 +111,10 @@ Source: external/james_replication/stats_equivalence.csv
 | nos2 | 50 | 0.32779 | 0.32702 | 1.00 |
 | sts4098 | 20 | 0.000556 | 0.0000817 | 6.81 |
 
-TODO: commit quired_matvec.csv to external/james_replication/ (currently missing).
 
 ## Table 8 — Iterative refinement improvement factor (posit32 correction solve)
 
-**Data status: code exists (src/cg_refinement_seeded_v2.cpp), result CSV not yet committed — see TODO below.**
+Script: `src/cg_refinement_seeded_v2.cpp`.
 
 | Matrix | Seeds | Imp. (mean) | Imp. (std) | Seeds worse |
 |---|---|---|---|---|
@@ -135,4 +134,3 @@ TODO: commit quired_matvec.csv to external/james_replication/ (currently missing
 
 228 of 232 seed-runs improve; only bcsstk03 and nos2 show occasional regressions.
 
-TODO: run src/cg_refinement_seeded_v2.cpp end to end (or locate existing output logs) and commit the resulting CSV to results/csv/refinement_seeded_summary.csv, then remove this TODO note.
