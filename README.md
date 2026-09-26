@@ -49,4 +49,3 @@ Prof. John Gustafson (ASU, posit inventor) for the es=2 standard correction and 
 
 - docs/results.md — full 13-matrix result tables matching the paper's Tables 1-8
 - docs/methodology.md — accumulation-site design, metric definitions
-- docs/quire_error_bound.md — formal quire error bound analysis and retraction
