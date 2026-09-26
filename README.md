@@ -39,7 +39,6 @@ Environment: Ubuntu 22.04, g++ 11, Universal v3.80, quire<N,ES,2>.
 
 ## Open items
 
-- Table 7's matvec-quire script (James Quinlan's) not yet added to this repo.
 - CITATION.cff pending final reference list.
 
 ## Acknowledgments
