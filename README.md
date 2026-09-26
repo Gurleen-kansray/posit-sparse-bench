@@ -17,7 +17,7 @@ Section 6 of the paper connects this to Greenbaum's finite-precision CG theory: 
 
 `docs/results.md` contains the full per-matrix result tables matching the paper's Tables 1-8, with matrix properties, quire gain figures, the solution non-transfer result, the matvec-quire ablation, and the refinement improvement factors.
 
-Two pipelines produced these results: an independent replication pipeline built by co-author James Quinlan (`external/james_replication/`, MAXITER=300, tol=1e-10), and this repo's own solver sweep (`results/csv/`, `src/cg_refinement_seeded_v2.cpp`, MAXITER=2000, tol=1e-6). Both are documented in `docs/methodology.md`, and their outputs should not be merged, as they use different seeds and convergence criteria.
+Co-author James Quinlan independently replicated the non-transfer and TOST equivalence results with a separate pipeline (MAXITER=300, tol=1e-10). This repo's own solver sweep (`aggregate_seeded_results.py`, `compute_preconv_gain3.py`, `src/cg_refinement_seeded_v2.cpp`, MAXITER=2000, tol=1e-6) produced the pre-convergence gain and refinement results. Both pipelines are documented in `docs/methodology.md`; their outputs should not be merged, as they use different seeds and convergence criteria.
 
 ## Methodology
 
@@ -28,12 +28,12 @@ Two pipelines produced these results: an independent replication pipeline built 
 
 Full metric definitions and the three-accumulation-site design are in `docs/methodology.md`.
 
-## Reproducing results (Docker)
+## Reproducing results
 
     git clone https://github.com/Gurleen-kansray/posit-sparse-bench
     cd posit-sparse-bench
-    docker build -t posit-bench .
-    docker run --rm posit-bench bash run_all.sh
+
+The core quire-vs-naive pAp/r'z comparison can be run via Docker (`docker build -t posit-bench . && docker run --rm posit-bench bash run_all.sh`). The refinement (Table 8) and pre-convergence gain (Table 5) results are produced by `src/cg_refinement_seeded_v2.cpp` and `compute_preconv_gain3.py` respectively, run directly against the Universal library (v3.80) and the matrices in `data/matrices/`.
 
 Environment: Ubuntu 22.04, g++ 11, Universal v3.80, quire<N,ES,2>.
 
