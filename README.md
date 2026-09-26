@@ -13,21 +13,11 @@ The posit standard's quire lets a dot product be summed exactly and rounded once
 
 Section 6 of the paper connects this to Greenbaum's finite-precision CG theory: rounding error acts as a spectral perturbation on the problem CG actually solves, which offers a candidate mechanism for why per-iteration accuracy doesn't reliably reach the final solution.
 
-## Repository layout and which script backs which table
+## Repository Structure
 
-`docs/results.md` gives the full per-matrix tables matching the paper's Tables 1-8. Summary of what backs each:
+`docs/results.md` contains the full per-matrix result tables matching the paper's Tables 1-8, with matrix properties, quire gain figures, the solution non-transfer result, the matvec-quire ablation, and the refinement improvement factors.
 
-| Table | What it shows | Script | Data |
-|---|---|---|---|
-| 1 | Matrix properties | — | static, listed in docs/results.md |
-| 3 | Per-iteration quire gain (pAp, r'z) | James Quinlan's pipeline | external/james_replication/ladder_seeded_summary.csv |
-| 4 | Solution non-transfer | aggregate_seeded_results.py (this repo) | results/csv/seeded_aggregate_summary.csv |
-| 5 | Pre-convergence pAp gain | compute_preconv_gain3.py (this repo) | results/csv/preconv_gain_table5.txt |
-| 6 | TOST equivalence, 6-matrix subset | James Quinlan's pipeline | external/james_replication/stats_equivalence.csv |
-| 7 | Matvec-quire solution gain | James Quinlan's ablation | not yet added to this repo |
-| 8 | Refinement improvement factor | src/cg_refinement_seeded_v2.cpp (this repo) | results/refinement_v2/refinement_summary_FINAL.csv |
-
-James Quinlan's pipeline (MAXITER=300, tol=1e-10) and this repo's own sweep (MAXITER=2000, tol=1e-6) are separate codebases with different seeds and convergence criteria — do not merge their outputs.
+Two pipelines produced these results: an independent replication pipeline built by co-author James Quinlan (`external/james_replication/`, MAXITER=300, tol=1e-10), and this repo's own solver sweep (`results/csv/`, `src/cg_refinement_seeded_v2.cpp`, MAXITER=2000, tol=1e-6). Both are documented in `docs/methodology.md`, and their outputs should not be merged, as they use different seeds and convergence criteria.
 
 ## Methodology
 
