@@ -64,7 +64,7 @@ Source: external/james_replication/ladder_seeded_summary.csv
 
 ## Table 5 — Pre-convergence pAp gain (this repo's own 2000-iter pipeline)
 
-Source: results/csv/ (this repo's seed-sweep logs, restricted to pre-1e-6-residual iterations)
+Script: `compute_preconv_gain3.py` (output: `results/csv/preconv_gain_table5.txt`). Note: rerunning now returns slightly higher n for s3dkq4m2/s3dkt3m2 (more seeds completed since submission); other 11 matrices match exactly.
 
 | Matrix | Seeds | Pre-conv gain (mean) | Pre-conv gain (std) |
 |---|---|---|---|
