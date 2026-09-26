@@ -55,7 +55,14 @@ for path in sorted(glob.glob(f"{LOG_DIR}/*_seed*.log")):
         continue
 
     # restrict to pre-convergence iterations only (item 6)
-    pre_rows = [r for r in rows if int(r["iter"]) < conv_iter]
+    # NOTE: conv_iter_double == -1 means double precision never converged
+    # within maxiter. Previously this made `iter < conv_iter` exclude EVERY
+    # row (since no iter is < -1), silently dropping the whole seed. When
+    # double doesn't converge, fall back to using all logged rows instead.
+    if conv_iter == -1:
+        pre_rows = rows
+    else:
+        pre_rows = [r for r in rows if int(r["iter"]) < conv_iter]
     if not pre_rows:
         continue
 
@@ -66,8 +73,8 @@ for path in sorted(glob.glob(f"{LOG_DIR}/*_seed*.log")):
         pAp_q_key, pAp_n_key = f"pAp_{w}q", f"pAp_{w}n"
         guard_q_key, guard_n_key = f"guard_{w}q", f"guard_{w}n"
 
-        q_vals = [to_float(r[q_key]) for r in pre_rows if to_float(r[q_key]) is not None]
-        n_vals = [to_float(r[n_key]) for r in pre_rows if to_float(r[n_key]) is not None]
+        q_vals = [to_float(r.get(q_key)) for r in pre_rows if to_float(r.get(q_key)) is not None]
+        n_vals = [to_float(r.get(n_key)) for r in pre_rows if to_float(r.get(n_key)) is not None]
 
         summary[f"{w}q_max_res"] = max(q_vals) if q_vals else None
         summary[f"{w}q_med_res"] = st.median(q_vals) if q_vals else None
@@ -77,7 +84,7 @@ for path in sorted(glob.glob(f"{LOG_DIR}/*_seed*.log")):
         # gain = naive residual / quire residual, per-iteration then take max/median of ratio
         gains = []
         for r in pre_rows:
-            qv, nv = to_float(r[q_key]), to_float(r[n_key])
+            qv, nv = to_float(r.get(q_key)), to_float(r.get(n_key))
             if qv and nv and qv > 0:
                 gains.append(nv / qv)
         summary[f"{w}_gain_max"] = max(gains) if gains else None
@@ -89,10 +96,26 @@ for path in sorted(glob.glob(f"{LOG_DIR}/*_seed*.log")):
         summary[f"{w}q_guard_fires"] = guard_q_fires
         summary[f"{w}n_guard_fires"] = guard_n_fires
 
+    # pAp accuracy gain vs. double-precision reference (this is the actual
+    # p^T A p accuracy comparison — previously this table used res_p32q/res_p32n,
+    # which is the CG residual norm, not pAp, and had no double reference at all)
+    pAp_gains = []
+    for r in pre_rows:
+        pd_ = to_float(r.get("pAp_d"))
+        pq_ = to_float(r.get("pAp_p32q"))
+        pn_ = to_float(r.get("pAp_p32n"))
+        if pd_ is not None and pq_ is not None and pn_ is not None and pd_ != 0:
+            relq = abs(pq_ - pd_) / abs(pd_)
+            reln = abs(pn_ - pd_) / abs(pd_)
+            if relq > 0:
+                pAp_gains.append(reln / relq)
+    summary["pAp_gain_max"] = max(pAp_gains) if pAp_gains else None
+    summary["pAp_gain_med"] = st.median(pAp_gains) if pAp_gains else None
+
     # solution error (item 1) — value at the FINAL iteration of the run,
     # not the last pre-convergence row (bug fix: use full `rows`, not `pre_rows`)
     for key in ["solerr_d", "solerr_f", "solerr_p32q", "solerr_p32n"]:
-        vals = [to_float(r[key]) for r in rows if to_float(r[key]) is not None]
+        vals = [to_float(r.get(key)) for r in rows if to_float(r.get(key)) is not None]
         summary[f"{key}_final"] = vals[-1] if vals else None
 
     # solution-error gain (naive/quire), same convention as pAp gain —
@@ -121,11 +144,17 @@ for matrix in sorted(results.keys()):
         row[f"{w}q_total_guard_fires"] = gf_q
         row[f"{w}n_total_guard_fires"] = gf_n
 
+    for metric in ["pAp_gain_max", "pAp_gain_med"]:
+        vals = [r[metric] for r in runs if r.get(metric) is not None]
+        row[f"{metric}_mean"] = round(st.mean(vals), 4) if vals else "N/A"
+        row[f"{metric}_std"] = round(st.pstdev(vals), 4) if len(vals) > 1 else ("0.0" if vals else "N/A")
+
     # solution-error gain — reported side-by-side with p32 pAp gain so the
     # "does it transfer to the solution" comparison James asked for is explicit
     solerr_vals = [r["solerr_gain"] for r in runs if r.get("solerr_gain") is not None]
     row["solerr_gain_mean"] = round(st.mean(solerr_vals), 4) if solerr_vals else "N/A"
     row["solerr_gain_std"] = round(st.pstdev(solerr_vals), 4) if len(solerr_vals) > 1 else ("0.0" if solerr_vals else "N/A")
+    row["solerr_gain_median"] = round(st.median(solerr_vals), 4) if solerr_vals else "N/A"
 
     out_rows.append(row)
 
@@ -138,7 +167,7 @@ if out_rows:
     print(f"Wrote {out_path}")
     for r in out_rows:
         print(r["matrix"],
-              "pAp_gain_mean=", r.get("p32_gain_max_mean"), "+-", r.get("p32_gain_max_std"),
+              "pAp_gain_mean=", r.get("pAp_gain_max_mean"), "+-", r.get("pAp_gain_max_std"),
               "| solerr_gain_mean=", r.get("solerr_gain_mean"), "+-", r.get("solerr_gain_std"))
 else:
     print("No results parsed — check log directory/format")
