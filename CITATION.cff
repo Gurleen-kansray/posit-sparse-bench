@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "posit-sparse-bench: Exact accumulation (posit quire) in conjugate gradient"
+version: "v1.0.0"
+date-released: "2026-10-08"
+repository-code: "https://github.com/Gurleen-kansray/posit-sparse-bench"
+license: MIT
+authors:
+  - family-names: Kansray
+    given-names: Gurleen Kaur
+    affiliation: "Guru Nanak Dev Engineering College, I.K. Gujral Punjab Technical University"
+    orcid: "https://orcid.org/0009-0009-5631-4782"
+  - family-names: Omtzigt
+    given-names: E. Theodore L.
+    affiliation: "Stillwater Supercomputing, Inc."
+    orcid: "https://orcid.org/0000-0003-0194-951X"
+  - family-names: Quinlan
+    given-names: James
+    affiliation: "University of Southern Maine"
+    orcid: "https://orcid.org/0000-0002-2628-1651"
+  - family-names: Sherman
+    given-names: Paul
+    affiliation: "RISC-V International"
+    orcid: "https://orcid.org/0009-0000-3001-8285"
