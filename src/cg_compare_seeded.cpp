@@ -47,10 +47,14 @@ float dot_f(const std::vector<float>& a, const std::vector<float>& b, int n){
 float dot_f_fma(const std::vector<float>& a, const std::vector<float>& b, int n){
     float s=0; for(int i=0;i<n;i++) s=std::fma(a[i],b[i],s); return s;
 }
-// N=8/16/32/64, ES=2 uniformly (per ratified standard)
+// N=8/16/32/64, ES=2 uniformly (per ratified standard).
+// Capacity 31: with es=2 the quire's dynamic range is 2^2(4N-8) = 16N-32 bits,
+// so a 31-bit carry guard plus the sign bit gives exactly the standard's 16N
+// (512 bits for posit32). Earlier runs used capacity 2; output is identical,
+// since the suite's partial sums never reach the guard range.
 template<size_t N>
 double dot_p_quire(const std::vector<posit<N,2>>& a, const std::vector<posit<N,2>>& b, int n){
-    quire<N,2,2> q=0;
+    quire<N,2,31> q=0;
     for(int i=0;i<n;i++) q+=quire_mul(a[i],b[i]);
     posit<N,2> r; convert(q.to_value(),r); return double(r);
 }

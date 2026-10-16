@@ -40,7 +40,8 @@ void matvec_p32n(const MTX& A, const std::vector<P32>& x, std::vector<P32>& y){
 void exact_residual_quire(const MTX& A, const std::vector<P32>& x0,
                            const std::vector<P32>& b, std::vector<double>& d_out){
     int n = A.n;
-    std::vector<quire<32,2,2>> q(n);
+    // Capacity 31: 480 range bits + 31 guard + sign = 512, the standard's 16n.
+    std::vector<quire<32,2,31>> q(n);
     for(int i=0;i<n;i++) q[i]=0;
     for(int k=0;k<(int)A.row.size();k++)
         q[A.row[k]] += quire_mul(P32(A.val[k]), x0[A.col[k]]);
