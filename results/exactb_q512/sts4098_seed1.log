@@ -1,0 +1,3 @@
+matrix=data/matrices/sts4098.mtx n=4098 seed=1
+solerr_before solerr_after_double solerr_after_posit improvement_double improvement_posit
+1.4464107249e-03 2.9034179964e-05 2.9033834044e-05 49.8175 49.8181

@@ -1,0 +1,3 @@
+matrix=data/matrices/bcsstk38.mtx n=8032 seed=18
+solerr_before solerr_after_double solerr_after_posit improvement_double improvement_posit
+4.5236954533e-01 2.1510742852e-01 2.1524087513e-01 2.1030 2.1017

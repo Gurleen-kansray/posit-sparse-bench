@@ -1,0 +1,3 @@
+matrix=data/matrices/mhd4800b.mtx n=4800 seed=11
+solerr_before solerr_after_double solerr_after_posit improvement_double improvement_posit
+5.4122907310e-01 3.4479450203e-05 3.3515869786e-05 15697.1492 16148.4418

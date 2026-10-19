@@ -1,0 +1,3 @@
+matrix=data/matrices/bcsstk14.mtx n=1806 seed=19
+solerr_before solerr_after_double solerr_after_posit improvement_double improvement_posit
+1.7260716280e-03 1.0335560616e-04 1.0334277480e-04 16.7003 16.7024

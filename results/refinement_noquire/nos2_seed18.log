@@ -1,0 +1,3 @@
+matrix=data/matrices/nos2.mtx n=957 seed=18
+solerr_before solerr_after_double solerr_after_posit improvement_double improvement_posit
+1.0380941342e+00 1.2601851968e+00 1.0016293996e+00 0.8238 1.0364

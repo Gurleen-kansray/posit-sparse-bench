@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 title: "posit-sparse-bench: Exact accumulation (posit quire) in conjugate gradient"
-version: "v1.0.0"
-date-released: "2026-10-08"
+version: "v1.1.0"
+date-released: "2026-10-19"
 repository-code: "https://github.com/Gurleen-kansray/posit-sparse-bench"
 license: MIT
 authors:

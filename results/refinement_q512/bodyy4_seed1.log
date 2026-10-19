@@ -1,0 +1,3 @@
+matrix=data/matrices/bodyy4.mtx n=17546 seed=1
+solerr_before solerr_after_double solerr_after_posit improvement_double improvement_posit
+2.4113262350e-05 1.0351960235e-07 1.0352384706e-07 232.9343 232.9247

@@ -1,0 +1,3 @@
+matrix=data/matrices/s3dkq4m2.mtx n=90449 seed=8
+solerr_before solerr_after_double solerr_after_posit improvement_double improvement_posit
+3.0321211588e-01 6.9364339245e-02 6.9954646778e-02 4.3713 4.3344

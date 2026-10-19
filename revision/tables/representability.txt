@@ -1,0 +1,27 @@
+# Representability of matrix entries in posit<32,2>. Counts are stored (lower-triangle) entries.
+# The "exact" counts below include explicit zeros, which are always exact (bodyy4: 194, s3dkq4m2: 196583, s3dkt3m2: 33619).
+# Fraction of NONZERO entries exactly representable: bcsstk03 0%, bcsstk14 0.12%, bcsstk36 0.06%, bcsstk37 0.06%,
+# bcsstk38 0.25%, bodyy4 0%, mhd4800b 0.04%, nasa4704 0.04%, nasasrb 0.01%, nos2 100%, s3dkq4m2 7.0%,
+# s3dkt3m2 0.40%, sts4098 1.2%; bcsstk01 24.6%, bcsstk02 0%, nos1 100%, nos3 0%, nos4 0%, nos5 83.8%, nos6 33.6%.
+# No entry exceeds maxpos. 4 entries of s3dkt3m2 and 7 of sts4098 are below minpos (~7.5e-37) and are clamped to minpos,
+# which is the source of their very large "max rel err" values below.
+1 data/matrices/bcsstk03.mtx: 0/376 exact, max rel err 9.78093e-07
+1 data/matrices/bcsstk14.mtx: 40/32630 exact, max rel err 8.76943e-06
+1 data/matrices/bcsstk36.mtx: 345/583096 exact, max rel err 0.000134214
+1 data/matrices/bcsstk37.mtx: 350/583240 exact, max rel err 0.000110184
+1 data/matrices/bcsstk38.mtx: 458/181746 exact, max rel err 0.00325272
+1 data/matrices/bodyy4.mtx: 194/69742 exact, max rel err 1.00766e-06
+1 data/matrices/mhd4800b.mtx: 7/16160 exact, max rel err 0.000268936
+1 data/matrices/nasa4704.mtx: 19/54730 exact, max rel err 2.10603e-07
+1 data/matrices/nasasrb.mtx: 188/1366097 exact, max rel err 3.74166e-06
+1 data/matrices/nos2.mtx: 2547/2547 exact, max rel err 0
+1 data/matrices/s3dkq4m2.mtx: 355238/2455670 exact, max rel err 2.49036e-07
+1 data/matrices/s3dkt3m2.mtx: 41088/1921955 exact, max rel err 1.3507
+1 data/matrices/sts4098.mtx: 446/38227 exact, max rel err 1.71799e+10
+1 data/matrices/bcsstk01.mtx: 55/224 exact, max rel err 3.88476e-07
+1 data/matrices/bcsstk02.mtx: 0/2211 exact, max rel err 1.25866e-05
+1 data/matrices/nos1.mtx: 627/627 exact, max rel err 0
+1 data/matrices/nos3.mtx: 0/8402 exact, max rel err 4.13446e-08
+1 data/matrices/nos4.mtx: 0/347 exact, max rel err 5.89682e-09
+1 data/matrices/nos5.mtx: 2362/2820 exact, max rel err 2.78596e-08
+1 data/matrices/nos6.mtx: 660/1965 exact, max rel err 1.11177e-08

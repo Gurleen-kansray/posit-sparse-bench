@@ -1,0 +1,3 @@
+matrix=data/matrices/bcsstk03.mtx n=112 seed=9
+solerr_before solerr_after_double solerr_after_posit improvement_double improvement_posit
+8.7841212100e-03 1.3705543932e-02 1.3684906136e-02 0.6409 0.6419

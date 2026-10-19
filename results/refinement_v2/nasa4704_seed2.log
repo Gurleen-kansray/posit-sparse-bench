@@ -1,0 +1,3 @@
+matrix=data/matrices/nasa4704.mtx n=4704 seed=2
+solerr_before solerr_after_double solerr_after_posit improvement_double improvement_posit
+3.0615893045e-02 8.0006127203e-03 7.4198384191e-03 3.8267 4.1262

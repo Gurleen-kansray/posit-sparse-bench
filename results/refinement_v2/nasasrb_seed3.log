@@ -1,0 +1,3 @@
+matrix=data/matrices/nasasrb.mtx n=54870 seed=3
+solerr_before solerr_after_double solerr_after_posit improvement_double improvement_posit
+5.6559136936e-02 2.4483928429e-02 2.3336255438e-02 2.3101 2.4237

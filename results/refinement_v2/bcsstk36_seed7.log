@@ -1,0 +1,3 @@
+matrix=data/matrices/bcsstk36.mtx n=23052 seed=7
+solerr_before solerr_after_double solerr_after_posit improvement_double improvement_posit
+4.5802042249e-01 2.2779625228e-01 2.3023157197e-01 2.0107 1.9894
