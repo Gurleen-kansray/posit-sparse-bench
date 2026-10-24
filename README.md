@@ -58,3 +58,11 @@ Prof. John Gustafson (ASU, posit inventor) for the es=2 standard correction and 
 - `results/newmat_q512/`: 7 additional matrices, 25 seeds, 512-bit quire.
 - `revision/`: scripts, tables and figures for the reviewer-response analysis.
 - Matrices come from the SuiteSparse collection.
+
+## Table 10: quire matvec (Site 3), 512-bit quire
+One source file builds both arms (seeds 1-20, posit32, quire inner products in both):
+
+    g++ -std=c++20 -O2 -I../universal/include -o cg_q512_plainmv -DPLAIN_MV src/cg_compare_seeded_q512_qmv.cpp -lm   # plain posit32 matvec
+    g++ -std=c++20 -O2 -I../universal/include -o cg_q512_qmv src/cg_compare_seeded_q512_qmv.cpp -lm                 # quire matvec: one 512-bit quire per row, rounded once to posit32
+
+Run with `./run_table10.sh <binary> <qmv|plainmv> 20`; logs in results/table10_q512/, ratios via `python3 agg_table10.py`.
