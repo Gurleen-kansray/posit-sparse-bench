@@ -27,10 +27,13 @@ void matvec(const MTX& A,const double* x,double* y){
     for(int k=0;k<(int)A.row.size();k++) y[A.row[k]]+=A.val[k]*x[A.col[k]];
 }
 
+// Capacity 31: with es=2 the quire's dynamic range is 2^2(4N-8) = 16N-32 bits,
+// so a 31-bit carry guard plus the sign bit gives the standard's 16N (512 for
+// posit32). For ES != 2 it is simply a wider guard than the former capacity 2.
 template<size_t N, size_t ES>
 void compute_pAp(const std::vector<double>& p, const std::vector<double>& Ap, int n,
                  double& pAp_quire, double& pAp_naive){
-    quire<N,ES,2> q=0;
+    quire<N,ES,31> q=0;
     for(int i=0;i<n;i++){ posit<N,ES> pa(p[i]),pb(Ap[i]); q+=quire_mul(pa,pb); }
     posit<N,ES> pr; convert(q.to_value(),pr); pAp_quire=double(pr);
     posit<N,ES> pnaive=0;
@@ -41,7 +44,7 @@ void compute_pAp(const std::vector<double>& p, const std::vector<double>& Ap, in
 template<size_t N, size_t ES>
 void compute_rz(const std::vector<double>& r, const std::vector<double>& z, int n,
                 double& rz_quire, double& rz_naive){
-    quire<N,ES,2> q=0;
+    quire<N,ES,31> q=0;
     for(int i=0;i<n;i++){ posit<N,ES> pa(r[i]),pb(z[i]); q+=quire_mul(pa,pb); }
     posit<N,ES> pr; convert(q.to_value(),pr); rz_quire=double(pr);
     posit<N,ES> pnaive=0;

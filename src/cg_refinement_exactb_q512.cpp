@@ -40,7 +40,7 @@ void matvec_p32n(const MTX& A, const std::vector<P32>& x, std::vector<P32>& y){
 void exact_residual_quire(const MTX& A, const std::vector<P32>& x0,
                            const std::vector<P32>& b, std::vector<double>& d_out){
     int n = A.n;
-    std::vector<quire<32,2,32>> q(n);
+    std::vector<quire<32,2,31>> q(n);
     for(int i=0;i<n;i++) q[i]=0;
     for(int k=0;k<(int)A.row.size();k++)
         q[A.row[k]] += quire_mul(P32(A.val[k]), x0[A.col[k]]);
@@ -120,7 +120,7 @@ int main(int argc, char** argv){
     matvec_d(A, x_true, b_d);
     double x_true_norm = std::sqrt(std::inner_product(x_true.begin(),x_true.end(),x_true.begin(),0.0));
     std::vector<P32> b_p(n), x0_p(n,P32(0)), diagA_p(n,P32(1));
-    { std::vector<quire<32,2,32>> qb(n);
+    { std::vector<quire<32,2,31>> qb(n);
       for(int k=0;k<(int)A.row.size();k++) qb[A.row[k]] += quire_mul(P32(A.val[k]), P32(x_true[A.col[k]]));
       for(int i=0;i<n;i++){ P32 t; convert(qb[i].to_value(), t); b_p[i]=t; b_d[i]=double(t); } }
     for(int k=0;k<(int)A.row.size();k++) if(A.row[k]==A.col[k]) diagA_p[A.row[k]]=P32(A.val[k]);
