@@ -50,7 +50,7 @@ float dot_f_fma(const std::vector<float>& a, const std::vector<float>& b, int n)
 // N=8/16/32/64, ES=2 uniformly (per ratified standard)
 template<size_t N>
 double dot_p_quire(const std::vector<posit<N,2>>& a, const std::vector<posit<N,2>>& b, int n){
-    quire<N,2,32> q=0;
+    quire<N,2,31> q=0;
     for(int i=0;i<n;i++) q+=quire_mul(a[i],b[i]);
     posit<N,2> r; convert(q.to_value(),r); return double(r);
 }

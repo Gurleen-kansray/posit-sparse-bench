@@ -66,10 +66,16 @@ double dot_p_naive(const std::vector<posit<N,2>>& a, const std::vector<posit<N,2
 }
 
 int main(int argc, char* argv[]){
-    if(argc<4){ printf("usage: cg_compare_seeded <matrix.mtx> <logfile> <seed>\n"); return 1; }
+    if(argc<4){ printf("usage: cg_compare_seeded <matrix.mtx> <logfile> <seed> [maxiter]\n"); return 1; }
     const char* mtx_path = argv[1];
     const char* log_path = argv[2];
     unsigned int seed = (unsigned int)atoi(argv[3]);
+    // Optional iteration cap. Default 2000, the budget used for every table.
+    // Raising it tests whether the reported gains depend on the budget: the
+    // loop still stops at conv_iter + 20 once the double-precision reference
+    // converges, so a larger cap only matters on the matrices where the cap
+    // binds. Pass 0 or a negative value to keep the default.
+    int maxiter_arg = (argc > 4) ? atoi(argv[4]) : 0;
 
     MTX A = read_mtx(mtx_path);
     int n = A.n;
@@ -87,8 +93,12 @@ int main(int argc, char* argv[]){
     matvec_d(A, x_true, b);
     double x_true_norm = sqrt(dot_d(x_true, x_true, n));
 
+    int maxiter = (maxiter_arg > 0) ? maxiter_arg : 2000;
+
     FILE* log=fopen(log_path,"w");
-    fprintf(log,"matrix=%s n=%d seed=%u\n", mtx_path, n, seed);
+    // maxiter goes on the existing metadata line, not a line of its own, so
+    // the format stays: line 1 metadata, line 2 column header, line 3+ data.
+    fprintf(log,"matrix=%s n=%d seed=%u maxiter=%d\n", mtx_path, n, seed, maxiter);
     fprintf(log,"iter res_d res_f res_ffma res_p32q res_p32n "
                 "solerr_d solerr_f solerr_ffma solerr_p32q solerr_p32n "
                 "pAp_d pAp_p32q pAp_p32n "
@@ -128,7 +138,6 @@ int main(int argc, char* argv[]){
 
     SETUP_POSIT(32)
 
-    int maxiter = 2000;
     int conv_iter = -1;
     int conv_iter_p32q = -1;
     int conv_iter_p32n = -1;

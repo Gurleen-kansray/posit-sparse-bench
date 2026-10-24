@@ -39,10 +39,14 @@ void matvec_p(const MTX& A, const std::vector<posit<N,2>>& x, std::vector<posit<
 }
 // Site 3: quire-accumulated sparse matvec. Each row is accumulated in its own
 // 512-bit quire (quire_mul) and rounded ONCE to posit32. Other widths unchanged.
+// Capacity 31, not 32: Universal sets qbits = range + capacity and counts the sign
+// bit separately, so 480 range + 31 guard + 1 sign = 512 = 16N exactly. Capacity 32
+// would be 513. The accumulation is exact either way for these sums, so this changes
+// no result, only the stated width.
 template<size_t N>
 void matvec_pq(const MTX& A, const std::vector<posit<N,2>>& x, std::vector<posit<N,2>>& y){
     if constexpr (N==32){
-        std::vector<quire<32,2,32>> q(A.n);
+        std::vector<quire<32,2,31>> q(A.n);
         for(int i=0;i<A.n;i++) q[i]=0;
         for(int k=0;k<(int)A.row.size();k++)
             q[A.row[k]] += quire_mul(posit<32,2>(A.val[k]), x[A.col[k]]);
