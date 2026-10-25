@@ -22,7 +22,7 @@ Co-author James Quinlan independently replicated the non-transfer and TOST equiv
 ## Methodology
 
 - CG solver: Jacobi-preconditioned, 300-2000 iterations depending on experiment
-- Quire config: quire<N,ES,2> (482-bit for posit32) in the original experiments; the v1.1.0 revision runs (`*_q512`) use the 512-bit quire<32,2,32>. es=2 uniformly per the 2022 Posit Standard
+- Quire config: quire<N,ES,2> (482-bit for posit32) in the original experiments; the v1.1.0 revision runs (`*_q512`) use the 512-bit quire<32,2,31>. es=2 uniformly per the 2022 Posit Standard
 - Ground truth: posit64, cross-validated against double64
 - 13 matrices tested; unsymmetric and artificially-preconditioned matrices excluded as CG-invalid
 
@@ -33,7 +33,7 @@ Full metric definitions and the three-accumulation-site design are in `docs/meth
     git clone https://github.com/Gurleen-kansray/posit-sparse-bench
     cd posit-sparse-bench
 
-The core quire-vs-naive pAp/r'z comparison can be run via Docker (`docker build -t posit-bench . && docker run --rm posit-bench bash run_all.sh`). The refinement (Table 8) and pre-convergence gain (Table 5) results are produced by `src/cg_refinement_seeded_v2.cpp` and `compute_preconv_gain3.py` respectively, run directly against the Universal library (v3.80) and the matrices in `data/matrices/`.
+The core quire-vs-naive pAp/r'z comparison can be run via Docker (`docker build -t posit-bench . && docker run --rm posit-bench bash run_all.sh`). The refinement (Table 11) and pre-convergence gain (Table 6) results are produced by `src/cg_refinement_seeded_v2.cpp` and `compute_preconv_gain3.py` respectively, run directly against the Universal library (v3.80) and the matrices in `data/matrices/`.
 
 Environment: Ubuntu 22.04, g++ 11, Universal v3.80, quire<N,ES,2>.
 
