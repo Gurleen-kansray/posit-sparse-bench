@@ -13,7 +13,7 @@ All C++ quire sources use quire<32,2,31> (512-bit). Original 482-bit logs: git t
 | Table 11 (refinement) | src/cg_refinement_seeded_v2.cpp | results/refinement_v2 | python3 compute_refinement_gains.py | yes, exact (232 runs) |
 | Table 12 (refinement baseline) | src/cg_refinement_noquire.cpp (plain arm), src/cg_refinement_seeded_v3_q512.cpp (quire arm) | results/refinement_noquire, results/refinement_q512 | revision/make_figs.py -> revision/tables/refinement_baseline_per_seed.csv | quire arm: rebuilt, identical on bcsstk03 seed 1 |
 | Table 13 (exact b) | src/cg_refinement_exactb_q512.cpp | results/exactb_q512 | revision/make_figs.py -> revision/tables/exactb_perseed.csv | rebuilt, identical on bcsstk03 seed 1 |
-| Fig. 2 (nasa4704, n iters) | src/cg_compare_maxn.cpp | results/maxn_all | results/maxn_all/analyze_maxn.py, revision/make_figs.py | source not re-verified (long runs) |
+| Fig. 2 (nasa4704, n iters) | src/cg_compare_maxn.cpp | results/maxn_all | results/maxn_all/analyze_maxn.py, revision/make_figs.py | |
 
 Table 10 build:
     g++ -std=c++20 -O2 -I../universal/include -o cg_q512_plainmv -DPLAIN_MV src/cg_compare_seeded_q512_qmv.cpp -lm
