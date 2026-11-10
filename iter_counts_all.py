@@ -1,7 +1,7 @@
 import glob, re, os, numpy as np
 from collections import defaultdict
 R = defaultdict(list); tot = defaultdict(int)
-for f in glob.glob("results/ladder_logs/seed_sweep/*_seed*.log"):
+for f in glob.glob(os.environ.get("LOG_DIR", "results/ladder_logs/seed_sweep") + "/*_seed*.log"):
     m = re.match(r"(.+)_seed(\d+)\.log$", os.path.basename(f))
     if not m: continue
     mat = m.group(1); tot[mat] += 1
@@ -25,4 +25,4 @@ for mat in sorted(tot):
     row = (mat, tot[mat], len(R[mat]), len(A), np.median(q), np.median(n), int((q<n).sum()), int((q==n).sum()), int((q>n).sum()), np.median(100*(n-q)/n))
     print("%-10s %5d %5d %5d %8.1f %8.1f  %d / %d / %d  (%.2f%%)" % (row[:6] + row[6:9] + (row[9],)))
     out.append("%s,%d,%d,%d,%.1f,%.1f,%d,%d,%d,%.2f" % row)
-open("results/csv/iter_counts_all_matrices.csv", "w").write("\n".join(out) + "\n")
+open(os.environ.get("OUT_CSV", "results/csv/iter_counts_all_matrices.csv"), "w").write("\n".join(out) + "\n")

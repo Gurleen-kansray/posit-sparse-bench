@@ -1,8 +1,8 @@
-import glob, re
+import glob, os, re
 from collections import defaultdict
 import statistics as stats
 
-files = sorted(glob.glob("results/refinement_v2/*_seed*.log"))
+files = sorted(glob.glob(os.environ.get("LOG_DIR", "results/refinement_v2") + "/*_seed*.log"))
 data = defaultdict(list)
 
 for f in files:

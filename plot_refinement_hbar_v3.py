@@ -1,4 +1,4 @@
-import glob, re
+import glob, os, re
 from collections import defaultdict
 import statistics as stats
 import matplotlib.pyplot as plt
@@ -9,7 +9,7 @@ mpl.rcParams['font.size'] = 11
 mpl.rcParams['axes.edgecolor'] = '#333333'
 mpl.rcParams['axes.linewidth'] = 0.8
 
-files = sorted(glob.glob("results/refinement_v2/*_seed*.log"))
+files = sorted(glob.glob(os.environ.get("LOG_DIR", "results/refinement_v2") + "/*_seed*.log"))
 data = defaultdict(list)
 
 for f in files:
@@ -30,12 +30,13 @@ for mat, imps in data.items():
 
 rows.sort(key=lambda r: r[2])
 
-with open("results/refinement_v2/refinement_summary_FINAL.csv", "w") as out:
+with open(os.environ.get("OUT_CSV", "results/refinement_v2/refinement_summary_FINAL.csv"), "w") as out:
     out.write("matrix,n_seeds,imp_posit_mean,imp_posit_std\n")
     for mat, n, mean, std in rows:
         out.write(f"{mat},{n},{mean:.4f},{std:.4f}\n")
 
-labels = [f"{mat} (n={n})" for mat, n, _, _ in rows]
+uniform = len({r[1] for r in rows}) == 1
+labels = [mat if uniform else f"{mat} (n={n})" for mat, n, _, _ in rows]
 means = [r[2] for r in rows]
 stds = [r[3] for r in rows]
 
@@ -68,5 +69,5 @@ ax.spines["top"].set_visible(False)
 ax.spines["right"].set_visible(False)
 
 plt.tight_layout()
-plt.savefig("fig1_refinement_hbar.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.environ.get("OUT_PNG", "fig1_refinement_hbar.png"), dpi=300, bbox_inches="tight")
 print("Wrote fig1_refinement_hbar.png (v3, clean labels)")

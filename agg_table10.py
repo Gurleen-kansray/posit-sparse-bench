@@ -1,6 +1,8 @@
 import os, statistics as st
-B = 'results/table10_q512'
-mats = ['bcsstk03','bcsstk14','bodyy4','mhd4800b','nasa4704','nos2','sts4098']
+B = os.environ.get('B', 'results/table10_q512')
+PLAIN = os.environ.get('PLAIN', 'plainmv')
+QMV = os.environ.get('QMV', 'qmv')
+mats = os.environ.get('MATS', 'bcsstk03,bcsstk14,bodyy4,mhd4800b,nasa4704,nos2,sts4098').split(',')
 
 def final_err(f):
     L = [l.split() for l in open(f) if l.strip()]
@@ -13,8 +15,8 @@ print(f"{'Matrix':10s} {'Seeds':>5s} {'Naive(plain mv)':>16s} {'Quire mv':>12s} 
 for m in mats:
     p, q = [], []
     for s in range(1, 51):
-        fp = f'{B}/plainmv/{m}_seed{s}.log'
-        fq = f'{B}/qmv/{m}_seed{s}.log'
+        fp = f'{B}/{PLAIN}/{m}_seed{s}.log'
+        fq = f'{B}/{QMV}/{m}_seed{s}.log'
         if os.path.exists(fp) and os.path.exists(fq):
             p.append(final_err(fp)); q.append(final_err(fq))
     if p:
