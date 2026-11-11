@@ -1,21 +1,21 @@
 # posit-sparse-bench
 
-Code and data for **"Exact Accumulation Improves the Inner Product but Not the Attainable Accuracy of Conjugate Gradient"** (Kaur, Omtzigt, Quinlan, Sherman — CoNGA26). LFX Summer 2026 mentorship project.
+Code and data for **"Where Exact Accumulation Helps Conjugate Gradient"** (Kaur, Omtzigt, Quinlan, Sherman — CoNGA26). LFX Summer 2026 mentorship project.
 
 ## What this paper shows
 
 The posit standard's quire lets a dot product be summed exactly and rounded once. Conjugate gradient (CG) computes two inner products and a sparse matrix-vector product per iteration — natural candidates for exact accumulation. Across 13 SuiteSparse symmetric positive definite matrices, we find:
 
-1. **The quire delivers its designed gain at the reduction level.** Median 260x lower error on the curvature term p^T A p and 423x on the residual inner product r^T z, against a double-precision reference (50-seed sweep).
-2. **That gain does not transfer to the final solution.** The solution-error ratio (posit32+quire vs. posit32 naive) clusters near 1.0 across all 13 matrices (median 0.92-1.05), confirmed by a formal TOST equivalence test on an independently replicated 6-matrix subset (pooled ratio 1.025, p=0.003, 300 paired runs).
-3. **The matrix-vector product is the exception.** Quiring the sparse matvec (inner products held fixed at quire) gives a real solution-accuracy gain — a 1.0x-1.9x band across 6 of 7 matrices, with sts4098 an outlier at ~6.8x.
-4. **Iterative refinement is where the quire earns its cost.** Applying it once to a refinement residual (d = b - Ax0, solved once rather than every iteration — a scheme suggested by Prof. John Gustafson) improves the solution in 228 of 232 seed-runs, with gains from ~2x to ~18,500x depending on matrix.
+1. **The quire delivers its designed gain at the reduction level.** Median 267x lower error on the curvature term p^T A p and 416x on the residual inner product r^T z, against a double-precision reference (50-seed sweep).
+2. **That gain does not transfer to the final solution.** The solution-error ratio (posit32+quire vs. posit32 naive) clusters near 1.0 across all 13 matrices (median 0.95-1.05), confirmed by a formal TOST equivalence test on an independently replicated 6-matrix subset (pooled ratio 1.025, p=0.003, 300 paired runs).
+3. **The matrix-vector product is the exception.** Quiring the sparse matvec (inner products held fixed at quire) lowers solution error on all 13 matrices, by factors of 1.2 to 6.9 on eleven of them (sts4098 6.9x, nasasrb 3.1x); the two largest matrices, s3dkq4m2 and s3dkt3m2, improve by under 1%.
+4. **Iterative refinement is where the quire earns its cost.** Applying it once to a refinement residual (d = b - Ax0, solved once rather than every iteration — a scheme suggested by Prof. John Gustafson) improves the solution in 636 of 650 seed-runs, with mean gains from ~1.4x to over 20,000x depending on matrix.
 
 Section 6 of the paper connects this to Greenbaum's finite-precision CG theory: rounding error acts as a spectral perturbation on the problem CG actually solves, which offers a candidate mechanism for why per-iteration accuracy doesn't reliably reach the final solution.
 
 ## Repository Structure
 
-`docs/results.md` contains the full per-matrix result tables matching the paper's Tables 1-8, with matrix properties, quire gain figures, the solution non-transfer result, the matvec-quire ablation, and the refinement improvement factors.
+`docs/results.md` contains the full per-matrix result tables matching the paper's tables, with matrix properties, quire gain figures, the solution non-transfer result, the matvec-quire ablation, and the refinement improvement factors.
 
 Co-author James Quinlan independently replicated the non-transfer and TOST equivalence results with a separate pipeline (MAXITER=300, tol=1e-10). This repo's own solver sweep (`aggregate_seeded_results.py`, `compute_preconv_gain3.py`, `src/cg_refinement_seeded_v2.cpp`, MAXITER=2000, tol=1e-6) produced the pre-convergence gain and refinement results. Both pipelines are documented in `docs/methodology.md`; their outputs should not be merged, as they use different seeds and convergence criteria.
 
@@ -39,7 +39,7 @@ Environment: Ubuntu 22.04, g++ 11, Universal v3.80, quire<N,ES,2>.
 
 ## Open items
 
-- CITATION.cff pending final reference list.
+- Docs under docs/ still use the pre-revision numbering; the paper's tables are the source of truth.
 
 ## Acknowledgments
 
@@ -47,8 +47,11 @@ Prof. John Gustafson (ASU, posit inventor) for the es=2 standard correction and 
 
 ## Full documentation
 
-- docs/results.md — full 13-matrix result tables matching the paper's Tables 1-8
+- docs/results.md — full 13-matrix result tables matching the paper's tables
 - docs/methodology.md — accumulation-site design, metric definitions
+
+## v1.2.0 additions
+`hpc/`: SLURM harness for the 50-seed campaign (13 matrices x 50 seeds), and tables, figures and aggregation scripts regenerated from that run. Zenodo DOI for v1.2.0: 10.5281/zenodo.24123505.
 
 ## v1.1.0 additions (camera-ready revision runs)
 - `results/refinement_noquire/`: refinement baseline with a plain posit32 residual (6 matrices x 20 seeds; some seeds were run on collaborators' machines).
