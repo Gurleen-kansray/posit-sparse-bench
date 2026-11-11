@@ -1,0 +1,9 @@
+s3dkq4m2 1 4000
+s3dkq4m2 2 4000
+s3dkq4m2 3 4000
+s3dkt3m2 1 4000
+s3dkt3m2 2 4000
+s3dkt3m2 3 4000
+nasasrb 1 4000
+nasasrb 2 4000
+nasasrb 3 4000

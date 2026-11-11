@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import glob, os, statistics
 
-LOG_DIR = "results/ladder_logs/seed_sweep"
+LOG_DIR = os.environ.get("LOG_DIR", "results/ladder_logs/seed_sweep")
 MATRICES = ["bcsstk03","bcsstk14","bcsstk36","bcsstk37","bcsstk38","bodyy4",
             "mhd4800b","nasa4704","nasasrb","nos2","s3dkq4m2","s3dkt3m2","sts4098"]
 TOL = 1e-6

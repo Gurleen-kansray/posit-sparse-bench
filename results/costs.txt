@@ -1,0 +1,131 @@
+Measured per-seed cost on one epyc core, ARCSIM Penobscot, 2026-10-29 to 11-03.
+Produced by: bash arcsim/fit_costs.sh   (sacct Elapsed joined to the job lists)
+
+CAVEATS
+  * The max column is contaminated by node-153, whose management controller had a
+    bad temperature setting and throttled its CPUs about 8x. Every max/med near
+    8-9 is that node, not the cost distribution. Quote the median.
+  * Seed counts are not all exactly 50 for classes that were resubmitted. A task
+    index maps to a matrix through the job list, and the requeue pass used a
+    shorter list with different ordering, so some tasks are attributed to the
+    neighbouring matrix. This matters only for the refinement _lg rows, where
+    bcsstk36 and bcsstk37 cost within 10% of each other anyway.
+
+class              matrix       seeds     median        max    max/med
+budget2k_xl        nasasrb          3     89728s     90275s      1.01
+budget2k_xl        s3dkq4m2         3    144654s    144670s      1.00
+budget2k_xl        s3dkt3m2         3    133271s    133296s      1.00
+ladder_lg          nasasrb         50       852s       936s      1.10
+ladder_lg          s3dkq4m2        50      1465s      1600s      1.09
+ladder_lg          s3dkt3m2        50      1465s      1602s      1.09
+ladder_sm          bcsstk03        50         4s         9s      2.25
+ladder_sm          bcsstk14        50        30s        33s      1.10
+ladder_sm          bcsstk36        50       346s       401s      1.16
+ladder_sm          bcsstk37        50       433s       481s      1.11
+ladder_sm          bcsstk38        50       137s       143s      1.04
+ladder_sm          bodyy4          50       267s      2266s      8.49
+ladder_sm          mhd4800b        50        41s        51s      1.24
+ladder_sm          nasa4704        50        82s        87s      1.06
+ladder_sm          nos2            50        17s        22s      1.29
+ladder_sm          sts4098         50        66s       581s      8.80
+maxn_lg            mhd4800b         5        24s        26s      1.08
+maxn_lg            nasa4704         5      4679s      4809s      1.03
+maxn_lg            sts4098          5       297s       325s      1.09
+maxn_sm            bcsstk03         5         2s        14s      7.00
+maxn_sm            bcsstk14         5       246s       252s      1.02
+maxn_sm            nos2             5        60s        62s      1.03
+maxn_xl            bcsstk36         5    206021s    221912s      1.08
+maxn_xl            bcsstk37         5    260438s    261583s      1.00
+maxn_xl            bcsstk38         5     17746s     20478s      1.15
+maxn_xl            bodyy4           5       394s       396s      1.01
+qmv_lg             bcsstk36        50     18065s     20267s      1.12
+qmv_lg             bcsstk37        51     18356s     20676s      1.13
+qmv_lg             bcsstk38        49      6107s      6190s      1.01
+qmv_lg             nasa4704        50      2024s      2073s      1.02
+qmv_sm             bcsstk03        50         3s         4s      1.33
+qmv_sm             bcsstk14        50       231s      2096s      9.07
+qmv_sm             bodyy4          50       368s       409s      1.11
+qmv_sm             mhd4800b        50        24s        27s      1.12
+qmv_sm             nos2            50       131s      1175s      8.97
+qmv_sm             sts4098         50       298s       346s      1.16
+qmv_xl             nasasrb         50     44575s     44651s      1.00
+qmv_xl             s3dkq4m2        50     73406s     73615s      1.00
+qmv_xl             s3dkt3m2        50     63173s     67828s      1.07
+qmvplain_lg        bcsstk36        50     18242s     20252s      1.11
+qmvplain_lg        bcsstk37        50     18503s     20358s      1.10
+qmvplain_lg        bcsstk38        50      5726s      6206s      1.08
+qmvplain_lg        nasa4704        50      1866s      2026s      1.09
+qmvplain_sm        bcsstk03        50         3s         4s      1.33
+qmvplain_sm        bcsstk14        49       237s       257s      1.08
+qmvplain_sm        bodyy4          52       361s       395s      1.09
+qmvplain_sm        mhd4800b        50        24s        27s      1.12
+qmvplain_sm        nos2            50       131s      1113s      8.50
+qmvplain_sm        sts4098         49       300s       350s      1.17
+qmvplain_xl        nasasrb         50     41504s     44840s      1.08
+qmvplain_xl        s3dkq4m2        50     67548s     67870s      1.00
+qmvplain_xl        s3dkt3m2        50     61997s     67857s      1.09
+ref12plain_lg      bcsstk36        40     18156s     20474s      1.13
+ref12plain_lg      bcsstk37        60     17134s     20496s      1.20
+ref12plain_lg      bcsstk38        50      3255s      3506s      1.08
+ref12plain_sm      bcsstk03        50         3s        21s      7.00
+ref12plain_sm      bcsstk14        50       159s      1382s      8.69
+ref12plain_sm      bodyy4          50       208s      1764s      8.48
+ref12plain_sm      mhd4800b        50        12s        95s      7.92
+ref12plain_sm      nasa4704        50      1687s      1968s      1.17
+ref12plain_sm      nos2            50       121s       144s      1.19
+ref12plain_sm      sts4098         50       197s       247s      1.25
+ref12plain_xl      nasasrb         50     43877s     44204s      1.01
+ref12plain_xl      s3dkq4m2        50     55015s     59138s      1.07
+ref12plain_xl      s3dkt3m2        50     49551s     54270s      1.10
+ref12quire_lg      bcsstk36        39     17938s     20111s      1.12
+ref12quire_lg      bcsstk37        65     17340s     21745s      1.25
+ref12quire_lg      bcsstk38        46      3299s      3573s      1.08
+ref12quire_sm      bcsstk03        50         2s        24s     12.00
+ref12quire_sm      bcsstk14        50       161s      1405s      8.73
+ref12quire_sm      bodyy4          50       210s      1805s      8.60
+ref12quire_sm      mhd4800b        50        12s        14s      1.17
+ref12quire_sm      nasa4704        50      1694s      2030s      1.20
+ref12quire_sm      nos2            50       125s       145s      1.16
+ref12quire_sm      sts4098         50       205s      1691s      8.25
+ref12quire_xl      nasasrb         47     41336s     44741s      1.08
+ref12quire_xl      s3dkq4m2        53     52214s     60438s      1.16
+ref12quire_xl      s3dkt3m2        50     50189s     55119s      1.10
+refexactb_lg       bcsstk36        24     18298s     20358s      1.11
+refexactb_lg       bcsstk37        76     16678s     20404s      1.22
+refexactb_lg       bcsstk38        50      3286s      3533s      1.08
+refexactb_sm       bcsstk03        50         3s        18s      6.00
+refexactb_sm       bcsstk14        50       161s       171s      1.06
+refexactb_sm       bodyy4          50       192s       217s      1.13
+refexactb_sm       mhd4800b        50        12s        14s      1.17
+refexactb_sm       nasa4704        50      1692s      1973s      1.17
+refexactb_sm       nos2            50       124s      1048s      8.45
+refexactb_sm       sts4098         50       206s      1681s      8.16
+refexactb_xl       nasasrb         50     39802s     45306s      1.14
+refexactb_xl       s3dkq4m2        50     55770s     59802s      1.07
+refexactb_xl       s3dkt3m2        50     50153s     55494s      1.11
+refine11_lg        bcsstk36        32     19066s     21710s      1.14
+refine11_lg        bcsstk37        68     17608s     21735s      1.23
+refine11_lg        bcsstk38        50      3284s      3494s      1.06
+refine11_sm        bcsstk03        50         3s         9s      3.00
+refine11_sm        bcsstk14        50       164s       202s      1.23
+refine11_sm        bodyy4          50       195s      1803s      9.25
+refine11_sm        mhd4800b        50        12s        20s      1.67
+refine11_sm        nasa4704        50      1700s      2018s      1.19
+refine11_sm        nos2            50       124s      1040s      8.39
+refine11_sm        sts4098         50       204s      1876s      9.20
+refine11_xl        nasasrb         50     44499s     45285s      1.02
+refine11_xl        s3dkq4m2        56     55469s     57809s      1.04
+refine11_xl        s3dkt3m2        44     49692s     51869s      1.04
+sweep_lg           bcsstk36        50     20045s     20114s      1.00
+sweep_lg           bcsstk37        50     20334s     22059s      1.08
+sweep_lg           bcsstk38        50      6158s      6240s      1.01
+sweep_lg           nasa4704        50      2005s     17039s      8.50
+sweep_sm           bcsstk03        50         3s        19s      6.33
+sweep_sm           bcsstk14        50       228s       262s      1.15
+sweep_sm           bodyy4          51       360s       398s      1.11
+sweep_sm           mhd4800b        50        24s        25s      1.04
+sweep_sm           nos2            50       128s      1121s      8.76
+sweep_sm           sts4098         49       302s       328s      1.09
+sweep_xl           nasasrb         50     41568s     44898s      1.08
+sweep_xl           s3dkq4m2        50     72900s     75754s      1.04
+sweep_xl           s3dkt3m2        50     62078s     67083s      1.08
